@@ -6,6 +6,7 @@ import Support from "../pages/Support";
 import License from "../pages/License";
 import Authentication from "../pages/Authentication";
 import NotFound from "../pages/NotFound";
+import AccountSettings from "../pages/AccountSettings";
 
 
 export default function Main( { user, setUser } ) {
@@ -17,6 +18,7 @@ export default function Main( { user, setUser } ) {
                 <Route path="/support" element={<Support />} />
                 <Route path="/license" element={<License />} />
                 <Route path="/Authentification" element={<Authentication setUser={setUser} user={user} />} />
+                <Route path="/AccountSettings" element={<AccountSettings user={user} />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>

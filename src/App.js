@@ -11,7 +11,7 @@ function App() {
   
   const headerLinks = [
     { name: 'Authentication', path: '/Authentification' },
-    { name: 'Home', path: '/' },
+    { name: 'Account Settings', path: '/AccountSettings' },
     { name: 'Support', path: '/support' },
     { name: 'License', path: '/license' },
   ];
