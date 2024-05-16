@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [user, setUser] = useState(null);
-
+  
   const headerLinks = [
     { name: 'Authentication', path: '/Authentification' },
     { name: 'Home', path: '/' },

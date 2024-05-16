@@ -1,12 +1,20 @@
 import axios from "axios";
 
 import * as utils from './index';
+import { json } from "react-router-dom";
 
-export default async function Registration(username, email, password, setUser) {
+export default async function Registration(username, email, password) {
+    
+    if (!username || !email || !password) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
     try {
         const response = await axios.post('http://localhost:3000/api/users', {
             type: 'register',
             name: username,
+            email: email,
             password: utils.hashPassword(password)
         });
         const token = response.data.token;
@@ -17,8 +25,7 @@ export default async function Registration(username, email, password, setUser) {
                     'Authorization': token
                 }
             });
-            setUser(userResponse.data.data);
-            utils.RedirectToMainPage();
+            return (userResponse.data.data);
         } else {
             console.error('Token not found in response');
         }

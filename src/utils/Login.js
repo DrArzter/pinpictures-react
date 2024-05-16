@@ -1,9 +1,7 @@
 import axios from "axios";
-import { useState, useEffect } from 'react';
-
 import * as utils from './index';
 
-export default async function Login(username, password, setUser) {
+export  default async function Login(username, password) {
     try {
         const response = await axios.post('http://localhost:3000/api/users', {
             type: 'login',
@@ -18,13 +16,15 @@ export default async function Login(username, password, setUser) {
                     'Authorization': token
                 }
             });
-            setUser(userResponse.data.data);
-            utils.RedirectToMainPage();
+            return userResponse.data.data;
         } else {
             console.error('Token not found in response');
+            return null;
         }
     } catch (error) {
-        console.error('Invalid username or password', error);
-        alert('Invalid username or password');
-    }
-}    
+        console.error('Error during login:', error);
+        alert('Error during login. Please try again.');
+        throw error;
+}
+
+}

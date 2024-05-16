@@ -1,20 +1,37 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import * as utils from "../utils";
 
-export default function Authentification() {
+export default function Authentification({ setUser, user }) {
 
     const [registration, setRegistration] = React.useState(false);
     const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-    const handleSubmit = (e) => {
-        {registration ? utils.Registration(username, email, password) : utils.Login(username, password)}
-    };
+    const redirect = utils.useRedirectToMainPage();
 
+    async function handleSubmit(e) {
+        e.preventDefault();
+        try {
+            if (registration) {
+                const userData = await utils.Registration(username, email, password);
+                setRegistration(false);
+                setUser(userData);
+
+                redirect();
+            } else {
+                const userData = await utils.Login(username, password); 
+                setUser(userData);
+                console.log(user)
+                redirect();
+            }
+        } catch (error) {
+            console.error('Error during authentication:', error);
+        }
+    }    
+    
     return (
-        <div className="flex flex-col items-center h-screen mx-auto p-4">
+        <div className="flex flex-col items-center h-screen mx-auto text-zinc-800 p-4">
             <form className="w-full max-w-md" onSubmit={handleSubmit}>
                 <div className="mb-6">
                     <label className="block text-sm font-bold mb-2" htmlFor="username">Username</label>

@@ -8,7 +8,7 @@ import Authentication from "../pages/Authentication";
 import NotFound from "../pages/NotFound";
 
 
-export default function Main() {
+export default function Main( { user, setUser } ) {
     return (
         //bg-gradient-to-br from-zinc-950 to-zinc-900 min-h-screen
         <div id="main" className="main min-h-screen bg-zinc-700">
@@ -16,7 +16,7 @@ export default function Main() {
                 <Route path="/" element={<Posts />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/license" element={<License />} />
-                <Route path="/Authentification" element={<Authentication />} />
+                <Route path="/Authentification" element={<Authentication setUser={setUser} user={user} />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
