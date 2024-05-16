@@ -1,12 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-export default function DropDownMenu({ children }) {
-
-    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+export default function DropDownMenu({isDropdownOpen, headerLinks }) { // Change children to headerLinks
 
     return (
         <div className={`absolute right-0 mt-12 mr-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none ${isDropdownOpen ? 'block' : 'hidden'}`}>
