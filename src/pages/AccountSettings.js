@@ -5,7 +5,7 @@ function AccountSettings( {user} ) {
   const userData = user && user.length > 0 ? user[0] : null;
   return (
     <div className="flex flex-col items-center mx-auto p-4">
-      <div className="w-1/2 bg-zinc-800 p-6 rounded-lg">
+      <div className="w-full lg:w-3/4  bg-zinc-800 p-6 rounded-lg">
         <h1 className="text-2xl font-bold mb-4">Account Settings</h1> 
         {user && (
           <>

@@ -12,7 +12,6 @@ export default function StarRating  ({ rating, postId, setPosts }){
             rating: newRating
         })
             .then(response => {
-                console.log('Post rating updated:', response.data.data);
                 setCurrentRating(newRating);
                 setPosts(prevPosts => prevPosts.map(post => post.id === postId ? { ...post, rating: newRating } : post));
             })

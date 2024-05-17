@@ -12,7 +12,7 @@ export default function Header({ user, headerLinks }) {
 
     return (
         <header className="header p-4 rounded-2xl relative">
-            <div className="header__logo text-3xl font-bold flex flex-row justify-between lg:mx-auto items-center lg:w-1/2">
+            <div className="header__logo text-3xl font-bold flex flex-row justify-between lg:mx-auto items-center lg:w-3/4">
                 <div className="header__logo text-3xl font-bold items-center flex flex-row">
                     <svg width="40px" height="40" className="fill-zinc-300" version="1.1" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
                         <g>

@@ -16,7 +16,7 @@ export default function Posts({ posts, setPosts }) {
 
     return (
         <div className="flex flex-col items-center mx-auto p-4">
-            <div className="w-full lg:w-1/2 bg-zinc-800 p-6 rounded-lg">
+            <div className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg">
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Main Page</h1>
                 </div>
@@ -24,7 +24,7 @@ export default function Posts({ posts, setPosts }) {
                 <p>Search by name or type:</p>
                 <div className="mb-4"></div>
             </div>
-            <div id="posts" className="w-full lg:w-1/2 bg-zinc-800 p-6 rounded-lg mt-4 flex flex-col justify-between">
+            <div id="posts" className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg mt-4 flex flex-col justify-between">
                 <h1 className="text-2xl font-bold mb-4">Posts</h1>
                 {posts && posts.map((post) => (
                     <div key={post.id} className="mb-4">

@@ -9,7 +9,6 @@ function Support() {
             <div className="w-1/2 p-6 rounded-lg bg-zinc-800 mt-4">
                 <p className="mb-4">If you have any questions or concerns, please contact me.</p>
                 <p className="mb-4">Email: chapegarostislav@gmail.com</p>
-                <p className="mb-4">Phone: +48731378107</p>
                 <a href = "https://github.com/DrArzter" className="mb-4">GitHub</a>
             </div>
         </div>
