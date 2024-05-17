@@ -26,6 +26,7 @@ export default function Main({ user, setUser, posts, setPosts }) {
                     </Routes>
                 </CSSTransition>
             </TransitionGroup>
+            <div className="h-40"></div>
         </div>
     );
 }
