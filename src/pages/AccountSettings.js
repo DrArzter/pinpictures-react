@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 
 function AccountSettings( {user} ) {  
   
-  const userData = user && user.length > 0 ? user[0] : null;
   return (
     <div className="flex flex-col items-center mx-auto p-4">
       <div className="w-full lg:w-3/4  bg-zinc-800 p-6 rounded-lg">
         <h1 className="text-2xl font-bold mb-4">Account Settings</h1> 
         {user && (
           <>
-            <p className="mb-4">Name: {userData.name}</p>
-            <p className="mb-4">Email: {userData.email}</p>
+            <p className="mb-4">Name: {user.name}</p>
+            <p className="mb-4">Email: {user.email}</p>
             <button className="bg-zinc-700 text-white px-4 py-2 rounded-lg" onClick={() => {}}>Delete</button> <button className="bg-zinc-700 text-white px-4 py-2 rounded-lg">Edit</button>
           </>
         )} 

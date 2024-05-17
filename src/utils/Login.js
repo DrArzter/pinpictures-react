@@ -1,30 +1,19 @@
 import axios from "axios";
-import * as utils from './index';
 
-export  default async function Login(username, password) {
+export default async function Login(username, password) {
     try {
-        const response = await axios.post('http://localhost:3000/api/users', {
-            type: 'login',
+        const response = await axios.post('http://localhost:3000/api/users/login', {
             name: username,
-            password: utils.hashPassword(password)
+            password: password
         });
         const token = response.data.token;
         if (token) {
             localStorage.setItem('token', token);
-            const userResponse = await axios.get('http://localhost:3000/api/users', {
-                headers: {
-                    'Authorization': token
-                }
-            });
-            return userResponse.data.data;
-        } else {
-            console.error('Token not found in response');
-            return null;
         }
+        return response.data;
     } catch (error) {
         console.error('Error during login:', error);
         alert('Error during login. Please try again.');
         throw error;
-}
-
+    }
 }

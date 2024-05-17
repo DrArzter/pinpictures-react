@@ -1,6 +1,15 @@
 import axios from 'axios';
 
 export default async function getUser() {
-    const response = await axios.get('http://localhost:3000/api/user');
-    return response.data;
+    try {
+        const response = await axios.get('http://localhost:3000/api/users', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error;
+    }
 }

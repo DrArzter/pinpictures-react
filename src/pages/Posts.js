@@ -42,7 +42,7 @@ export default function Posts({ posts, setPosts }) {
                                         <p className="">Posted by: <span className="cursor-pointer">{post.author}</span></p>
                                     </div>
                                     <div className="ml-4 w-full max-h-60 overflow-y-auto">
-                                        {post.comments && JSON.parse(post.comments).map(comment => (
+                                        {post.comments && post.comments.map(comment => (
                                             <div key={comment.id} className="rounded-lg">
                                                 <p className="">{comment.content}</p>
                                                 <p className="">By: <span className="cursor-pointer">{comment.author}</span></p>
