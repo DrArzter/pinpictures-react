@@ -5,3 +5,6 @@ export { default as Login } from './Login';
 export { default as Registration } from './Registration';
 export { default as DropdownMenu } from './DropdownMenu';
 export { default as useRedirectToMainPage } from './useRedirectToMainPage';
+export { default as sortPosts } from './sortPosts';
+export { default as searchPost } from './searchPost';
+export { default as StarRating } from './StarRating';

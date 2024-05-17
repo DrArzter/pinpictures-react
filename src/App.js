@@ -8,6 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState(null);
   
   const headerLinks = [
     { name: 'Authentication', path: '/Authentification' },
@@ -20,7 +21,7 @@ function App() {
     <Router>
       <div id="root" className="bg-zinc-800 text-zinc-300">
         <Header user={user} headerLinks={headerLinks} />
-        <Main user={user} setUser={setUser} />
+        <Main user={user} setUser={setUser} posts={posts} setPosts={setPosts} />
         <Footer />
       </div>
     </Router>
