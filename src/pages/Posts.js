@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import * as utils from "../utils";
 
-export default function Posts({ posts, setPosts }) {
+export default function Posts({ posts, setPosts, createPostModal, setCreatePostModal }) {
 
     const [commentValues, setCommentValues] = useState({});
-
-    useEffect(() => {
-        utils.getPosts().then((data) => {
-            setPosts(data);
-            console.log(data);
-        });
-    }, [setPosts]);
 
     function stopPropagation(event) {
         event.stopPropagation();
@@ -18,6 +11,7 @@ export default function Posts({ posts, setPosts }) {
 
     return (
         <div className="flex flex-col items-center mx-auto p-4">
+            {createPostModal && <utils.createPostModal />}
             <div className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg">
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Main Page</h1>

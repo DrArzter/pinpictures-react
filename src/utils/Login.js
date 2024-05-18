@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 export default async function Login(username, password) {
     try {
@@ -8,7 +9,7 @@ export default async function Login(username, password) {
         });
         const token = response.data.token;
         if (token) {
-            localStorage.setItem('token', token);
+            Cookies.set('token', token);
         }
         return response.data;
     } catch (error) {

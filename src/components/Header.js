@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import * as utils from "../utils";
 
-export default function Header({ user, headerLinks }) {
+export default function Header({ user, headerLinks, createPostModal, setCreatePostModal }) {    
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleCreatePostModal = () => {
+        setCreatePostModal(!createPostModal);
+    };
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -25,7 +29,7 @@ export default function Header({ user, headerLinks }) {
                 </div>
                 {user && (
                 <div className="flex flex-row gap-4 ml-auto">
-                <svg viewBox="0 0 32 32" width="40px" className="" version="1.1" fill="#000000">
+                <svg viewBox="0 0 32 32" width="40px" className="" version="1.1" fill="#000000" onClick={toggleCreatePostModal}>
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">

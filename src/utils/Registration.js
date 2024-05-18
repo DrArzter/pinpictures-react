@@ -1,5 +1,5 @@
 import axios from "axios";
-import getUser from "./getUser";
+import Cookies from 'js-cookie';
 
 export default async function Registration(username, email, password) {
     if (!username || !email || !password) {
@@ -14,7 +14,7 @@ export default async function Registration(username, email, password) {
         });
         const token = response.data.token;
         if (token) {
-            localStorage.setItem('token', token);
+            Cookies.set('token', token);
         }
         return response.data;
     } catch (error) {

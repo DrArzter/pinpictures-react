@@ -10,7 +10,7 @@ import NotFound from "../pages/NotFound";
 import AccountSettings from "../pages/AccountSettings";
 import Chats from "../pages/Chats";
 
-export default function Main({ user, setUser, posts, setPosts }) {
+export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal }) {
     const location = useLocation();
 
     return (
@@ -18,7 +18,7 @@ export default function Main({ user, setUser, posts, setPosts }) {
             <TransitionGroup>
                 <CSSTransition key={location.key} classNames="fade" timeout={300}>
                     <Routes location={location}>
-                        <Route path="/" element={<Posts posts={posts} setPosts={setPosts} />} />
+                        <Route path="/" element={<Posts posts={posts} setPosts={setPosts} createPostModal={createPostModal} setCreatePostModal={setCreatePostModal} />} />
                         <Route path="/support" element={<Support />} />
                         <Route path="/license" element={<License />} />
                         <Route path="/Authentification" element={<Authentication setUser={setUser} user={user} />} />
