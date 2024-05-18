@@ -23,8 +23,8 @@ export default function Header({ user, headerLinks }) {
                     </svg>
                     <Link to="/" className="header__logo ml-4 text-3xl font-bold">PinPictures</Link>
                 </div>
+                {user && (
                 <div className="flex flex-row gap-4 ml-auto">
-                {}
                 <svg viewBox="0 0 32 32" width="40px" className="" version="1.1" fill="#000000">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -46,12 +46,17 @@ export default function Header({ user, headerLinks }) {
                     </svg>
                 </Link>
                 </div>
+                    
+                )}
                 <div className="header__login ml-4 flex flex-row relative">
                     <button type="button" onClick={toggleDropdown} className="btn btn--primary inline-flex items-center">
-                        {user ? user.name : 'Login'}
-                        <svg className="-mr-1 mt-2 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
+                        {user ? user.name : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" fill="none" stroke="#000000">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                            <g id="SVGRepo_iconCarrier"> <path d="M3 7C3 4.79086 4.79086 3 7 3H17C19.2091 3 21 4.79086 21 7V17C21 19.2091 19.2091 21 17 21H7C4.79086 21 3 19.2091 3 17V7Z" stroke="#d4d4d8" stroke-width="2"/> <path d="M8 13.15C8.63513 13.15 9.15 12.6351 9.15 12C9.15 11.3649 8.63513 10.85 8 10.85C7.36487 10.85 6.85 11.3649 6.85 12C6.85 12.6351 7.36487 13.15 8 13.15Z" fill="#d4d4d8" stroke="#d4d4d8" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"/> <path d="M16 13.15C16.6351 13.15 17.15 12.6351 17.15 12C17.15 11.3649 16.6351 10.85 16 10.85C15.3649 10.85 14.85 11.3649 14.85 12C14.85 12.6351 15.3649 13.15 16 13.15Z" fill="#d4d4d8" stroke="#d4d4d8" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12 13.15C12.6351 13.15 13.15 12.6351 13.15 12C13.15 11.3649 12.6351 10.85 12 10.85C11.3649 10.85 10.85 11.3649 10.85 12C10.85 12.6351 11.3649 13.15 12 13.15Z" fill="#d4d4d8" stroke="#d4d4d8" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"/> </g>
+                            </svg>
+                        )}
                     </button>
                     {isDropdownOpen && <utils.DropdownMenu headerLinks={headerLinks} user={user} isDropdownOpen={isDropdownOpen} toggleDropdown={toggleDropdown} />}
                 </div>
