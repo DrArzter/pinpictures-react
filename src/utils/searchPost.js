@@ -1,9 +1,12 @@
-export default function searchPost(searchTerm, posts) {
-    const filteredPosts = posts.filter((post) => {
-        const postName = post.name.toLowerCase();
-        const postDescription = post.description.toLowerCase();
-        const searchTermLower = searchTerm.toLowerCase();
-        return postName.includes(searchTermLower) || postDescription.includes(searchTermLower);
-    });
-    return filteredPosts;
+export default function searchPost(posts, setFilteredPosts, searchTerm) {
+  if (!searchTerm) {
+    setFilteredPosts(posts);
+    return;
+  }
+  const filtered = posts.filter(
+    (post) =>
+      post.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  setFilteredPosts(filtered);
 }

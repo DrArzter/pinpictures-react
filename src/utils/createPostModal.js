@@ -8,8 +8,8 @@ export default function CreatePostModal({ setCreatePostModal, posts, setPosts })
 
     async function handleSubmit(e) {
         e.preventDefault();
-        await utils.createPost(title, description, image).then((mewPost) => {
-            setPosts([...posts, mewPost]);
+        await utils.createPost(title, description, image).then((newPost) => {
+            setPosts([newPost, ...posts]);
             closeModal();
         });
     }

@@ -8,6 +8,7 @@ import License from "../pages/License";
 import Authentication from "../pages/Authentication";
 import NotFound from "../pages/NotFound";
 import AccountSettings from "../pages/AccountSettings";
+import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
 
 export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal }) {
@@ -23,6 +24,7 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
                         <Route path="/license" element={<License />} />
                         <Route path="/Authentification" element={<Authentication setUser={setUser} user={user} />} />
                         <Route path="/AccountSettings" element={<AccountSettings user={user} />} />
+                        <Route path="/Profile" element={<Profile user={user} />} />
                         <Route path="/Chats" element={<Chats user={user} />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
