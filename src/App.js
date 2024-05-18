@@ -9,7 +9,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
  
 function App() {
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [createPostModal, setCreatePostModal] = useState(false);
   useEffect(() => {
     async function fetchData() {
@@ -34,7 +34,7 @@ function App() {
   return (
     <Router>
       <div id="root" className="bg-zinc-800 text-zinc-300">
-        <Header user={user} headerLinks={headerLinks} createPostModal={createPostModal} setCreatePostModal={setCreatePostModal} />
+        <Header user={user} headerLinks={headerLinks} />
         <Main user={user} setUser={setUser} posts={posts} setPosts={setPosts} createPostModal={createPostModal} setCreatePostModal={setCreatePostModal} />
         <Footer />
       </div>

@@ -9,5 +9,5 @@ export { default as searchPost } from './searchPost';
 export { default as StarRating } from './StarRating';
 export { default as Notification } from './Notification'
 export { default as uploadComment } from './uploadComment';
-export { default as createPostModal } from './createPostModal'
+export { default as CreatePostModal } from './CreatePostModal'
 export { default as createPost } from './createPost'
