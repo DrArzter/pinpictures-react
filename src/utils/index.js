@@ -10,4 +10,4 @@ export { default as StarRating } from './StarRating';
 export { default as Notification } from './Notification'
 export { default as uploadComment } from './uploadComment';
 export { default as CreatePostModal } from './CreatePostModal'
-export { default as createPost } from './createPost'
+export { default as uploadPost } from './uploadPost'

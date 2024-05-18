@@ -44,6 +44,7 @@ export default function Posts({
           setCreatePostModal={setCreatePostModal}
           posts={posts}
           setPosts={setPosts}
+          user={user}
         />
       )}
       <div className="w-full lg:w-3/4 flex flex-row gap-4 bg-zinc-800 p-6 rounded-lg">
@@ -90,7 +91,7 @@ export default function Posts({
           <input
             type="text"
             placeholder="Search by name or type..."
-            className="px-4 py-2 w-full rounded-md border border-gray-300 text-zinc-700 focus:outline-none focus:border-blue-500"
+            className="px-4 py-2 w-full rounded-md border border-gray-300 text-zinc-700 focus:outline-none"
             value={searchTerm}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -124,7 +125,7 @@ export default function Posts({
                 {post.picpath && (
                   <img
                     src={`http://localhost:3000/${post.picpath}`}
-                    alt="Post Image"
+                    alt="Post"
                     className="mb-4 hover:transform hover:scale-110 transition duration-500 rounded-2xl"
                     style={{ minWidth: "100%", maxHeight: "50%" }}
                   />
@@ -147,7 +148,7 @@ export default function Posts({
                     {post.comments &&
                       post.comments.map((comment) => (
                         <div key={comment.id} className="rounded-lg">
-                          <p className="">{comment.content}</p>
+                          <p className="">{comment.comment}</p>
                           <p className="">
                             By:{" "}
                             <span className="cursor-pointer">
@@ -162,7 +163,7 @@ export default function Posts({
                       key={post.id}
                     >
                       <input
-                        className="shadow appearance-none w-10/12 border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                        className="px-4 py-2 w-full rounded-md border border-gray-300 text-zinc-700 focus:outline-none"
                         type="text"
                         value={commentValues[post.id] || ""}
                         onChange={(e) =>
@@ -179,7 +180,9 @@ export default function Posts({
                           utils.uploadComment(
                             post.id,
                             commentValues[post.id],
-                            setCommentValues
+                            setCommentValues,
+                            posts,
+                            setPosts
                           )
                         }
                         viewBox="0 0 24 24"

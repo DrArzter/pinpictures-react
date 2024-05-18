@@ -14,7 +14,7 @@ function App() {
 
   const headerLinks = [
     { name: "Authentication", path: "/Authentification" },
-    { name: "Profile", path: "/Profile" },
+    { name: "Profile", path: "/profile" },
     { name: "Support", path: "/support" },
     { name: "License", path: "/license" },
   ];
@@ -28,10 +28,14 @@ function App() {
       if (user) {
         setUser(user);
       }
-      setPosts(posts);
+      const initializedPosts = posts.map(post => ({
+        ...post,
+        comments: post.comments || []
+      }));
+      setPosts(initializedPosts);
     }
     fetchData();
-  }, [setUser, setPosts]);
+  }, []);
 
   return (
     <Router>

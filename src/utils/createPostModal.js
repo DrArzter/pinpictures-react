@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import * as utils from ".";
 
-export default function CreatePostModal({ setCreatePostModal, posts, setPosts }) {
+export default function CreatePostModal({ setCreatePostModal, posts, setPosts, user }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState(null);
 
     async function handleSubmit(e) {
         e.preventDefault();
-        await utils.createPost(title, description, image).then((newPost) => {
+        await utils.uploadPost(title, description, image, user.name).then((newPost) => {
             setPosts([newPost, ...posts]);
             closeModal();
         });
