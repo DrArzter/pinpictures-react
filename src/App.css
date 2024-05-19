@@ -37,17 +37,22 @@
   }
 }
 
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms;
-}
+.fade-enter,
 .fade-exit {
-  opacity: 1;
+  opacity: 0;
+  position: absolute;
+  width: 100%;
 }
+
+.fade-enter-active,
+.fade-exit-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in-out;
+  position: absolute;
+  width: 100%;
+}
+
 .fade-exit-active {
   opacity: 0;
-  transition: opacity 300ms;
+  transition: opacity 1000ms ease-in-out;
 }
