@@ -84,7 +84,10 @@ export default function Header({ user, headerLinks }) {
             className="btn btn--primary inline-flex items-center"
           >
             {user ? (
-              user.name
+             <>
+             <span className="mr-2">{user.name}</span>
+             <img src={`http://localhost:3000/${user.picpath}`} alt="Profile Picture" className="w-8 h-8 rounded-full" />
+             </>
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"

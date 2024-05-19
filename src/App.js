@@ -11,6 +11,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [createPostModal, setCreatePostModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const headerLinks = [
     { name: "Authentication", path: "/Authentification" },
@@ -28,14 +29,19 @@ function App() {
       if (user) {
         setUser(user);
       }
-      const initializedPosts = posts.map(post => ({
+      const initializedPosts = posts.map((post) => ({
         ...post,
-        comments: post.comments || []
+        comments: post.comments || [],
       }));
       setPosts(initializedPosts);
+      setLoading(false);
     }
     fetchData();
   }, []);
+
+  if (loading) {
+    return <div className="min-h-screen bg-zinc-800"></div>;
+  }
 
   return (
     <Router>
