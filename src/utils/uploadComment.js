@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export default async function uploadComment(postId, comment, setCommentValues, posts, setPosts) {
+export default async function uploadComment(postId, comment, setCommentValues, posts, setPosts, user) {
     try {
         const response = await axios.post('http://localhost:3000/api/comments', {
             postid: postId,
@@ -13,6 +13,7 @@ export default async function uploadComment(postId, comment, setCommentValues, p
         });
 
         const newComment = response.data
+        newComment.author = user.name
 
         const updatedPosts = posts.map(post => {
             if (post.id === postId) {

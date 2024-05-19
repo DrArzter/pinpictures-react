@@ -16,6 +16,9 @@ export default function Posts({
 
   const handleSortByChange = (e) => {
     const newSortBy = e.target.value;
+    if (newSortBy === sortBy){
+      return
+    }
     setSortBy(newSortBy);
     utils.sortPosts(newSortBy, posts, setPosts);
   };
@@ -51,7 +54,7 @@ export default function Posts({
         {user && (
           <svg
             viewBox="0 0 32 32"
-            width="40px"
+            width="50"
             className=""
             version="1.1"
             fill="#000000"
@@ -103,7 +106,7 @@ export default function Posts({
         <select
           value={sortBy}
           onChange={handleSortByChange}
-          className="bg-zinc-700 px-4 py-2 rounded-md"
+          className="bg-zinc-700 px-4 rounded-md"
         >
           <option value="">Sort by...</option>
           <option value="id">Time added</option>
@@ -182,7 +185,8 @@ export default function Posts({
                             commentValues[post.id],
                             setCommentValues,
                             posts,
-                            setPosts
+                            setPosts,
+                            user
                           )
                         }
                         viewBox="0 0 24 24"
