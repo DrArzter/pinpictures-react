@@ -9,10 +9,12 @@ export { default as searchPost } from './searchPost';
 export { default as StarRating } from './StarRating';
 export { default as Notification } from './Notification'
 export { default as uploadComment } from './uploadComment';
-export { default as CreatePostModal } from './createPostModal'
+export { default as CreatePostModal } from './CreatePostModal'
 export { default as uploadPost } from './uploadPost'
 export { default as getChats } from './getChats'
 export { default as getComments } from './getComments'
 export { default as uploadMessage } from './uploadMessage'
 export { default as getUserByName } from './getUserByName'
 export { default as ScrollToTop } from './scrollToTop'
+export { default as sortChats } from './sortChats'
+export { default as searchChats } from './searchChats'

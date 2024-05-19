@@ -31,6 +31,7 @@ function Profile(user, setUser) {
       <div className="w-full lg:w-3/4 p-6 rounded-lg bg-zinc-800 mt-4">
         {profile && (
           <>
+            <img src={`http://localhost:3000/${profile.picpath}`} alt="Profile Picture" className="w-32 h-32 rounded-full mb-4" />
             <p className="mb-4">Name: {profile.name}</p>
             <p className="mb-4">Email: {profile.email}</p>
           </>

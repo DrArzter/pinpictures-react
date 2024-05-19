@@ -1,4 +1,4 @@
-export default function sortPosts(sortBy, posts, setPosts) {
+export default async function sortPosts(sortBy, posts, setPosts) {
   let sortedPosts = [...posts];
   if (sortBy === "id") {
     sortedPosts.sort((a, b) => a.id - b.id);

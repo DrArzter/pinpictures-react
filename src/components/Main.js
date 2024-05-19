@@ -10,6 +10,7 @@ import NotFound from "../pages/NotFound";
 import AccountSettings from "../pages/AccountSettings";
 import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
+import Chat from "../pages/Chat";
 import * as utils from "../utils";
 
 
@@ -29,6 +30,7 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
                         <Route path="/AccountSettings" element={<AccountSettings user={user} />} />
                         <Route path="/Profile/:username" element={<Profile user={user} setUser={setUser} />} />
                         <Route path="/Chats" element={<Chats user={user} />} />
+                        <Route path="/Chat/:id" element={<Chat user={user} />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </CSSTransition>
