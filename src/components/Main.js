@@ -10,13 +10,16 @@ import NotFound from "../pages/NotFound";
 import AccountSettings from "../pages/AccountSettings";
 import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
+import * as utils from "../utils";
+
 
 export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal }) {
     const location = useLocation();
 
     return (
-        <div id="main" className="min-h-screen bg-zinc-700">
-            <TransitionGroup>
+        <div id="main" className="min-h-screen bg-zinc-700 transition-all">
+            <utils.ScrollToTop   />
+            <TransitionGroup component={null}>
                 <CSSTransition key={location.key} classNames="fade" timeout={300}>
                     <Routes location={location}>
                         <Route path="/" element={<Posts posts={posts} setPosts={setPosts} user={user} createPostModal={createPostModal} setCreatePostModal={setCreatePostModal} />} />
@@ -24,13 +27,12 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
                         <Route path="/license" element={<License />} />
                         <Route path="/Authentification" element={<Authentication setUser={setUser} user={user} />} />
                         <Route path="/AccountSettings" element={<AccountSettings user={user} />} />
-                        <Route path="/Profile" element={<Profile user={user} />} />
+                        <Route path="/Profile/:username" element={<Profile user={user} setUser={setUser} />} />
                         <Route path="/Chats" element={<Chats user={user} />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </CSSTransition>
             </TransitionGroup>
-            <div className="h-40"></div>
         </div>
     );
 }

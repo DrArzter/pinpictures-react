@@ -11,3 +11,8 @@ export { default as Notification } from './Notification'
 export { default as uploadComment } from './uploadComment';
 export { default as CreatePostModal } from './CreatePostModal'
 export { default as uploadPost } from './uploadPost'
+export { default as getChats } from './getChats'
+export { default as getComments } from './getComments'
+export { default as uploadMessage } from './uploadMessage'
+export { default as getUserByName } from './getUserByName'
+export { default as ScrollToTop } from './scrollToTop'

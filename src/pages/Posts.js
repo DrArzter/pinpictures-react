@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as utils from "../utils";
+import { Link } from "react-router-dom";
 
 export default function Posts({
   posts,
@@ -144,7 +145,7 @@ export default function Posts({
                     />
                     <p className="">
                       Posted by:{" "}
-                      <span className="cursor-pointer">{post.author}</span>
+                      <Link to={`/profile/${post.author}`}>{post.author} </Link>
                     </p>
                   </div>
                   <div className="ml-4 w-full max-h-60 overflow-y-auto">
@@ -154,9 +155,7 @@ export default function Posts({
                           <p className="">{comment.comment}</p>
                           <p className="">
                             By:{" "}
-                            <span className="cursor-pointer">
-                              {comment.author}
-                            </span>
+                            <Link to={`/profile/${comment.author}`}>{comment.author} </Link>
                           </p>
                         </div>
                       ))}

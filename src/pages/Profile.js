@@ -1,7 +1,21 @@
-import React, { } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import * as utils from "../utils";
 
-function Profile({ user }) {
+function Profile() {
+  const [user, setUser] = useState(null);
+  const { username } = useParams();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await utils.getUserByName(username);
+      setUser(userData);
+    };
+
+    if (username) {
+      fetchUser();
+    }
+  }, [username]);
 
   return (
     <div className="flex flex-col items-center mx-auto p-4">
