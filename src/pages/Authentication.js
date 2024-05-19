@@ -40,6 +40,13 @@ export default function Authentification({ setUser }) {
     }
   }
 
+  function toggleRegistration() {
+    setRegistration(!registration);
+    setUsername("");
+    setEmail("");
+    setPassword("");
+  }
+
   return (
     <div className="flex flex-col items-center min-h-screen mx-auto p-4">
       <utils.Notification
@@ -103,7 +110,7 @@ export default function Authentification({ setUser }) {
               <a
                 className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300"
                 href="#"
-                onClick={() => setRegistration(false)}
+                onClick={toggleRegistration}
               >
                 Already have an account? Sign In
               </a>
@@ -113,7 +120,7 @@ export default function Authentification({ setUser }) {
               <a
                 className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300"
                 href="#"
-                onClick={() => setRegistration(true)}
+                onClick={toggleRegistration}
               >
                 Don't have an account? Sign Up
               </a>
