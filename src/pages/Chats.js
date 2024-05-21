@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as utils from "../utils";
 
-
 export default function Chats({ user }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredChatList, setFilteredChatList] = useState([]);
@@ -28,7 +27,7 @@ export default function Chats({ user }) {
         setFilteredChatList(response);
       }
       setIsLoading(false);
-    }
+    };
     fetchChats();
   }, []);
 
@@ -62,26 +61,29 @@ export default function Chats({ user }) {
           <ul className="divide-y divide-gray-700">
             {filteredChatList
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-              .map((chat) => (
-                <li key={chat.id}>
-                  <Link
-                    to={`/Chat/${chat.id}`}
-                    className="flex items-center justify-between p-4 hover:bg-zinc-700"
-                  >
-                    <div className="flex items-center">
-                      <img
-                        src={chat.picpath}
-                        alt={chat.name}
-                        className="w-12 h-12 rounded-full mr-4"
-                      />
-                      <div>
-                        <h2 className="text-lg font-bold">{chat.name}</h2>
-                        <p className="text-gray-500">{chat.lastMessage}</p>
+              .map((chat) => {
+                const secondUser = chat.users.find((u) => u !== user.name);
+                return (
+                  <li key={chat.chatId}>
+                    <Link
+                      to={`/Chat/${chat.chatId}`}
+                      className="flex items-center justify-between p-4 hover:bg-zinc-700"
+                    >
+                      <div className="flex items-center">
+                        <img
+                          src={chat.picpath}
+                          alt={chat.name}
+                          className="w-12 h-12 rounded-full mr-4"
+                        />
+                        <div>
+                          <h2 className="text-lg font-bold">{secondUser}</h2>
+                          <p className="text-gray-500">{chat.lastMessage}</p>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+                    </Link>
+                  </li>
+                );
+              })}
           </ul>
         </div>
       ) : (

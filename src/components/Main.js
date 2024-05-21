@@ -35,6 +35,7 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
                     </Routes>
                 </CSSTransition>
             </TransitionGroup>
+            <div className="h-40"></div>
         </div>
     );
 }

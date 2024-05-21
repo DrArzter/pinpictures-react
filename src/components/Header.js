@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import * as utils from "../utils";
+import DropdownMenu from "./DropdownMenu";
 
 export default function Header({ user, headerLinks }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,6 +13,8 @@ export default function Header({ user, headerLinks }) {
     <header className="header p-4 rounded-2xl relative">
       <div className="header__logo text-3xl font-bold flex flex-row justify-between lg:mx-auto items-center lg:w-3/4">
         <div className="header__logo text-3xl font-bold items-center flex flex-row">
+          
+          <Link to="/" className="header__logo ml-4 text-3xl font-bold flex flex-row gap-2">
           <svg
             width="40px"
             height="40"
@@ -27,8 +29,7 @@ export default function Header({ user, headerLinks }) {
               <path d="m720 484.8h-60c-25.199 0-37.199 12-37.199 39.602v136.8c0 21.602 12 34.801 32.398 34.801 20.398 0 32.398-12 32.398-34.801v-33.602h32.402c50.398 0 90-15.602 90-72 0-55.203-39.602-70.801-90-70.801zm3.6016 93.598h-36v-43.199h32.398c15.602 0 25.199 8.3984 25.199 21.602 0 14.398-10.801 21.598-21.598 21.598z" />
             </g>
           </svg>
-          <Link to="/" className="header__logo ml-4 text-3xl font-bold">
-            PinPictures
+            <h1 className="text-3xl font-bold hidden md:block">PinPictures</h1>
           </Link>
         </div>
         {user && (
@@ -85,7 +86,7 @@ export default function Header({ user, headerLinks }) {
           >
             {user ? (
              <>
-             <span className="mr-2">{user.name}</span>
+             <span className="mr-2 hidden md:block">{user.name}</span>
              <img src={`http://localhost:3000/${user.picpath}`} alt="Profile Picture" className="w-8 h-8 rounded-full" />
              </>
             ) : (
@@ -139,7 +140,7 @@ export default function Header({ user, headerLinks }) {
             )}
           </button>
           {isDropdownOpen && (
-            <utils.DropdownMenu
+            <DropdownMenu
               headerLinks={headerLinks}
               user={user}
               isDropdownOpen={isDropdownOpen}

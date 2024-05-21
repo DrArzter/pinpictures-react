@@ -11,7 +11,8 @@ export default async function getUser() {
                 Authorization: `Bearer ${Cookies.get('token')}`
             }
         });
-        return response.data;
+        console.log(response.data[0]);
+        return response.data[0];
     } catch (error) {
         return null;
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as utils from ".";
+import * as utils from "../utils";
 
 export default function CreatePostModal({ setCreatePostModal, posts, setPosts, user }) {
     const [title, setTitle] = useState("");

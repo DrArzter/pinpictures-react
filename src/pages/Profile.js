@@ -23,9 +23,12 @@ function Profile(user, setUser) {
   return (
     <div className="flex flex-col items-center mx-auto p-4">
       <div className="flex flex-row justify-between w-full lg:w-3/4 items-center p-6 text-center bg-zinc-800 rounded-lg">
-        <h1 className="text-2xl font-bold text-center">Profile</h1>
         <div className="flex flex-row gap-4">
-          {user.user && profile && user.user.name === profile.name && <Link className="hover:underline bg-zinc-700 rounded p-2 hover:bg-zinc-600" to="/AccountSettings">Edit</Link> }
+          {user.user && profile && user.user.name === profile.name ? (
+             <Link className="hover:underline bg-zinc-700 rounded p-2 hover:bg-zinc-600" to="/AccountSettings">Edit</Link>
+          ) : (
+            <button className="bg-zinc-700 rounded p-2 hover:bg-zinc-600">Message</button>
+          )}
         </div>
       </div>
       <div className="w-full lg:w-3/4 p-6 rounded-lg bg-zinc-800 mt-4">

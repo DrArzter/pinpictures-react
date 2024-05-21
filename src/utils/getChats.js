@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { getUserById } from './getUserById';
 
 export default async function getChats() {
     try {
@@ -10,6 +11,7 @@ export default async function getChats() {
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`
             }
+            
         });
         console.log(response.data);
         return response.data;
