@@ -18,7 +18,10 @@ export default function MessageList({ messages, user }) {
                     }`}
                 >
                     <div>{msg.message}</div>
-                    <Link className="text-sm" to={`/Profile/${msg.author}`}>{msg.author}</Link>
+                    <Link className="text-sm flex items-center gap-2" to={`/Profile/${msg.author}`}>
+                        <p className="text-sm">{msg.author}</p>
+                        <img className="w-8 h-8 rounded-full" src={`http://localhost:3000/${msg.picpath}`} alt={msg.author} />
+                    </Link>
                 </div>
             ))}
         </div>
