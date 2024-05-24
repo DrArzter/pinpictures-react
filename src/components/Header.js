@@ -13,7 +13,6 @@ export default function Header({ user, headerLinks }) {
     <header className="header p-4 rounded-2xl relative">
       <div className="header__logo text-3xl font-bold flex flex-row justify-between lg:mx-auto items-center lg:w-3/4">
         <div className="header__logo text-3xl font-bold items-center flex flex-row">
-          
           <Link to="/" className="header__logo ml-4 text-3xl font-bold flex flex-row gap-2">
           <svg
             width="40px"

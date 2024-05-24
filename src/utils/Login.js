@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 export default async function Login(username, password) {
     try {
-        const response = await axios.post('http://localhost:3000/api/users/login', {
+        const response = await axios.post(`${config.apiUrl}/users/login`, {
             name: username,
             password: password
         });

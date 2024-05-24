@@ -5,7 +5,7 @@ export default async function uploadMessage(chatId, message) {
     console.log(chatId, message);
     try {
         const response = await axios.post(
-            `http://localhost:3000/api/chats/messages/${chatId}`,
+            `${config.apiUrl}/chats/messages/${chatId}`,
             {
                 message
             },

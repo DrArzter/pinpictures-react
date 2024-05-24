@@ -1,8 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import config from './config';
 
 export default async function getChatById(id) {
-    const response = await axios.get(`http://localhost:3000/api/chats/${id}`, {
+    const response = await axios.get(`${config.apiUrl}/chats/${id}`, {
         headers: {
             'Authorization': `Bearer ${Cookies.get('token')}`
         }

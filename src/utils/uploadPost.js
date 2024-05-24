@@ -9,7 +9,7 @@ export default async function uploadPost(title, description, image, author) {
     formData.append('image', image);
     if (title && description && image && Cookies.get('token')) {
         try {
-            const response = await axios.post('http://localhost:3000/api/posts', formData, {
+            const response = await axios.post(`${config.apiUrl}/api/posts`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${Cookies.get('token')}`

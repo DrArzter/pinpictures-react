@@ -7,7 +7,7 @@ export default async function Registration(username, email, password) {
         return;
     }
     try {
-        const response = await axios.post('http://localhost:3000/api/users/register', {
+        const response = await axios.post(`${config.apiUrl}/users/register`, {
             name: username,
             email: email,
             password: password
