@@ -108,8 +108,7 @@ export default function Authentification({ setUser }) {
           {registration ? (
             <div className="flex items-center justify-between">
               <a
-                className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300"
-                href="#"
+                className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300 cursor-pointer"
                 onClick={toggleRegistration}
               >
                 Already have an account? Sign In
@@ -118,8 +117,7 @@ export default function Authentification({ setUser }) {
           ) : (
             <div className="flex items-center justify-between">
               <a
-                className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300"
-                href="#"
+                className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300 cursor-pointer"
                 onClick={toggleRegistration}
               >
                 Don't have an account? Sign Up

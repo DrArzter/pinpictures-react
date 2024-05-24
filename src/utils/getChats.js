@@ -7,7 +7,7 @@ export default async function getChats() {
         if (!Cookies.get('token')) {
             return null;
         }
-        const response = await axios.get(`${config.apiBaseUrl}/chats`, {
+        const response = await axios.get(`${config.apiUrl}/chats`, {
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`
             }

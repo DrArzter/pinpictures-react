@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DropdownMenu from "./DropdownMenu";
+import config from '../utils/config';
+
 
 export default function Header({ user, headerLinks }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const ppath = null;
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -42,11 +45,11 @@ export default function Header({ user, headerLinks }) {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0" />
+                <g id="SVGRepo_bgCarrier" />
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  
+                  
                 />
                 <g id="SVGRepo_iconCarrier">
                   {" "}
@@ -57,20 +60,20 @@ export default function Header({ user, headerLinks }) {
                   <path
                     d="M15.5 7.83008L15.6716 8.00165C17.0049 9.33498 17.6716 10.0017 17.6716 10.8301C17.6716 11.6585 17.0049 12.3252 15.6716 13.6585L15.5 13.8301"
                     stroke="#d4d4d8"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
+                    
+                    
                   />{" "}
                   <path
                     d="M13.2939 6L11.9998 10.8296L10.7058 15.6593"
                     stroke="#d4d4d8"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
+                    
+                    
                   />{" "}
                   <path
                     d="M8.49994 7.83008L8.32837 8.00165C6.99504 9.33498 6.32837 10.0017 6.32837 10.8301C6.32837 11.6585 6.99504 12.3252 8.32837 13.6585L8.49994 13.8301"
                     stroke="#d4d4d8"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
+                    
+                    
                   />{" "}
                 </g>
               </svg>
@@ -86,7 +89,7 @@ export default function Header({ user, headerLinks }) {
             {user ? (
              <>
              <span className="mr-2 hidden md:block">{user.name}</span>
-             <img src={`http://localhost:3000/${user.picpath}`} alt="Profile Picture" className="w-8 h-8 rounded-full" />
+             <img src={((user.picpath).startsWith("https://ui-avatars.com/") ? user.picpath : config.apiUrl.replace('/api', '/') + user.picpath)} alt="Profile Picture" className="w-8 h-8 rounded-full" />
              </>
             ) : (
               <svg
@@ -97,42 +100,38 @@ export default function Header({ user, headerLinks }) {
                 fill="none"
                 stroke="#000000"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0" />
+                <g id="SVGRepo_bgCarrier" />
                 <g
                   id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  
+                  
                 />
                 <g id="SVGRepo_iconCarrier">
                   {" "}
                   <path
                     d="M3 7C3 4.79086 4.79086 3 7 3H17C19.2091 3 21 4.79086 21 7V17C21 19.2091 19.2091 21 17 21H7C4.79086 21 3 19.2091 3 17V7Z"
                     stroke="#d4d4d8"
-                    stroke-width="2"
                   />{" "}
                   <path
                     d="M8 13.15C8.63513 13.15 9.15 12.6351 9.15 12C9.15 11.3649 8.63513 10.85 8 10.85C7.36487 10.85 6.85 11.3649 6.85 12C6.85 12.6351 7.36487 13.15 8 13.15Z"
                     fill="#d4d4d8"
                     stroke="#d4d4d8"
-                    stroke-width="0.3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    
+                    
                   />{" "}
                   <path
                     d="M16 13.15C16.6351 13.15 17.15 12.6351 17.15 12C17.15 11.3649 16.6351 10.85 16 10.85C15.3649 10.85 14.85 11.3649 14.85 12C14.85 12.6351 15.3649 13.15 16 13.15Z"
                     fill="#d4d4d8"
                     stroke="#d4d4d8"
-                    stroke-width="0.3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    
+                    
                   />{" "}
                   <path
                     d="M12 13.15C12.6351 13.15 13.15 12.6351 13.15 12C13.15 11.3649 12.6351 10.85 12 10.85C11.3649 10.85 10.85 11.3649 10.85 12C10.85 12.6351 11.3649 13.15 12 13.15Z"
                     fill="#d4d4d8"
                     stroke="#d4d4d8"
-                    stroke-width="0.3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    
+                    
                   />{" "}
                 </g>
               </svg>

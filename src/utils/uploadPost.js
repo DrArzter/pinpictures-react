@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import config from './config';
 
 export default async function uploadPost(title, description, image, author) {
     const formData = new FormData();

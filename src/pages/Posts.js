@@ -5,16 +5,25 @@ import PostList from "../components/PostList";
 import CreatePostModal from "../components/CreatePostModal";
 
 export default function Posts({
-  posts,
-  setPosts,
   user,
   setUser,
   createPostModal,
   setCreatePostModal,
 }) {
+  const [posts, setPosts] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([...posts]);
+
+  useEffect(() => {
+    console.log('Эффект выполняется');
+    const post = utils.getPosts()
+    const initializedPosts = posts.map((post) => ({
+      ...post,
+      comments: post.comments || [],
+    }));
+    setPosts(initializedPosts);
+}, []);
 
   const handleSortByChange = (e) => {
     const newSortBy = e.target.value;
@@ -65,8 +74,6 @@ export default function Posts({
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g
               id="SVGRepo_tracerCarrier"
-              strokeLinecap="round"
-              strokeLinejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
               <title>plus-square</title>

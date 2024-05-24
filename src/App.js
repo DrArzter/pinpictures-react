@@ -9,12 +9,11 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState([]);
   const [createPostModal, setCreatePostModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const headerLinks = [
-    { name: "Authentication", path: "/Authentification" },
+    { name: "Authentication", path: "/authentification" },
     { name: "Profile", path: user ? `/profile/${user.name}` : "/profile" },
     { name: "Support", path: "/support" },
     { name: "License", path: "/license" },
@@ -22,21 +21,13 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const [user, posts] = await Promise.all([
-        utils.getUser(),
-        utils.getPosts(),
-      ]);
+      const user = await utils.getUser();
       if (user) {
         setUser(user);
       }
-      const initializedPosts = posts.map((post) => ({
-        ...post,
-        comments: post.comments || [],
-      }));
-      setPosts(initializedPosts);
-      setLoading(false);
     }
     fetchData();
+    setLoading(false);
   }, []);
 
   if (loading) {
@@ -45,13 +36,11 @@ function App() {
 
   return (
     <Router>
-      <div id="root" className="bg-zinc-800 text-zinc-300">
+      <div className="bg-zinc-800 text-zinc-300">
         <Header user={user} headerLinks={headerLinks} />
         <Main
           user={user}
           setUser={setUser}
-          posts={posts}
-          setPosts={setPosts}
           createPostModal={createPostModal}
           setCreatePostModal={setCreatePostModal}
         />

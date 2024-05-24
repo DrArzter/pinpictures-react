@@ -1,7 +1,6 @@
 import React from "react";
 
 import * as utils from "../utils";
-import { redirect } from "react-router-dom";
 
 function Support() {
 

@@ -1,4 +1,6 @@
 import axios from "axios";
+import config from "./config";  
+
 
 export default async function getUserByName(name) {
     console.log(name);

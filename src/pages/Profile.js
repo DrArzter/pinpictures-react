@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
 import * as utils from "../utils";
+import config from '../utils/config';
 
 function Profile(user, setUser) {
+
   const [profile, setProfile] = useState();
   const { username } = useParams();
 
@@ -17,9 +20,24 @@ function Profile(user, setUser) {
     }
   }, [username]);
 
+  function handleChatCreate() {
+    utils.createChat( profile.id )
+    .then((data) => {
+      if (data) {
+        redirectToChat(data._id);
+      }
+    })
+  }
+
+  function redirectToChat(id) {
+    const navigate = useNavigate();
+    return () => navigate(`/chat/${id}`);
+  }
+
   if (!profile) {
     return <div className="text-center text-3xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">Loading...</div>;
   }
+
   return (
     <div className="flex flex-col items-center mx-auto p-4">
       <div className="flex flex-row justify-between w-full lg:w-3/4 items-center p-6 text-center bg-zinc-800 rounded-lg">
@@ -27,14 +45,14 @@ function Profile(user, setUser) {
           {user.user && profile && user.user.name === profile.name ? (
              <><Link className="hover:underline bg-zinc-700 rounded p-2 hover:bg-zinc-600" to="/AccountSettings">Edit</Link><button className="bg-zinc-700 rounded p-2 hover:bg-zinc-600 hover:underline" onClick={() => utils.Logout(setUser)}>Logout</button></>
           ) : (
-            <button className="bg-zinc-700 rounded p-2 hover:bg-zinc-600 hover:underline">Message</button>
+            <button className="bg-zinc-700 rounded p-2 hover:bg-zinc-600 hover:underline" onClick={handleChatCreate}>Message</button>
           )}
         </div>
       </div>
       <div className="w-full lg:w-3/4 p-6 rounded-lg bg-zinc-800 mt-4">
         {profile && (
           <>
-            <img src={`http://localhost:3000/${profile.picpath}`} alt="Profile Picture" className="w-32 h-32 rounded-full mb-4" />
+            <img src={((profile.picpath).startsWith("https://ui-avatars.com/") ? profile.picpath : config.apiUrl.replace('/api', '/') + profile.picpath)} alt="Profile Picture" className="w-32 h-32 rounded-full mb-4" />
             <p className="mb-4">Name: {profile.name}</p>
             <p className="mb-4">Email: {profile.email}</p>
           </>

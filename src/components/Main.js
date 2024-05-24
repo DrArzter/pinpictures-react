@@ -26,11 +26,11 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
                         <Route path="/" element={<Posts posts={posts} setPosts={setPosts} user={user} createPostModal={createPostModal} setCreatePostModal={setCreatePostModal} />} />
                         <Route path="/support" element={<Support />} />
                         <Route path="/license" element={<License />} />
-                        <Route path="/Authentification" element={<Authentication setUser={setUser} user={user} />} />
-                        <Route path="/AccountSettings" element={<AccountSettings user={user} />} />
-                        <Route path="/Profile/:username" element={<Profile user={user} setUser={setUser} />} />
-                        <Route path="/Chats" element={<Chats user={user} />} />
-                        <Route path="/Chat/:id" element={<Chat user={user} />} />
+                        <Route path="/authentification" element={<Authentication setUser={setUser} user={user} />} />
+                        <Route path="/settings" element={<AccountSettings user={user} />} />
+                        <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} />} />
+                        <Route path="/chats" element={<Chats user={user} />} />
+                        <Route path="/chat/:id" element={<Chat user={user} />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </CSSTransition>
