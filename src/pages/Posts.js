@@ -13,25 +13,34 @@ export default function Posts({
   const [posts, setPosts] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState([...posts]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   useEffect(() => {
-    console.log('Эффект выполняется');
-    const post = utils.getPosts()
-    const initializedPosts = posts.map((post) => ({
-      ...post,
-      comments: post.comments || [],
-    }));
-    setPosts(initializedPosts);
-}, []);
+    const fetchPosts = async () => {
+      try {
+        const fetchedPosts = await utils.getPosts();
+        const initializedPosts = fetchedPosts.map((post) => ({
+          ...post,
+          comments: post.comments || [],
+        }));
+        setPosts(initializedPosts);
+        setFilteredPosts(initializedPosts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleSortByChange = (e) => {
     const newSortBy = e.target.value;
-    if (newSortBy === sortBy){
-      return
+    if (newSortBy === sortBy) {
+      return;
     }
     setSortBy(newSortBy);
     utils.sortPosts(newSortBy, posts, setPosts);
+    utils.sortPosts(newSortBy, filteredPosts, setFilteredPosts);
   };
 
   const handleSearchByChange = (newValue) => {
@@ -39,17 +48,9 @@ export default function Posts({
     utils.searchPost(posts, setFilteredPosts, newValue);
   };
 
-  function stopPropagation(event) {
-    event.stopPropagation();
-  }
-
   const toggleCreatePostModal = () => {
     setCreatePostModal(!createPostModal);
   };
-
-  useEffect(() => {
-    setFilteredPosts([...posts]);
-  }, [posts]);
 
   return (
     <div className="flex flex-col items-center mx-auto p-4">
@@ -58,6 +59,8 @@ export default function Posts({
           setCreatePostModal={setCreatePostModal}
           posts={posts}
           setPosts={setPosts}
+          filteredPosts={filteredPosts}
+          setFilteredPosts={setFilteredPosts}
           user={user}
         />
       )}
@@ -72,9 +75,7 @@ export default function Posts({
             onClick={toggleCreatePostModal}
           >
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-            <g
-              id="SVGRepo_tracerCarrier"
-            ></g>
+            <g id="SVGRepo_tracerCarrier"></g>
             <g id="SVGRepo_iconCarrier">
               <title>plus-square</title>
               <desc>Created with Sketch Beta.</desc>

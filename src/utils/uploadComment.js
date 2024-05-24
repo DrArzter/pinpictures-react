@@ -1,9 +1,10 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import config from "./config";
 
 export default async function uploadComment(postId, comment, setCommentValues, posts, setPosts, user) {
     try {
-        const response = await axios.post('http://localhost:3000/api/comments', {
+        const response = await axios.post(`${config.apiUrl}/comments`, {
             postid: postId,
             comment: comment
         }, {
@@ -12,23 +13,20 @@ export default async function uploadComment(postId, comment, setCommentValues, p
             }
         });
 
-        const newComment = response.data
-        newComment.author = user.name
+        const newComment = response.data;
+        newComment.author = user.name;
 
-        const updatedPosts = posts.map(post => {
-            if (post.id === postId) {
-                return {
-                    ...post,
-                    comments: post.comments ? [...post.comments, newComment] : [newComment]
-                };
-            }
-            return post;
-        });
+        console.log('New comment from API:', newComment);
 
-        setPosts(updatedPosts);
-        setCommentValues({});
+        setCommentValues(prevValues => ({
+            ...prevValues,
+            [postId]: ''
+        }));
+
+        return newComment;
 
     } catch (error) {
         console.error('Failed to add comment', error);
+        throw error;
     }
 }

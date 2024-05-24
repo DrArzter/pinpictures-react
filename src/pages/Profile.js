@@ -9,6 +9,12 @@ function Profile(user, setUser) {
   const [profile, setProfile] = useState();
   const { username } = useParams();
 
+  const navigate = useNavigate();
+
+  const redirectToChat = (id) => {
+    navigate(`/chat/${id}`);
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await utils.getUserByName(username);
@@ -21,17 +27,15 @@ function Profile(user, setUser) {
   }, [username]);
 
   function handleChatCreate() {
-    utils.createChat( profile.id )
-    .then((data) => {
-      if (data) {
-        redirectToChat(data._id);
-      }
-    })
-  }
-
-  function redirectToChat(id) {
-    const navigate = useNavigate();
-    return () => navigate(`/chat/${id}`);
+    utils.createChat(profile.id)
+      .then((data) => {
+        if (data) {
+          redirectToChat(data.chatId);
+        }
+      })
+      .catch((error) => {
+        console.error('Error creating chat:', error);
+      });
   }
 
   if (!profile) {
