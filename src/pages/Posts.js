@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import * as utils from "../utils";
-import { Link } from "react-router-dom";
 import PostList from "../components/PostList";
 import CreatePostModal from "../components/CreatePostModal";
 

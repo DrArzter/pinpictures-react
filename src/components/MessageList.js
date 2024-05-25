@@ -33,6 +33,7 @@ export default function MessageList({ messages, user }) {
             <img
               src={getProfilePicPath(msg.picpath)}
               alt="Profile Picture"
+              style={{ objectFit: "cover" }}
               className="w-8 h-8 rounded-full"
             />
             <p className="text-sm">{msg.author}</p>

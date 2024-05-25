@@ -32,7 +32,7 @@ const Post = ({ post, commentValue, onCommentChange, onCommentSubmit }) => {
               <img
                 src={`${utils.config.apiUrl.replace("/api", "")}/${post.picpath}`}
                 alt="Post"
-                style={{ minWidth: "100%", objectFit: "contain" }}
+                style={{ minWidth: "100%", objectFit: "cover" }}
                 className="hover:transform hover:scale-110 transition-transform duration-500 rounded-2xl"
               />
             </div>

@@ -100,6 +100,7 @@ export default function Chats({ user }) {
                       <img
                         src={secondUser.picpath.startsWith("https://ui-avatars.com/") ? secondUser.picpath : utils.config.apiUrl.replace('/api', '/') + secondUser.picpath}
                         alt="Profile Picture"
+                        style={{ objectFit: "cover" }}
                         className="w-8 h-8 rounded-full"
                       />
                       <div className="ml-4">
