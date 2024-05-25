@@ -54,7 +54,7 @@ export default function DropdownMenu({
           <Link
             key={link.path}
             to={link.path}
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            className="block px-4 py-2 text-sm text-zinc-700 hover:bg-gray-100 hover:text-zinc-900"
             role="menuitem"
             onClick={toggleDropdown}
           >

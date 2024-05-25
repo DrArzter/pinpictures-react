@@ -49,7 +49,7 @@ export default function Authentication({ setUser }) {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen text-white p-4">
+    <div className="flex flex-col items-center min-h-screen  p-4">
       <div className="flex flex-col w-full lg:w-1/2 xl:w-1/3 items-center bg-zinc-800 p-6 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-6">
           {forgotPassword ? "Forgot Password" : registration ? "Sign Up" : "Sign In"}

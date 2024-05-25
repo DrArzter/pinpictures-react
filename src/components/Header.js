@@ -73,6 +73,7 @@ export default function Header({ user, headerLinks }) {
                 <img
                   src={user.picpath.startsWith("https://ui-avatars.com/") ? user.picpath : config.apiUrl.replace('/api', '/') + user.picpath}
                   alt="Profile Picture"
+                  style={{ objectFit: "cover" }}
                   className="w-8 h-8 rounded-full"
                 />
               </>

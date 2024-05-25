@@ -115,7 +115,7 @@ export default function Posts({
         <select
           value={sortBy}
           onChange={handleSortByChange}
-          className="bg-zinc-700 px-4 py-2 rounded-md text-white focus:outline-none"
+          className="bg-zinc-700 px-4 py-2 rounded-md  focus:outline-none"
         >
           <option value="">Sort by...</option>
           <option value="id">Time added</option>

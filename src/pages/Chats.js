@@ -51,7 +51,7 @@ export default function Chats({ user }) {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen ">
         Loading...
       </div>
     );
@@ -75,7 +75,7 @@ export default function Chats({ user }) {
           <select
             value={sortBy}
             onChange={handleSortByChange}
-            className="bg-zinc-700 px-4 py-2 rounded-md text-white focus:outline-none"
+            className="bg-zinc-700 px-4 py-2 rounded-md  focus:outline-none"
           >
             <option value="id">Sort by: Time added</option>
             <option value="name">Sort by: Name</option>
@@ -103,7 +103,7 @@ export default function Chats({ user }) {
                         className="w-8 h-8 rounded-full"
                       />
                       <div className="ml-4">
-                        <h2 className="text-lg font-bold text-white">{secondUser.name}</h2>
+                        <h2 className="text-lg font-bold ">{secondUser.name}</h2>
                         <p className="text-gray-400">{chat.lastMessage}</p>
                       </div>
                     </div>
@@ -115,7 +115,7 @@ export default function Chats({ user }) {
         </div>
       ) : (
         <div className="w-full lg:w-3/4 mt-4 bg-zinc-800 p-6 rounded-lg items-center">
-          <h1 className="text-2xl font-bold mb-4 text-center text-white">No chats yet</h1>
+          <h1 className="text-2xl font-bold mb-4 text-center ">No chats yet</h1>
         </div>
       )}
     </div>

@@ -12,7 +12,7 @@ const AccountSettings = ({ user }) => {
           </div>
           <div className="w-full bg-zinc-700 p-4 rounded-md">
             <h2 className="text-xl font-semibold mb-2">Security Settings</h2>
-            <button className="mt-2 bg-zinc-600 hover:bg-zinc-500 text-white py-2 px-4 rounded">
+            <button className="mt-2 bg-zinc-600 hover:bg-zinc-500  py-2 px-4 rounded">
               Change Password
             </button>
           </div>
