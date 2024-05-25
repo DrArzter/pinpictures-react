@@ -40,6 +40,8 @@ export default async function uploadPost(title, description, image, author) {
       headers: getHeaders()
     });
     response.data.author = author;
+    response.data.comments = [];
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error during post creation:', error);

@@ -4,10 +4,9 @@ import config from "./config";
 
 const addCommentToPost = (posts, postId, newComment) => {
   const updatedPosts = [...posts];
+  console.log(updatedPosts);
   const postIndex = updatedPosts.findIndex(post => post.id === postId);
-  if (postIndex !== -1) {
-    updatedPosts[postIndex].comments = [...updatedPosts[postIndex].comments, newComment];
-  }
+  updatedPosts[postIndex].comments = [...updatedPosts[postIndex].comments, newComment];
   return updatedPosts;
 };
 

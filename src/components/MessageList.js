@@ -23,9 +23,10 @@ export default function MessageList({ messages, user }) {
       {user && messages.map((msg, index) => (
         <div
           key={index}
-          className={`p-3 rounded-lg flex flex-col max-w-xs ${
+          className={`p-3 rounded-lg flex flex-col ${
             msg.author === user.name ? "bg-zinc-700 text-zinc-300 self-end" : "bg-zinc-400 text-zinc-800 self-start"
           }`}
+          style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
         >
           <div className="mb-1">{msg.message}</div>
           <Link to={`/profile/${msg.author}`} className="flex items-center gap-2 mt-2">
