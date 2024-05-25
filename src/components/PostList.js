@@ -30,11 +30,6 @@ export default function PostList({ posts, setPosts, user }) {
                 <div className="flex flex-col w-1/3">
                   <h2 className="text-xl font-bold mb-2">{post.name}</h2>
                   <p className="">{post.description}</p>
-                  <utils.StarRating
-                    rating={post.rating}
-                    postId={post.id}
-                    setPosts={setPosts}
-                  />
                   <p className="">
                     Posted by:{" "}
                     <Link to={`/profile/${post.author}`}>{post.author} </Link>

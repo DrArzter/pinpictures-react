@@ -6,7 +6,7 @@ export default function Authentification({ setUser }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [notifications, setNotifications] = useState([]);
+
 
   const redirect = utils.useRedirectToMainPage();
 
@@ -15,28 +15,15 @@ export default function Authentification({ setUser }) {
     try {
       let userData;
       if (registration) {
-        userData = await utils.Registration(username, email, password);
+        userData = await utils.registration(username, email, password);
         setRegistration(false);
       } else {
-        userData = await utils.Login(username, password);
+        userData = await utils.login(username, password);
       }
       setUser(userData);
-      setNotifications((prev) => [
-        ...prev,
-        {
-          status: "success",
-          message: registration
-            ? "Registration successful"
-            : "Login successful",
-        },
-      ]);
       redirect();
     } catch (error) {
       console.error("Error during authentication:", error);
-      setNotifications((prev) => [
-        ...prev,
-        { status: "error", message: "Authentication failed" },
-      ]);
     }
   }
 
@@ -49,10 +36,6 @@ export default function Authentification({ setUser }) {
 
   return (
     <div className="flex flex-col items-center min-h-screen mx-auto p-4">
-      <utils.Notification
-        notifications={notifications}
-        setNotifications={setNotifications}
-      />
       <div className="flex flex-col w-full lg:w-3/4 items-center bg-zinc-800 p-6 rounded-lg">
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
           <div className="mb-6">
