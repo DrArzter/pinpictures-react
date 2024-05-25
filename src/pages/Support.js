@@ -1,5 +1,7 @@
 import React from "react";
 
+
+//TODO REFACTOR
 function Support() {
     return (
         <div className="flex flex-col items-center mx-auto p-4">

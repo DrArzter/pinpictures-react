@@ -17,8 +17,7 @@ export default function Footer() {
 
   return (
     <footer 
-      className={`bg-zinc-800 py-4 text-center w-full fixed bottom-0 transition-transform duration-300 ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
-      style={{ transform: isVisible ? 'translateY(0)' : 'translateY(100%)', willChange: 'transform' }}
+      className={`bg-zinc-800 py-4 text-center w-full fixed bottom-0 transition-transform duration-300 transform ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
     >
       <div>
         <a href="https://github.com/DrArzter" className="hover:text-gray-400">GitHub</a>

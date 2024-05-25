@@ -1,20 +1,29 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import config from "./config";
+import * as utils from "../utils";
+
+const getHeaders = () => {
+  return {
+    headers: {
+      Authorization: utils.getAuthToken()
+    }
+  };
+};
+
+const getCreateChatUrl = () => {
+  return `${config.apiUrl}/chats`;
+};
 
 export default async function createChat(secondUserId) {
   try {
     const response = await axios.post(
-      `${config.apiUrl}/chats`,
+      getCreateChatUrl(),
       { secondUserId },
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('token')}`
-        }
-      }
+      getHeaders()
     );
     return response.data;
   } catch (error) {
+    console.error("Error creating chat:", error);
     throw error;
   }
 }

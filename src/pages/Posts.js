@@ -64,14 +64,13 @@ export default function Posts({
           user={user}
         />
       )}
-      <div className="w-full lg:w-3/4 flex flex-row gap-4 bg-zinc-800 p-6 rounded-lg">
+      <div className="w-full lg:w-3/4 flex flex-row gap-4 bg-zinc-800 p-6 rounded-lg shadow-lg">
         {user && (
           <svg
             viewBox="0 0 32 32"
             width="50"
-            className=""
-            version="1.1"
-            fill="#000000"
+            className="cursor-pointer hover:text-zinc-400 transition-colors duration-300"
+            fill="#d4d4d8"
             onClick={toggleCreatePostModal}
           >
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -116,7 +115,7 @@ export default function Posts({
         <select
           value={sortBy}
           onChange={handleSortByChange}
-          className="bg-zinc-700 px-4 rounded-md"
+          className="bg-zinc-700 px-4 py-2 rounded-md text-white focus:outline-none"
         >
           <option value="">Sort by...</option>
           <option value="id">Time added</option>
@@ -126,7 +125,7 @@ export default function Posts({
       </div>
       <div
         id="posts"
-        className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg mt-4 flex flex-col justify-between"
+        className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg mt-4 flex flex-col justify-between shadow-lg"
       >
         <PostList posts={filteredPosts} setPosts={setPosts} user={user} />
       </div>

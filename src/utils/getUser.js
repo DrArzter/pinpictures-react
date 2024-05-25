@@ -1,19 +1,28 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import * as utils from '../utils';
 import config from './config';
 
+// Формирование заголовков для запроса
+const getHeaders = () => {
+  const token = utils.getAuthToken();
+  return token ? { headers: { Authorization: token } } : null;
+};
+
+const getUserUrl = () => {
+  return `${config.apiUrl}/users`;
+};
+
 export default async function getUser() {
-    try {
-        if (!Cookies.get('token')) {
-            return null;
-        }
-        const response = await axios.get(`${config.apiUrl}/users`, {
-            headers: {
-                Authorization: `Bearer ${Cookies.get('token')}`
-            }
-        });
-        return response.data[0];
-    } catch (error) {
-        return null;
+  try {
+    const headers = getHeaders();
+    if (!headers) {
+      return null;
     }
+    
+    const response = await axios.get(getUserUrl(), headers);
+    return response.data[0];
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
 }

@@ -1,23 +1,28 @@
 import React from "react";
-
 import * as utils from "../utils";
 
-function Support() {
+function NotFound() {
+  const redirect = utils.useRedirectToMainPage();
 
-    const redirect = utils.useRedirectToMainPage();
-
-    return (
-        <div className="p-4">
-            <div className="lg:w-3/4 p-6 bg-zinc-800 mx-auto p-6 rounded-lg">
-                <h1 className="text-2xl font-bold text-center text-5xl mb-4">Error 404</h1>
-                <h1 className="text-2xl font-bold text-center text-5xl mb-4">Page not found</h1>
-            </div>
-            <div className="lg:w-3/4 p-6 bg-zinc-800 mx-auto p-6 rounded-lg mt-4">
-                <p className="text-center">If you have any questions or concerns, please contact me.</p>
-                <p className="text-center hover:underline cursor-pointer">Get back to <a href={redirect} onClick={() => redirect()}>main page</a></p>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex flex-col items-center min-h-screen p-4">
+      <div className="w-full lg:w-3/4 p-6 bg-zinc-800 rounded-lg shadow-lg">
+        <h1 className="text-5xl font-bold text-center mb-4">Error 404</h1>
+        <h2 className="text-3xl font-bold text-center mb-4">Page Not Found</h2>
+      </div>
+      <div className="w-full lg:w-3/4 p-6 bg-zinc-800 rounded-lg shadow-lg mt-4">
+        <p className="text-center mb-4">If you have any questions or concerns, please contact me.</p>
+        <p className="text-center">
+          <span
+            className="text-blue-400 hover:underline cursor-pointer"
+            onClick={redirect}
+          >
+            Get back to main page
+          </span>
+        </p>
+      </div>
+    </div>
+  );
 }
 
-export default Support;
+export default NotFound;

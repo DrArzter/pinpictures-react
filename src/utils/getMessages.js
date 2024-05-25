@@ -1,14 +1,28 @@
 import axios from "axios";
-import Cookies from 'js-cookie';
-import config from './config';
+import * as utils from "../utils";
+import config from "./config";
+
+// Формирование заголовков для запроса
+const getHeaders = () => {
+  const token = utils.getAuthToken();
+  return token ? { headers: { Authorization: token } } : null;
+};
+
+const getMessagesUrl = (id) => {
+  return `${config.apiUrl}/chats/messages/${id}`;
+};
 
 export default async function getMessages(id) {
-    const response = await axios.get(`${config.apiUrl}/chats/messages/${id}`, {
-        headers: {
-            'Authorization': `Bearer ${Cookies.get('token')}`
-        }
-
+  try {
+    const headers = getHeaders();
+    if (!headers) {
+      throw new Error('No authorization token found');
     }
-    );
+
+    const response = await axios.get(getMessagesUrl(id), headers);
     return response.data;
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    throw error;
+  }
 }

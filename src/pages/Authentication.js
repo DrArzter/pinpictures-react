@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import * as utils from "../utils";
 
-export default function Authentification({ setUser }) {
+export default function Authentication({ setUser }) {
   const [registration, setRegistration] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const redirect = utils.useRedirectToMainPage();
 
@@ -17,11 +17,16 @@ export default function Authentification({ setUser }) {
       if (registration) {
         userData = await utils.registration(username, email, password);
         setRegistration(false);
+      } else if (forgotPassword) {
+        //await utils.forgotPassword(email); //TODO: Add forgot password functionality
+        setForgotPassword(false);
       } else {
         userData = await utils.login(username, password);
       }
-      setUser(userData);
-      redirect();
+      if (!forgotPassword) {
+        setUser(userData);
+        redirect();
+      }
     } catch (error) {
       console.error("Error during authentication:", error);
     }
@@ -29,92 +34,112 @@ export default function Authentification({ setUser }) {
 
   function toggleRegistration() {
     setRegistration(!registration);
+    setForgotPassword(false);
+    setUsername("");
+    setEmail("");
+    setPassword("");
+  }
+
+  function toggleForgotPassword() {
+    setForgotPassword(!forgotPassword);
+    setRegistration(false);
     setUsername("");
     setEmail("");
     setPassword("");
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen mx-auto p-4">
-      <div className="flex flex-col w-full lg:w-3/4 items-center bg-zinc-800 p-6 rounded-lg">
+    <div className="flex flex-col items-center min-h-screen text-white p-4">
+      <div className="flex flex-col w-full lg:w-1/2 xl:w-1/3 items-center bg-zinc-800 p-6 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold mb-6">
+          {forgotPassword ? "Forgot Password" : registration ? "Sign Up" : "Sign In"}
+        </h1>
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label className="block text-sm font-bold mb-2" htmlFor="username">
-              Username
-            </label>
-            <input
-              className="shadow shadow-zinc-700 text-zinc-700 appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          {registration && (
+          {!forgotPassword && (
+            <div className="mb-6">
+              <label className="block text-sm font-bold mb-2" htmlFor="username">
+                Username
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight text-zinc-700 focus:outline-none focus:shadow-outline bg-white"
+                id="username"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required={!forgotPassword}
+              />
+            </div>
+          )}
+          {(registration || forgotPassword) && (
             <div className="mb-6">
               <label className="block text-sm font-bold mb-2" htmlFor="email">
                 Email
               </label>
               <input
-                className="shadow shadow-zinc-700 text-zinc-700 appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight text-zinc-700 focus:outline-none focus:shadow-outline bg-white"
                 id="email"
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
           )}
-          <div className="mb-6">
-            <label className="block text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="shadow shadow-zinc-700 text-zinc-700 appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex items-center justify-between">
+          {!forgotPassword && (
+            <div className="mb-6">
+              <label className="block text-sm font-bold mb-2" htmlFor="password">
+                Password
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight text-zinc-700 focus:outline-none focus:shadow-outline bg-white"
+                id="password"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+          )}
+          <div className="flex items-center justify-center mb-6">
             <button
-              className="bg-zinc-700 hover:bg-zinc-900 transition duration-300 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-zinc-700 hover:bg-zinc-600 transition duration-300 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Submit
+              {forgotPassword ? "Send Reset Link" : registration ? "Sign Up" : "Sign In"}
             </button>
           </div>
-          <div className="my-4"></div>
-          {registration ? (
-            <div className="flex items-center justify-between">
+          <div className="text-center mb-4">
+            {forgotPassword ? (
               <a
-                className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300 cursor-pointer"
-                onClick={toggleRegistration}
+                className="font-bold text-sm hover:text-zinc-400 transition duration-300 cursor-pointer"
+                onClick={toggleForgotPassword}
               >
-                Already have an account? Sign In
+                Back to Sign In
               </a>
-            </div>
-          ) : (
-            <div className="flex items-center justify-between">
+            ) : (
               <a
-                className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300 cursor-pointer"
+                className="font-bold text-sm hover:text-zinc-400 transition duration-300 cursor-pointer"
                 onClick={toggleRegistration}
               >
-                Don't have an account? Sign Up
+                {registration
+                  ? "Already have an account? Sign In"
+                  : "Don't have an account? Sign Up"}
+              </a>
+            )}
+          </div>
+          {!registration && !forgotPassword && (
+            <div className="text-center mt-4">
+              <a
+                className="font-bold text-sm hover:text-zinc-400 transition duration-300 cursor-pointer"
+                onClick={toggleForgotPassword}
+              >
+                Forgot Password?
               </a>
             </div>
           )}
-          <div className="flex items-center justify-between">
-            <a
-              className="inline-block align-baseline font-bold text-sm hover:text-zinc-200 transition duration-300"
-              href="#"
-            >
-              Forgot Password?
-            </a>
-          </div>
         </form>
       </div>
     </div>

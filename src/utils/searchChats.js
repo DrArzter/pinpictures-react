@@ -1,9 +1,11 @@
 export default function searchChats(chats, searchTerm) {
   if (!searchTerm) return chats;
 
-  return chats.filter((chat) =>
-    chat.users.some((user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+  return chats.filter(({ users }) =>
+    users.some(({ name }) =>
+      name.toLowerCase().includes(lowerCaseSearchTerm)
     )
   );
 }

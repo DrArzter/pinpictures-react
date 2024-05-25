@@ -1,14 +1,20 @@
 import Cookies from 'js-cookie';
-import React, { useState } from 'react';
 
-export default function Logout(setUser) {
+const clearAuthToken = () => {
+  Cookies.remove('token');
+};
 
+export default function logout(setUser) {
+  try {
     if (!Cookies.get('token')) {
-        return null;
+      console.warn('No token found, user might already be logged out.');
+      return;
     }
 
-    Cookies.remove('token');
-
+    clearAuthToken();
     setUser(null);
+    console.log('User successfully logged out.');
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
 }
-

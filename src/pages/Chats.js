@@ -18,6 +18,8 @@ export default function Chats({ user }) {
   };
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchChats = async () => {
       setIsLoading(true);
       try {
@@ -32,35 +34,37 @@ export default function Chats({ user }) {
       setIsLoading(false);
     };
     fetchChats();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    const filtered = utils.searchChats(chatList, searchTerm);
-    setFilteredChatList(filtered);
+    if (chatList.length > 0) {
+      const filtered = utils.searchChats(chatList, searchTerm);
+      setFilteredChatList(filtered);
+    }
   }, [searchTerm, chatList]);
 
-  const sortChats = (chats) => {
-    switch (sortBy) {
-      case "name":
-        return chats.sort((a, b) =>
-          a.users[0].name.localeCompare(b.users[0].name)
-        );
-      case "rating":
-        // Assuming rating is a field in your chat object
-        return chats.sort((a, b) => b.rating - a.rating);
-      default:
-        return chats.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  useEffect(() => {
+    if (filteredChatList.length > 0) {
+      utils.sortChats(sortBy, filteredChatList, setFilteredChatList);
     }
-  };
+  }, [sortBy]);
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-white">
+        Loading...
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center mx-auto p-4">
-      <div className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg">
-        <div className="flex flex-row justify-between gap-4">
+    <div className="flex flex-col items-center mx-auto p-4 min-h-screen">
+      <div className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg shadow-md mb-4">
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
           <input
             type="text"
             placeholder="Search by name or type..."
-            className="px-4 py-2 w-full rounded-md border border-gray-300 text-zinc-700 focus:outline-none"
+            className="px-4 py-2 w-full sm:w-2/3 rounded-md border border-gray-300 text-zinc-700 focus:outline-none"
             value={searchTerm}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -71,27 +75,26 @@ export default function Chats({ user }) {
           <select
             value={sortBy}
             onChange={handleSortByChange}
-            className="bg-zinc-700 px-4 rounded-md"
+            className="bg-zinc-700 px-4 py-2 rounded-md text-white focus:outline-none"
           >
-            <option value="">Sort by...</option>
-            <option value="id">Time added</option>
-            <option value="name">Name</option>
-            <option value="rating">Rating</option>
+            <option value="id">Sort by: Time added</option>
+            <option value="name">Sort by: Name</option>
+            <option value="rating">Sort by: Rating</option>
           </select>
         </div>
       </div>
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="w-full lg:w-3/4 mt-4 bg-zinc-800 p-6 rounded-lg"></div>
       ) : filteredChatList && filteredChatList.length > 0 ? (
         <div className="w-full lg:w-3/4 mt-4 bg-zinc-800 p-6 rounded-lg">
           <ul className="divide-y divide-gray-700">
-            {sortChats(filteredChatList).map((chat) => {
+            {filteredChatList.map((chat) => {
               const secondUser = chat.users.find((u) => u.name !== user.name);
               return (
                 <li key={chat.chatId}>
                   <Link
                     to={`/Chat/${chat.chatId}`}
-                    className="flex items-center justify-between p-4 hover:bg-zinc-700"
+                    className="flex items-center justify-between p-4 hover:bg-zinc-700 rounded-lg transition"
                   >
                     <div className="flex items-center">
                       <img
@@ -100,8 +103,8 @@ export default function Chats({ user }) {
                         className="w-8 h-8 rounded-full"
                       />
                       <div className="ml-4">
-                        <h2 className="text-lg font-bold">{secondUser.name}</h2>
-                        <p className="text-gray-500">{chat.lastMessage}</p>
+                        <h2 className="text-lg font-bold text-white">{secondUser.name}</h2>
+                        <p className="text-gray-400">{chat.lastMessage}</p>
                       </div>
                     </div>
                   </Link>
@@ -112,7 +115,7 @@ export default function Chats({ user }) {
         </div>
       ) : (
         <div className="w-full lg:w-3/4 mt-4 bg-zinc-800 p-6 rounded-lg items-center">
-          <h1 className="text-2xl font-bold mb-4 text-center">No chats yet</h1>
+          <h1 className="text-2xl font-bold mb-4 text-center text-white">No chats yet</h1>
         </div>
       )}
     </div>
