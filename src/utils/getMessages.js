@@ -2,7 +2,6 @@ import axios from "axios";
 import * as utils from "../utils";
 import config from "./config";
 
-// Формирование заголовков для запроса
 const getHeaders = () => {
   const token = utils.getAuthToken();
   return token ? { headers: { Authorization: token } } : null;
