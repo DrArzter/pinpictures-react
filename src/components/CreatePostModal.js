@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import * as utils from "../utils";
+import FullScreenImage from "./FullScreenImage";
 
 export default function CreatePostModal({
   setCreatePostModal,
@@ -11,14 +12,15 @@ export default function CreatePostModal({
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [fullScreenImage, setFullScreenImage] = useState(null);
   const fileInputRef = useRef(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const newPost = await utils.uploadPost(title, description, image, user.name);
+      const newPost = await utils.uploadPost(title, description, images, user.name);
       setPosts([newPost, ...posts]);
       setFilteredPosts([newPost, ...filteredPosts]);
       closeModal();
@@ -32,20 +34,32 @@ export default function CreatePostModal({
   }
 
   function handleImageChange(e) {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
+    const files = Array.from(e.target.files);
+    if (files.length + images.length > 10) {
+      console.error("You can upload a maximum of 10 images.");
+      return;
+    }
+    setImages(prevImages => [...prevImages, ...files]);
+
+    files.forEach(file => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        setImagePreviews(prevPreviews => [...prevPreviews, reader.result]);
       };
       reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
-    }
+    });
   }
 
-  function handleImageClick() {
+  function handleImageClick(index) {
+    setFullScreenImage(imagePreviews[index]);
+  }
+
+  function handleRemoveImage(index) {
+    setImages(images.filter((_, i) => i !== index));
+    setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+  }
+
+  function handleFileInputClick() {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -82,24 +96,39 @@ export default function CreatePostModal({
             ref={fileInputRef}
             id="imageInput"
             type="file"
-            name="image"
-            placeholder="Image"
+            name="images"
+            placeholder="Images"
             className="hidden"
             accept="image/*"
+            multiple
             onChange={handleImageChange}
           />
-          {imagePreview && (
-            <div className="w-5/6 mt-4 flex items-center justify-center cursor-pointer" onClick={handleImageClick}>
-              <img src={imagePreview} style={{ maxWidth: "100%", height: "auto" }} alt="Preview" className="rounded-lg max-h-60" />
-            </div>
-          )}
-          {!imagePreview && (
-            <div className="w-5/6 mt-4 cursor-pointer" onClick={handleImageClick}>
-              <div className="bg-zinc-700 text-zinc-400 p-6 rounded-lg flex items-center justify-center">
-                <span>Click to select an image</span>
+          <div className="w-5/6 mt-4 flex flex-wrap gap-2">
+            {imagePreviews.map((preview, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={preview}
+                  alt={`Preview ${index}`}
+                  className="rounded-lg max-h-60 cursor-pointer"
+                  onClick={() => handleImageClick(index)}
+                />
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1"
+                  onClick={() => handleRemoveImage(index)}
+                >
+                  X
+                </button>
               </div>
-            </div>
-          )}
+            ))}
+            {images.length < 10 && (
+              <div className="w-full flex justify-center mt-2">
+                <div className="relative flex items-center justify-center w-full bg-zinc-700 text-zinc-400 p-6 rounded-lg cursor-pointer" onClick={handleFileInputClick}>
+                  <span>Click to select images (max {10 - images.length})</span>
+                </div>
+              </div>
+            )}
+          </div>
           <button
             type="submit"
             className="bg-zinc-700 hover:bg-zinc-600 font-bold py-2 px-4 rounded mt-4"
@@ -108,6 +137,9 @@ export default function CreatePostModal({
           </button>
         </form>
       </div>
+      {fullScreenImage && (
+        <FullScreenImage imageUrl={fullScreenImage} onClose={() => setFullScreenImage(null)} />
+      )}
     </div>
   );
 }

@@ -14,27 +14,28 @@ const getHeaders = () => {
   };
 };
 
-const validateInputs = (title, description, image) => {
-  return title && description && image && Cookies.get('token');
+const validateInputs = (title, description, images) => {
+  return title && description && images.length > 0 && images.length <= 10 && Cookies.get('token');
 };
 
-const createFormData = (title, description, image) => {
+const createFormData = (title, description, images) => {
   const formData = new FormData();
-  formData.append('type', 'createPost');
   formData.append('name', title);
   formData.append('description', description);
-  formData.append('image', image);
+  images.forEach((image, index) => {
+    formData.append('images', image);
+  });
   return formData;
 };
 
-export default async function uploadPost(title, description, image, author) {
-  if (!validateInputs(title, description, image)) {
-    console.error('Error during post creation: Missing required fields');
+export default async function uploadPost(title, description, images, author) {
+  if (!validateInputs(title, description, images)) {
+    console.error('Error during post creation: Missing required fields or too many images');
     return;
   }
 
-  const formData = createFormData(title, description, image);
-  
+  const formData = createFormData(title, description, images);
+
   try {
     const response = await axios.post(getUploadPostUrl(), formData, {
       headers: getHeaders()
