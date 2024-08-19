@@ -42,9 +42,8 @@ export default function Posts({
     utils.sortPosts(newSortBy, filteredPosts, setFilteredPosts);
   };
 
-  const handleSearchByChange = (newValue) => {
-    setSearchTerm(newValue);
-    utils.searchPost(posts, setFilteredPosts, newValue);
+  const handleSearchClick = () => {
+    utils.searchPost(posts, setFilteredPosts, searchTerm);
   };
 
   const toggleCreatePostModal = () => {
@@ -98,23 +97,27 @@ export default function Posts({
             </g>
           </svg>
         )}
-        <div className="flex items-center w-full">
+        <div className="flex items-center focus:outline-none w-full">
           <input
             type="text"
             placeholder="Search by name or type..."
-            className="px-4 py-2 w-full rounded-md border border-gray-300 text-zinc-700 focus:outline-none"
+            className="px-4 py-2 w-full rounded-l-md border border-gray-300 text-zinc-700 focus:outline-none"
             value={searchTerm}
             onChange={(e) => {
               const newValue = e.target.value;
               setSearchTerm(newValue);
-              handleSearchByChange(newValue);
             }}
           />
+          <button
+            className="bg-zinc-700 px-4 py-2 h-full rounded-r-md border border-gray-300 focus:outline-none "
+            onClick={handleSearchClick}>
+            Search
+          </button>
         </div>
         <select
           value={sortBy}
           onChange={handleSortByChange}
-          className="bg-zinc-700 px-4 py-2 rounded-md  focus:outline-none"
+          className="bg-zinc-700 px-4 py-2 rounded-md focus:outline-none"
         >
           <option value="">Sort by...</option>
           <option value="id">Time added</option>

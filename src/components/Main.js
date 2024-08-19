@@ -11,6 +11,9 @@ import AccountSettings from "../pages/AccountSettings";
 import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
 import Chat from "../pages/Chat";
+
+import LeftMenu from "./LeftMenu";
+
 import * as utils from "../utils";
 
 export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal }) {
@@ -18,6 +21,10 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
 
   return (
     <div id="main" className="min-h-screen bg-zinc-700 transition-all">
+
+      <LeftMenu
+        user={user} />
+
       <utils.ScrollToTop />
       <TransitionGroup component={null}>
         <CSSTransition key={location.key} classNames="fade" timeout={300}>

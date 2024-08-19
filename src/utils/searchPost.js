@@ -1,4 +1,7 @@
-export default function searchPost(posts, setFilteredPosts, searchTerm) {
+import config from "./config";
+import axios from "axios";
+
+export default async function searchPost(posts, setFilteredPosts, searchTerm) {
   if (!searchTerm) {
     setFilteredPosts(posts);
     return;
@@ -6,11 +9,18 @@ export default function searchPost(posts, setFilteredPosts, searchTerm) {
 
   const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
-  const filteredPosts = posts.filter(
-    ({ name, description }) =>
-      name.toLowerCase().includes(lowerCaseSearchTerm) ||
-      description.toLowerCase().includes(lowerCaseSearchTerm)
-  );
-
-  setFilteredPosts(filteredPosts);
+  try {
+    const response = await axios.get(
+      `${config.apiUrl}/posts/search?searchTerm=${encodeURIComponent(searchTerm)}`
+    );
+    setFilteredPosts(response.data);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    const filteredPosts = posts.filter(
+      ({ title, description }) =>
+        title.toLowerCase().includes(lowerCaseSearchTerm) ||
+        description.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+    setFilteredPosts(filteredPosts);
+  }
 }

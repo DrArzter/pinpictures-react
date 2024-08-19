@@ -67,7 +67,7 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
                 placeholder="Add a comment"
               />
               <button
-                className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-600 rounded-r-md transition-colors duration-300"
+                className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-600 rounded-r-md transition duration-300"
                 onClick={onCommentSubmit}
               >
                 Send

@@ -15,8 +15,6 @@ function App() {
   const headerLinks = [
     { name: "Authentication", path: "/authentification" },
     { name: "Profile", path: user ? `/profile/${user.name}` : "/profile" },
-    { name: "Support", path: "/support" },
-    { name: "License", path: "/license" },
   ];
 
   useEffect(() => {

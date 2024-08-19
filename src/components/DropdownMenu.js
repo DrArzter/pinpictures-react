@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { FaUser, FaSignInAlt, FaSignOutAlt, FaCog } from "react-icons/fa";
 
 export default function DropdownMenu({
   isDropdownOpen,
@@ -37,15 +38,21 @@ export default function DropdownMenu({
     };
   }, [isDropdownOpen]);
 
+  const iconMapping = {
+    Profile: <FaUser className="mr-2" />,
+    Authentication: user ? <FaSignOutAlt className="mr-2" /> : <FaSignInAlt className="mr-2" />,
+    Settings: <FaCog className="mr-2" />,
+  };
+
   return (
     <div
       ref={dropdownRef}
-      className={`absolute right-0 mt-12 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[999] focus:outline-none ${
-        isDropdownOpen ? "block" : "hidden"
+      className={`absolute right-0 mt-12 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[999] transform transition-all duration-300 ease-in-out ${
+        isDropdownOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
       }`}
     >
       <div
-        className="py-1"
+        className="py-2"
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="options-menu"
@@ -54,10 +61,11 @@ export default function DropdownMenu({
           <Link
             key={link.path}
             to={link.path}
-            className="block px-4 py-2 text-sm text-zinc-700 hover:bg-gray-100 hover:text-zinc-900"
+            className="flex items-center px-4 py-2 text-sm text-zinc-700 hover:bg-gradient-to-r from-zinc-100 to-zinc-200 hover:text-zinc-900 transition-colors duration-150"
             role="menuitem"
             onClick={toggleDropdown}
           >
+            {iconMapping[link.name] || <span className="mr-2">•</span>}
             {link.name}
           </Link>
         ))}
