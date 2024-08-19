@@ -12,7 +12,7 @@ export default function LeftMenu({ user }) {
     ];
 
     return (
-        <div className="fixed top-0 left-0 h-full w-24 flex flex-col bg-zinc-800 shadow-lg lg:block hidden transition-transform duration-300 ease-in-out">
+        <div className="fixed top-0 left-0 h-full w-24 flex flex-col bg-zinc-800 lg:block hidden transition-transform duration-300 ease-in-out">
             <utils.ScrollToTop />
             <div className="flex flex-col justify-between h-full">
                 <div className="mt-20 flex flex-col justify-evenly space-y-4 text-white">

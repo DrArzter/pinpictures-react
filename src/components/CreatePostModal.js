@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import * as utils from "../utils";
 import FullScreenImage from "./FullScreenImage";
+import { MdImageNotSupported } from "react-icons/md";
 
 export default function CreatePostModal({
   setCreatePostModal,
@@ -114,10 +115,10 @@ export default function CreatePostModal({
                 />
                 <button
                   type="button"
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1"
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-md p-2"
                   onClick={() => handleRemoveImage(index)}
                 >
-                  X
+                  <MdImageNotSupported />
                 </button>
               </div>
             ))}
