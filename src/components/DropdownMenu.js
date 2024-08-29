@@ -27,14 +27,24 @@ export default function DropdownMenu({
   }
 
   useEffect(() => {
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        toggleDropdown();
+      }
+    };
+
     if (isDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isDropdownOpen]);
 
@@ -43,6 +53,8 @@ export default function DropdownMenu({
     Authentication: user ? <FaSignOutAlt className="mr-2" /> : <FaSignInAlt className="mr-2" />,
     Settings: <FaCog className="mr-2" />,
   };
+
+
 
   return (
     <div

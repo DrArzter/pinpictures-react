@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsHeart, BsChatDots, BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import CommentList from "./CommentList";
 import FullScreenImage from "./FullScreenImage";
@@ -18,6 +18,7 @@ export default function PostFullScreen({
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
   const [fullScreenImageUrl, setFullScreenImageUrl] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const hasMultipleImages = post.images && post.images.length > 1;
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : post.images.length - 1));
@@ -36,7 +37,21 @@ export default function PostFullScreen({
     setIsImageFullScreen(false);
   };
 
-  const hasMultipleImages = post.images && post.images.length > 1;
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-90 overflow-auto">

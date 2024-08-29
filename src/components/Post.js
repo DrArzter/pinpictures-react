@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-import CommentList from "./CommentList";
-import { BsChatDots, BsHeart, BsArrowsFullscreen } from "react-icons/bs";
+import { BsChatDots, BsHeart, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import * as utils from "../utils";
 import FullScreenImage from "./FullScreenImage";
 import PostFullScreen from "./PostFullScreen";
+import CommentList from "./CommentList";
 
 export default function Post({ post, commentValue, onCommentChange, onCommentSubmit }) {
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
   const [fullScreenImageUrl, setFullScreenImageUrl] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [isPostFullScreen, setIsPostFullScreen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const openFullScreenImage = (imageUrl) => {
+  const hasMultipleImages = post.images && post.images.length > 1;
+
+  const openFullScreenImage = (imageUrl, index) => {
     setFullScreenImageUrl(imageUrl);
+    setCurrentImageIndex(index);
     setIsImageFullScreen(true);
   };
 
@@ -34,6 +37,14 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
     // Логику для обновления лайков на сервере можно добавить здесь
   };
 
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : post.images.length - 1));
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex < post.images.length - 1 ? prevIndex + 1 : 0));
+  };
+
   return (
     <>
       <div
@@ -47,22 +58,36 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
           <BsArrowsFullscreen size={24} />
         </button>
         <div className="flex flex-col md:flex-row">
-          {post.images && (
-            <div className="flex flex-wrap w-full mb-4 md:mb-0 cursor-pointer">
-              {post.images.map((image) => (
-                <div className="flex-grow flex-shrink-0 min-w-[150px] p-1" key={image.id}>
-                  <div className="relative w-full pb-[100%] overflow-hidden rounded-lg">
-                    <img
-                      src={`${utils.config.apiUrl.replace("/api", "")}/${image.picpath}`}
-                      alt={post.name}
-                      className="absolute top-0 left-0 w-full h-full object-cover rounded-lg transition-transform transform hover:scale-105"
-                      onClick={() => openFullScreenImage(`${utils.config.apiUrl.replace("/api", "")}/${image.picpath}`)}
-                    />
-                  </div>
+          <div className="relative w-full group">
+            {post.images && (
+              <>
+                <div className="relative w-full pb-[75%] overflow-hidden rounded-lg">
+                  <img
+                    src={`${utils.config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
+                    alt={post.name}
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded-lg transition-transform transform hover:scale-105"
+                    onClick={() => openFullScreenImage(`${utils.config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`, currentImageIndex)}
+                  />
                 </div>
-              ))}
-            </div>
-          )}
+                {hasMultipleImages && (
+                  <>
+                    <button
+                      onClick={handlePrevImage}
+                      className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-zinc-800 text-yellow-400 hover:text-yellow-300 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    >
+                      <BsArrowLeft size={24} />
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-zinc-800 text-yellow-400 hover:text-yellow-300 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    >
+                      <BsArrowRight size={24} />
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+          </div>
           <div className="w-full md:w-2/3 md:ml-4">
             <div className="flex flex-col">
               <h2 className="text-3xl font-bold mb-2 text-yellow-400">{post.name}</h2>
@@ -113,18 +138,18 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
         </div>
       </div>
       {isPostFullScreen && (
-  <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50">
-    <PostFullScreen
-      post={post}
-      onClose={togglePostFullScreen}
-      commentValue={commentValue}
-      onCommentChange={onCommentChange}
-      onCommentSubmit={onCommentSubmit}
-      handleLike={handleLike}
-    />
-  </div>
-)}
-     {isImageFullScreen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <PostFullScreen
+            post={post}
+            onClose={togglePostFullScreen}
+            commentValue={commentValue}
+            onCommentChange={onCommentChange}
+            onCommentSubmit={onCommentSubmit}
+            handleLike={handleLike}
+          />
+        </div>
+      )}
+      {isImageFullScreen && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50">
           <FullScreenImage imageUrl={fullScreenImageUrl} onClose={closeFullScreenImage} />
         </div>

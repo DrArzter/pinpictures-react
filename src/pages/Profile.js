@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import * as utils from "../utils";
 import config from '../utils/config';
 import FullScreenImage from "../components/FullScreenImage";
 import UpdateImageModal from "../components/UpdateImageModal";
+import { FaSpinner } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 function Profile({ user, setUser }) {
   const [profile, setProfile] = useState(null);
@@ -14,9 +16,9 @@ function Profile({ user, setUser }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const redirectToChat = (id) => {
+  const redirectToChat = useCallback((id) => {
     navigate(`/chat/${id}`);
-  };
+  }, [navigate]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,39 +28,41 @@ function Profile({ user, setUser }) {
     if (username) {
       fetchUser();
     }
-  }, []);
+  }, [username]);
 
-  const handleChatCreate = () => {
-    utils.createChat(profile.id)
-      .then((data) => {
-        if (data) {
-          redirectToChat(data.chatId);
-        }
-      })
-      .catch((error) => {
-        console.error('Error creating chat:', error);
-      });
-  };
+  const handleChatCreate = useCallback(() => {
+    if (profile && profile.id) {
+      utils.createChat(profile.id)
+        .then((data) => {
+          if (data) {
+            redirectToChat(data.chatId);
+          }
+        })
+        .catch((error) => {
+          console.error('Error creating chat:', error);
+        });
+    }
+  }, [profile, redirectToChat]);
 
-  const handleProfilePicClick = () => {
+  const handleProfilePicClick = useCallback(() => {
     setShowFullScreen(true);
     toggleDropdown();
-  };
+  }, []);
 
-  const handleUpdateImageClick = () => {
+  const handleUpdateImageClick = useCallback(() => {
     setShowUpdateModal(true);
     toggleDropdown();
-  };
+  }, []);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const toggleDropdown = useCallback(() => {
+    setIsDropdownOpen(prev => !prev);
+  }, []);
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = useCallback((event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isDropdownOpen) {
@@ -70,12 +74,19 @@ function Profile({ user, setUser }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, handleClickOutside]);
+
+  const profilePicSrc = useMemo(() => {
+    if (!profile) return '';
+    return profile.picpath.startsWith("https://ui-avatars.com/")
+      ? profile.picpath
+      : config.apiUrl.replace('/api', '/') + profile.picpath;
+  }, [profile]);
 
   if (!profile) {
     return (
-      <div className="text-center text-3xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        Loading...
+      <div className="flex justify-center items-center w-full h-64">
+        <FaSpinner className="text-yellow-500 text-4xl animate-spin" />
       </div>
     );
   }
@@ -89,12 +100,14 @@ function Profile({ user, setUser }) {
               <Link
                 className="hover:underline bg-zinc-700 rounded p-2 hover:bg-zinc-600"
                 to="/settings"
+                title="Edit your profile"
               >
                 Edit
               </Link>
               <button
                 className="bg-zinc-700 rounded p-2 hover:bg-zinc-600 hover:underline"
                 onClick={() => utils.logout(setUser)}
+                title="Logout"
               >
                 Logout
               </button>
@@ -103,6 +116,7 @@ function Profile({ user, setUser }) {
             <button
               className="bg-zinc-700 rounded p-2 hover:bg-zinc-600 hover:underline"
               onClick={handleChatCreate}
+              title="Send a message"
             >
               Message
             </button>
@@ -111,21 +125,24 @@ function Profile({ user, setUser }) {
         <div className="relative flex flex-col items-center text-center">
           {profile && (
             <>
-              <div className="relative" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
+              <div
+                className="relative"
+                onMouseEnter={toggleDropdown}
+                onMouseLeave={toggleDropdown}
+              >
                 <img
-                  src={
-                    profile.picpath.startsWith("https://ui-avatars.com/")
-                      ? profile.picpath
-                      : config.apiUrl.replace('/api', '/') + profile.picpath
-                  }
+                  src={profilePicSrc}
                   alt="Profile Picture"
                   className="w-32 h-32 rounded-full mb-4 cursor-pointer"
                   style={{ objectFit: "cover" }}
                   onClick={handleProfilePicClick}
                 />
                 {isDropdownOpen && profile && user.name === profile.name && (
-                  <div
+                  <motion.div
                     ref={dropdownRef}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     className="absolute top-0 left-0 mt-36 text-sm text-bold w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[999]"
                   >
                     <div className="py-1" role="menu" aria-orientation="vertical">
@@ -136,21 +153,20 @@ function Profile({ user, setUser }) {
                         Update Image
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
               </div>
               <p className="text-xl font-bold mb-2">{profile.name}</p>
+              {profile.bio && (
+                <p className="text-md text-gray-300 mb-4">{profile.bio}</p>
+              )}
             </>
           )}
         </div>
       </div>
       {showFullScreen && (
         <FullScreenImage
-          imageUrl={
-            profile.picpath.startsWith("https://ui-avatars.com/")
-              ? profile.picpath
-              : config.apiUrl.replace('/api', '/') + profile.picpath
-          }
+          imageUrl={profilePicSrc}
           onClose={() => setShowFullScreen(false)}
         />
       )}

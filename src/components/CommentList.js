@@ -3,7 +3,7 @@ import Comment from "./Comment";
 
 export default function CommentList({ comments }) {
   return (
-    <div className="max-h-60 overflow-y-auto mb-4">
+    <div className="max-h-[70vh] overflow-y-auto mb-4">
       {comments.length > 0 ? (
         comments.map((comment) => <Comment key={comment.id} comment={comment} />)
       ) : (
