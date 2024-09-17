@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
-import * as utils from "../utils";
+
+import * as api from "../../api";
+import * as utils from "../../utils";
 
 export default function UpdateImageModal({ onClose, user, setUser, profile, setProfile }) {
   const [image, setImage] = useState(null);
@@ -29,7 +31,7 @@ export default function UpdateImageModal({ onClose, user, setUser, profile, setP
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updatedUser = await utils.uploadProfileImage(image, user.id);
+      const updatedUser = await api.uploadProfileImage(image, user.id);
       setUser(updatedUser);
       if (profile.name === user.name) {
         setProfile(updatedUser);

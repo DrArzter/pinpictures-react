@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { BsChatDots, BsHeart, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import * as utils from "../utils";
-import FullScreenImage from "./FullScreenImage";
-import PostFullScreen from "./PostFullScreen";
+import FullScreenImage from "./modals/FullScreenImageModal";
+import PostFullScreen from "./modals/PostFullScreenModal";
 import CommentList from "./CommentList";
+
+import config from "../api/config";
+import * as api from "../api";
+import * as utils from "../utils";
 
 export default function Post({ post, commentValue, onCommentChange, onCommentSubmit }) {
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
@@ -61,12 +64,12 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
           <div className="relative w-full group">
             {post.images && (
               <>
-                <div className="relative w-full pb-[75%] overflow-hidden rounded-lg">
+                <div className="relative w-full pb-[100%] overflow-hidden rounded-lg">
                   <img
-                    src={`${utils.config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
+                    src={`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
                     alt={post.name}
                     className="absolute top-0 left-0 w-full h-full object-cover rounded-lg transition-transform transform hover:scale-105"
-                    onClick={() => openFullScreenImage(`${utils.config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`, currentImageIndex)}
+                    onClick={() => openFullScreenImage(`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`, currentImageIndex)}
                   />
                 </div>
                 {hasMultipleImages && (
@@ -150,7 +153,7 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
         </div>
       )}
       {isImageFullScreen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div className="fixed top-0 left-0 w-full h-full bg-opacity-70 flex items-center justify-center z-50">
           <FullScreenImage imageUrl={fullScreenImageUrl} onClose={closeFullScreenImage} />
         </div>
       )}

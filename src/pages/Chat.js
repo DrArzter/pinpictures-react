@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import MessageList from "../components/MessageList";
 import MessageInput from "../components/MessageInput";
 import { useParams } from "react-router-dom";
+
+import * as api from "../api";
 import * as utils from "../utils";
 
 
@@ -12,7 +14,7 @@ export default function Chat({ user }) {
 
   useEffect(() => {
     const fetchChats = async () => {
-      const response = await utils.getChatById(id);
+      const response = await api.getChatById(id);
       if (response) {
         setMessages(response);
       }
@@ -23,7 +25,7 @@ export default function Chat({ user }) {
 
   const fetchMessages = async () => {
     try {
-      const data = await utils.getMessages(id);
+      const data = await api.getMessages(id);
       setMessages(messages => [...messages, data]);
       await fetchMessages();
     } catch (error) {
@@ -35,7 +37,7 @@ export default function Chat({ user }) {
 
   const handleSend = async (message) => {
     const newMessage = { text: message };
-    await utils.uploadMessage(id, newMessage);
+    await api.uploadMessage(id, newMessage);
   };
 
   return (

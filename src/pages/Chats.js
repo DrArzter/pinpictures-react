@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import config from "../api/config";
+
+import * as api from "../api";
 import * as utils from "../utils";
 
 export default function Chats({ user }) {
@@ -23,7 +27,7 @@ export default function Chats({ user }) {
     const fetchChats = async () => {
       setIsLoading(true);
       try {
-        const response = await utils.getChats();
+        const response = await api.getChats();
         if (response) {
           setChatList(response);
           setFilteredChatList(response);
@@ -38,7 +42,7 @@ export default function Chats({ user }) {
 
   useEffect(() => {
     if (chatList.length > 0) {
-      const filtered = utils.searchChats(chatList, searchTerm);
+      const filtered = api.searchChats(chatList, searchTerm);
       setFilteredChatList(filtered);
     }
   }, [searchTerm, chatList]);
@@ -98,7 +102,7 @@ export default function Chats({ user }) {
                   >
                     <div className="flex items-center">
                       <img
-                        src={secondUser.picpath.startsWith("https://ui-avatars.com/") ? secondUser.picpath : utils.config.apiUrl.replace('/api', '/') + secondUser.picpath}
+                        src={secondUser.picpath.startsWith("https://ui-avatars.com/") ? secondUser.picpath : config.apiUrl.replace('/api', '/') + secondUser.picpath}
                         alt="Profile Picture"
                         style={{ objectFit: "cover" }}
                         className="w-8 h-8 rounded-full"

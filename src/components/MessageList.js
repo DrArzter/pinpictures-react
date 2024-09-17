@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import config from '../utils/config';
+
+import config from '../api/config';
 
 export default function MessageList({ messages, user }) {
   const messageListRef = useRef(null);

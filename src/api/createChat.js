@@ -1,6 +1,7 @@
 import axios from "axios";
-import config from "./config";
 import * as utils from "../utils";
+
+import config from "./config";
 
 const getHeaders = () => {
   return {

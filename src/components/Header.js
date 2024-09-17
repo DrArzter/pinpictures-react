@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaBell } from "react-icons/fa";
 import DropdownMenu from "./DropdownMenu";
-import config from '../utils/config';
+
+import config from '../api/config';
 
 import { TbMessages } from "react-icons/tb";
 
 export default function Header({ user, headerLinks }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Переключение состояния выпадающего меню
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -35,6 +36,7 @@ export default function Header({ user, headerLinks }) {
         </Link>
         {user && (
           <div className="flex flex-row gap-4 ml-auto">
+            <FaBell size={36} className="hover:text-yellow-500 transition duration-300" />
             <Link to="./Chats" className="header__link">
               <TbMessages size={36} className="hover:text-yellow-500 transition duration-300" />
             </Link>

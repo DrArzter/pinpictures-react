@@ -12,8 +12,6 @@ import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
 import Chat from "../pages/Chat";
 
-import LeftMenu from "./LeftMenu";
-
 import * as utils from "../utils";
 
 export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal }) {
@@ -22,10 +20,7 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
   return (
     <div id="main" className="min-h-screen bg-zinc-700 transition-all">
 
-      <LeftMenu
-        user={user} />
-
-      <utils.ScrollToTop />
+      <utils.scrollToTop />
       <TransitionGroup component={null}>
         <CSSTransition key={location.key} classNames="fade" timeout={300}>
           <Routes location={location}>
@@ -48,6 +43,7 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
             <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} />} />
             <Route path="/chats" element={<Chats user={user} />} />
             <Route path="/chat/:id" element={<Chat user={user} />} />
+            <Route path="secret" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </CSSTransition>

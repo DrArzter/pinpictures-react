@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { BsHeart, BsChatDots, BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import CommentList from "./CommentList";
-import FullScreenImage from "./FullScreenImage";
+import CommentList from "../CommentList";
+import FullScreenImage from "./FullScreenImageModal";
 import { Link } from "react-router-dom";
 import { FaRegWindowClose } from "react-icons/fa";
-import * as utils from "../utils";
+
+import config from "../../api/config";
+import * as utils from "../../utils";
 
 export default function PostFullScreen({
   post,
@@ -62,9 +64,9 @@ export default function PostFullScreen({
             {post.images && post.images.length > 0 && (
               <div className="relative w-full h-full group">
                 <img
-                  src={`${utils.config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
+                  src={`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
                   alt={post.name}
-                  onClick={() => openFullScreenImage(`${utils.config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`)}
+                  onClick={() => openFullScreenImage(`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`)}
                   className="w-full h-full object-cover rounded-lg"
                 />
                 {hasMultipleImages && (

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Post from "./Post";
+
+import * as api from "../api";
 import * as utils from "../utils";
 
 export default function PostList({ posts, setPosts, user }) {
@@ -13,7 +15,7 @@ export default function PostList({ posts, setPosts, user }) {
   };
 
   const handleCommentSubmit = async (postId) => {
-    await utils.uploadComment(postId, commentValues[postId], setCommentValues, posts, setPosts, user);
+    await api.uploadComment(postId, commentValues[postId], setCommentValues, posts, setPosts, user);
   };
 
   return (

@@ -1,4 +1,5 @@
 import config from "./config";
+
 import axios from "axios";
 
 export default async function searchPost(posts, setFilteredPosts, searchTerm) {

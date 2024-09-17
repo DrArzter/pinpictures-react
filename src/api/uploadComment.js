@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as utils from "../utils";
+
 import config from "./config";
 
 const addCommentToPost = (posts, postId, newComment) => {

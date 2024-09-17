@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import * as utils from "./utils";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
+
+import * as utils from "./utils";
+import * as api from "./api";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -19,7 +21,7 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const user = await utils.getUser();
+      const user = await api.getUser();
       if (user) {
         setUser(user);
       }

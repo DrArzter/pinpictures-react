@@ -1,27 +1,29 @@
 import axios from 'axios';
 import * as utils from '../utils';
-import config from './config';
+
+import config from "./config";
 
 const getHeaders = () => {
   const token = utils.getAuthToken();
   return token ? { headers: { Authorization: token } } : null;
 };
 
-const getChatsUrl = () => {
-  return `${config.apiUrl}/chats`;
+const getUserUrl = () => {
+  return `${config.apiUrl}/users`;
 };
 
-export default async function getChats() {
+export default async function getUser() {
   try {
     const headers = getHeaders();
     if (!headers) {
       return null;
     }
     
-    const response = await axios.get(getChatsUrl(), headers);
+    const response = await axios.get(getUserUrl(), headers);
+    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching chats:', error);
+    console.error('Error fetching user:', error);
     return null;
   }
 }

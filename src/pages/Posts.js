@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import * as utils from "../utils";
 import PostList from "../components/PostList";
-import CreatePostModal from "../components/CreatePostModal";
+import CreatePostModal from "../components/modals/CreatePostModal";
 import { TbSquarePlus } from "react-icons/tb";
-import { FaSpinner } from "react-icons/fa"; // Loading spinner
+import { FaSpinner } from "react-icons/fa";
+
+import * as api from "../api";
+import * as utils from "../utils";
 
 export default function Posts({
   user,
@@ -15,13 +17,13 @@ export default function Posts({
   const [sortBy, setSortBy] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
-  const [suggestions, setSuggestions] = useState([]); // Autocomplete suggestions
+  const [loading, setLoading] = useState(true);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const fetchedPosts = await utils.getPosts();
+        const fetchedPosts = await api.getPosts();
         const initializedPosts = fetchedPosts.map((post) => ({
           ...post,
           comments: post.comments || [],
@@ -49,7 +51,7 @@ export default function Posts({
   };
 
   const handleSearchClick = () => {
-    utils.searchPost(posts, setFilteredPosts, searchTerm);
+    api.searchPost(posts, setFilteredPosts, searchTerm);
   };
 
   const handleSearchChange = (e) => {

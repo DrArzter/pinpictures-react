@@ -13,6 +13,7 @@ function Support() {
                 <p className="mb-4">Email: chapegarostislav@gmail.com</p>
                 <a href = "https://github.com/DrArzter" className="mb-4">GitHub</a>
             </div>
+            <iframe src="https://vk.com/video_ext.php?oid=-219485364&id=456239129&hd=2&autoplay=1" width="325" height="646" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
         </div>
     );
 }

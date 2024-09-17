@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
-import * as utils from "../utils";
-import FullScreenImage from "./FullScreenImage";
+import FullScreenImage from "./FullScreenImageModal";
 import { MdImageNotSupported } from "react-icons/md";
-import { FaSpinner } from "react-icons/fa"; // For loading spinner
+import { FaSpinner } from "react-icons/fa";
+
+import * as api from "../../api";
+import * as utils from "../../utils";
 
 export default function CreatePostModal({
   setCreatePostModal,
@@ -24,7 +26,7 @@ export default function CreatePostModal({
     e.preventDefault();
     setLoading(true);
     try {
-      const newPost = await utils.uploadPost(title, description, images, user.name);
+      const newPost = await api.uploadPost(title, description, images, user.name);
       setPosts([newPost, ...posts]);
       setFilteredPosts([newPost, ...filteredPosts]);
       closeModal();
@@ -79,8 +81,8 @@ export default function CreatePostModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[999] overflow-y-auto bg-black bg-opacity-50" onClick={handleClickOutside}>
-      <div className="lg:w-1/2 w-11/12 bg-zinc-800 text-zinc-100 p-6 rounded-lg relative max-h-[90vh] overflow-y-auto shadow-xl">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
+      <div className="lg:w-1/2 w-11/12 bg-zinc-800 text-zinc-100 p-6 rounded-lg relative overflow-y-auto shadow-xl">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 h-[80vh] items-center">
           <input
             type="text"
             name="title"
@@ -108,7 +110,7 @@ export default function CreatePostModal({
             multiple
             onChange={handleImageChange}
           />
-          <div className="w-5/6 mt-4 flex flex-wrap gap-2 overflow-y-auto max-h-60">
+          <div className="w-5/6 mt-4 flex flex-wrap gap-2 overflow-y-auto">
             {imagePreviews.map((preview, index) => (
               <div key={index} className="relative group">
                 <img
