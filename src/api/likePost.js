@@ -18,7 +18,8 @@ const getHeaders = () => {
 
 export default async function likePost(postId) {
   try {
-    const response = await axios.post(`${getLikePostUrl()}/like/${postId}`, {}, { getHeaders });
+    const headers = getHeaders();
+    const response = await axios.post(`${getLikePostUrl()}/like/${postId}`, {}, { headers });
     return response;
   } catch (error) {
     console.error('Error liking post:', error);

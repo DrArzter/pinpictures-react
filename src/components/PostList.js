@@ -24,6 +24,7 @@ export default function PostList({ posts, setPosts, user }) {
         <Post
           key={post.id}
           post={post}
+          user={user}
           commentValue={commentValues[post.id] || ""}
           onCommentChange={(e) => handleCommentChange(post.id, e.target.value)}
           onCommentSubmit={() => handleCommentSubmit(post.id)}

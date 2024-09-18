@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BsChatDots, BsHeart, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { BsChatDots, BsHeart, BsHeartFill, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import FullScreenImage from "./modals/FullScreenImageModal";
 import PostFullScreen from "./modals/PostFullScreenModal";
 import CommentList from "./CommentList";
@@ -10,14 +10,25 @@ import config from "../api/config";
 import * as api from "../api";
 import * as utils from "../utils";
 
-export default function Post({ post, commentValue, onCommentChange, onCommentSubmit }) {
+export default function Post({ post, commentValue, user, onCommentChange, onCommentSubmit }) {
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
   const [fullScreenImageUrl, setFullScreenImageUrl] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [isPostFullScreen, setIsPostFullScreen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const [liked, setLiked] = useState(false);
   const hasMultipleImages = post.images && post.images.length > 1;
+
+  post.likes = post.likes || 0;
+
+  useEffect(() => {
+    if (user.id) {
+      if (post.liked_user_ids && post.liked_user_ids.includes(user.id)) {
+        setLiked(true);
+      }
+    }
+    
+  }, [user])
 
   const openFullScreenImage = (imageUrl, index) => {
     setFullScreenImageUrl(imageUrl);
@@ -38,13 +49,21 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
   };
 
   const handleLike = () => {
-    console.log(post);
-    const res = likePost(post.id);
-    console.log(res);
-    if (res.status === 200) {
-      console.log("liked");
-    }
-    console.log(res);
+    likePost(post.id)
+    .then(res => {
+      if (res.data.message === 'liked') {
+        setLiked(true);
+        post.likes = post.likes + 1;
+      } else if (res.data.message === 'unliked') {
+        setLiked(false);
+        post.likes = post.likes - 1;
+      } else {
+        console.error('Error liking post:', res.data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error liking post:', error);
+    });
   };
 
   const handlePrevImage = () => {
@@ -110,8 +129,8 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
                   onClick={handleLike}
                   className="text-yellow-400 hover:text-yellow-300 flex items-center space-x-2"
                 >
-                  <BsHeart size={24} />
-                  <span>{post.likes || 0}</span>
+                  {liked ? <BsHeartFill size={24} /> : <BsHeart size={24} />}
+                  <span>{post.likes}</span>
                 </button>
                 <button
                   onClick={toggleComments}
