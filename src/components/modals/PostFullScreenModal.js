@@ -64,7 +64,7 @@ export default function PostFullScreen({
             {post.images && post.images.length > 0 && (
               <div className="relative w-full h-full group">
                 <img
-                  src={`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
+                  src={`${post.images[currentImageIndex].picpath}`}
                   alt={post.name}
                   onClick={() => openFullScreenImage(`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`)}
                   className="w-full h-full object-cover rounded-lg"

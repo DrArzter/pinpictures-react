@@ -12,6 +12,8 @@ export default function Posts({
   setUser,
   createPostModal,
   setCreatePostModal,
+  notifications,
+  setNotifications
 }) {
   const [posts, setPosts] = useState([]);
   const [sortBy, setSortBy] = useState("");
@@ -85,6 +87,8 @@ export default function Posts({
           filteredPosts={filteredPosts}
           setFilteredPosts={setFilteredPosts}
           user={user}
+          notifications={notifications}
+          setNotifications={setNotifications}
         />
       )}
 

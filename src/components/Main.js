@@ -14,7 +14,7 @@ import Chat from "../pages/Chat";
 
 import * as utils from "../utils";
 
-export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal }) {
+export default function Main({ user, setUser, posts, setPosts, createPostModal, setCreatePostModal, notifications, setNotifications }) {
   const location = useLocation();
 
   return (
@@ -31,8 +31,10 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
                   posts={posts} 
                   setPosts={setPosts} 
                   user={user} 
-                  createPostModal={createPostModal} 
+                  createPostModal={createPostModal}
                   setCreatePostModal={setCreatePostModal} 
+                  notifications={notifications}
+                  setNotifications={setNotifications}
                 />
               } 
             />

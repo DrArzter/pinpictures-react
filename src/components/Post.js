@@ -4,6 +4,7 @@ import { BsChatDots, BsHeart, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } fr
 import FullScreenImage from "./modals/FullScreenImageModal";
 import PostFullScreen from "./modals/PostFullScreenModal";
 import CommentList from "./CommentList";
+import likePost from "../api/likePost";
 
 import config from "../api/config";
 import * as api from "../api";
@@ -37,7 +38,13 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
   };
 
   const handleLike = () => {
-    // Логику для обновления лайков на сервере можно добавить здесь
+    console.log(post);
+    const res = likePost(post.id);
+    console.log(res);
+    if (res.status === 200) {
+      console.log("liked");
+    }
+    console.log(res);
   };
 
   const handlePrevImage = () => {
@@ -66,10 +73,10 @@ export default function Post({ post, commentValue, onCommentChange, onCommentSub
               <>
                 <div className="relative w-full pb-[100%] overflow-hidden rounded-lg">
                   <img
-                    src={`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`}
+                    src={`${post.images[currentImageIndex].picpath}`}
                     alt={post.name}
                     className="absolute top-0 left-0 w-full h-full object-cover rounded-lg transition-transform transform hover:scale-105"
-                    onClick={() => openFullScreenImage(`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`, currentImageIndex)}
+                    onClick={() => openFullScreenImage(`${post.images[currentImageIndex].picpath}`, currentImageIndex)}
                   />
                 </div>
                 {hasMultipleImages && (

@@ -31,7 +31,6 @@ const createFormData = (title, description, images) => {
 
 export default async function uploadPost(title, description, images, author) {
   if (!validateInputs(title, description, images)) {
-    console.error('Error during post creation: Missing required fields or too many images');
     return;
   }
 
@@ -46,7 +45,6 @@ export default async function uploadPost(title, description, images, author) {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('Error during post creation:', error);
     throw error;
   }
 }

@@ -13,6 +13,8 @@ export default function CreatePostModal({
   filteredPosts,
   setFilteredPosts,
   user,
+  notifications,
+  setNotifications
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -26,16 +28,27 @@ export default function CreatePostModal({
     e.preventDefault();
     setLoading(true);
     try {
-      const newPost = await api.uploadPost(title, description, images, user.name);
+      const responseData = await api.uploadPost(title, description, images, user.name);
+  
+      const newPost = responseData.newPost;
+      const message = responseData.message;
+      const status = responseData.status;
+  
+      setNotifications([...notifications, { message, status }]);
       setPosts([newPost, ...posts]);
       setFilteredPosts([newPost, ...filteredPosts]);
       closeModal();
     } catch (error) {
-      console.error("Error creating post:", error);
+      const status = error.response?.data?.status || "error";
+      const message = error.response?.data?.message || "An unexpected error occurred";
+      
+      setNotifications([...notifications, { message, status }]);
     } finally {
       setLoading(false);
     }
   }
+  
+  
 
   function closeModal() {
     setCreatePostModal(false);
@@ -44,7 +57,7 @@ export default function CreatePostModal({
   function handleImageChange(e) {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 10) {
-      console.error("You can upload a maximum of 10 images.");
+      setNotifications([...notifications, { message: 'You can only upload up to 10 images', status: 'error' }]);
       return;
     }
     setImages((prevImages) => [...prevImages, ...files]);
@@ -80,7 +93,7 @@ export default function CreatePostModal({
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-[999] overflow-y-auto bg-black bg-opacity-50" onClick={handleClickOutside}>
+    <div className="fixed inset-0 flex items-center justify-center z-[49] overflow-y-auto bg-black bg-opacity-50" onClick={handleClickOutside}>
       <div className="lg:w-1/2 w-11/12 bg-zinc-800 text-zinc-100 p-6 rounded-lg relative overflow-y-auto shadow-xl">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 h-[80vh] items-center">
           <input
@@ -141,9 +154,8 @@ export default function CreatePostModal({
           )}
           <button
             type="submit"
-            className={`bg-zinc-700 hover:bg-zinc-600 hover:text-yellow-500 text-white font-bold py-2 px-4 rounded mt-4 transition-colors duration-300 flex items-center ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`bg-zinc-700 hover:bg-zinc-600 hover:text-yellow-500 text-white font-bold py-2 px-4 rounded mt-4 transition-colors duration-300 flex items-center ${loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             disabled={loading}
           >
             {loading && <FaSpinner className="animate-spin mr-2" />}
