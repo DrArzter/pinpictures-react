@@ -18,7 +18,7 @@ export default function Main({ user, setUser, posts, setPosts, createPostModal, 
   const location = useLocation();
 
   return (
-    <div id="main" className="min-h-screen bg-zinc-700 transition-all">
+    <div id="main" className="min-h-screen bg-slate-100 transition-all">
 
       <utils.scrollToTop />
       <TransitionGroup component={null}>

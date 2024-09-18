@@ -30,6 +30,7 @@ export default function Posts({
           ...post,
           comments: post.comments || [],
         }));
+        console.log(initializedPosts);
         setPosts(initializedPosts);
         setFilteredPosts(initializedPosts);
       } catch (error) {
@@ -78,72 +79,7 @@ export default function Posts({
   };
 
   return (
-    <div className="flex flex-col items-center mx-auto p-4">
-      {createPostModal && (
-        <CreatePostModal
-          setCreatePostModal={setCreatePostModal}
-          posts={posts}
-          setPosts={setPosts}
-          filteredPosts={filteredPosts}
-          setFilteredPosts={setFilteredPosts}
-          user={user}
-          notifications={notifications}
-          setNotifications={setNotifications}
-        />
-      )}
-
-      <div className="w-full lg:w-3/4 flex flex-row gap-4 bg-zinc-800 p-6 rounded-lg shadow-lg mb-4 animate-fade-in">
-        {user && (
-          <button
-            className="focus:outline-none hover:text-yellow-500 transition duration-300"
-            onClick={toggleCreatePostModal}>
-            <TbSquarePlus size={46} className="hover:scale-110 transform transition-all duration-300" />
-          </button>
-        )}
-
-        <div className="relative flex items-center w-full">
-          <input
-            type="text"
-            placeholder="Search by name or type..."
-            className="px-4 py-2 w-full rounded-l-md text-zinc-700 focus:outline-none"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-          <button
-            className="bg-zinc-700 h-10 px-4 rounded-r-md focus:outline-none hover:text-yellow-500 transition duration-300"
-            onClick={handleSearchClick}>
-            Search
-          </button>
-
-          {suggestions.length > 0 && (
-            <ul className="absolute top-12 left-0 bg-white text-black w-full rounded-md shadow-lg max-h-40 overflow-y-auto z-10">
-              {suggestions.map((suggestion, index) => (
-                <li
-                  key={index}
-                  className="px-4 py-2 hover:bg-zinc-300 cursor-pointer"
-                  onClick={() => {
-                    setSearchTerm(suggestion);
-                    setSuggestions([]);
-                    handleSearchClick();
-                  }}>
-                  {suggestion}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <select
-          value={sortBy}
-          onChange={handleSortByChange}
-          className="bg-zinc-700 px-4 self-center h-10 rounded-md focus:outline-none hover:text-yellow-500 transition duration-300 focus:text-yellow-500">
-          <option value="">Sort by...</option>
-          <option value="id">Time added</option>
-          <option value="name">Name</option>
-          <option value="rating">Rating</option>
-        </select>
-      </div>
-
+    <div className="p-4">
       {loading ? (
         <div className="flex justify-center items-center w-full h-64">
           <FaSpinner className="text-yellow-500 text-4xl animate-spin" />
@@ -151,7 +87,7 @@ export default function Posts({
       ) : (
         <div
           id="posts"
-          className="w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg flex flex-col justify-between shadow-lg animate-slide-up">
+          className="w-full p-[14px] animate-slide-up">
           {filteredPosts.length > 0 ? (
             <PostList posts={filteredPosts} setPosts={setPosts} user={user} />
           ) : (

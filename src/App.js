@@ -16,10 +16,7 @@ function App() {
   const [createPostModal, setCreatePostModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const headerLinks = [
-    { name: "Authentication", path: "/authentification" },
-    { name: "Profile", path: user ? `/profile/${user.name}` : "/profile" },
-  ];
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,13 +30,16 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div className="min-h-screen bg-zinc-800"></div>;
+    return <div className="min-h-screen bg-slate-100"></div>;
   }
 
   return (
     <Router>
-      <div className="bg-zinc-800 text-zinc-300">
-        <Header user={user} headerLinks={headerLinks} />
+      <div className="bg-slate-100">
+        <Header 
+        user={user} 
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}/>
         <Notification
           notifications={notifications}
           setNotifications={setNotifications}
@@ -51,6 +51,8 @@ function App() {
           setCreatePostModal={setCreatePostModal}
           notifications={notifications}
           setNotifications={setNotifications}
+          isDarkMode={isDarkMode}
+          setIsDarkMode={setIsDarkMode}
         />
         <Footer />
       </div>

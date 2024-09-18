@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BsChatDots, BsHeart, BsHeartFill, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { FiLayers } from "react-icons/fi";
 import FullScreenImage from "./modals/FullScreenImageModal";
 import PostFullScreen from "./modals/PostFullScreenModal";
 import CommentList from "./CommentList";
@@ -28,10 +29,8 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
           setLiked(true);
         }
       }
-
     }
-    
-  }, [user])
+  }, [user]);
 
   const openFullScreenImage = (imageUrl, index) => {
     setFullScreenImageUrl(imageUrl);
@@ -53,20 +52,20 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
 
   const handleLike = () => {
     likePost(post.id)
-    .then(res => {
-      if (res.data.message === 'liked') {
-        setLiked(true);
-        post.likes = post.likes + 1;
-      } else if (res.data.message === 'unliked') {
-        setLiked(false);
-        post.likes = post.likes - 1;
-      } else {
-        console.error('Error liking post:', res.data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error liking post:', error);
-    });
+      .then(res => {
+        if (res.data.message === 'liked') {
+          setLiked(true);
+          post.likes = post.likes + 1;
+        } else if (res.data.message === 'unliked') {
+          setLiked(false);
+          post.likes = post.likes - 1;
+        } else {
+          console.error('Error liking post:', res.data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error liking post:', error);
+      });
   };
 
   const handlePrevImage = () => {
@@ -79,113 +78,55 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
 
   return (
     <>
+      {isPostFullScreen && (
+        <PostFullScreen
+          post={post}
+          onClose={togglePostFullScreen}
+          commentValue={commentValue}
+          onCommentChange={onCommentChange}
+          onCommentSubmit={onCommentSubmit}
+          handleLike={handleLike}
+          liked={liked}
+        />
+      )}
       <div
         key={post.id}
-        className={`relative p-6 rounded-lg shadow-lg bg-zinc-700 transition-all duration-300 flex-shrink-0 ${isPostFullScreen ? "hidden" : ""}`}
+        className={` hover:scale-105 focus:scale-105 transition-all duration-300`}
       >
-        <button
-          onClick={togglePostFullScreen}
-          className="absolute top-4 right-4 text-yellow-400 hover:text-yellow-300 transition duration-300"
-        >
-          <BsArrowsFullscreen size={24} />
-        </button>
         <div className="flex flex-col md:flex-row">
-          <div className="relative w-full group">
+          <div className="w-full group relative"> {/* Добавляем relative для позиционирования кнопок */}
             {post.images && (
               <>
-                <div className="relative w-full pb-[100%] overflow-hidden rounded-lg">
-                  <img
+                <div className="w-full overflow-hidden rounded-lg">
+                  {hasMultipleImages && (
+                    <FiLayers
+                      className="absolute top-4 right-4 text-black hover:text-yellow-500 transition duration-300 text-3xl"
+                    />
+                  )
+                  }
+
+                    < img
                     src={`${post.images[currentImageIndex].picpath}`}
-                    alt={post.name}
-                    className="absolute top-0 left-0 w-full h-full object-cover rounded-lg transition-transform transform hover:scale-105"
-                    onClick={() => openFullScreenImage(`${post.images[currentImageIndex].picpath}`, currentImageIndex)}
+                  alt={post.name}
+                  className="w-full object-cover max-h-[512px]" // Задаем ширину изображения на 100%
+                  onClick={togglePostFullScreen}
                   />
-                </div>
-                {hasMultipleImages && (
-                  <>
-                    <button
-                      onClick={handlePrevImage}
-                      className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-zinc-800 text-yellow-400 hover:text-yellow-300 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      <BsArrowLeft size={24} />
-                    </button>
-                    <button
-                      onClick={handleNextImage}
-                      className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-zinc-800 text-yellow-400 hover:text-yellow-300 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      <BsArrowRight size={24} />
-                    </button>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-          <div className="w-full md:w-2/3 md:ml-4">
-            <div className="flex flex-col">
-              <h2 className="text-3xl font-bold mb-2 text-yellow-400">{post.name}</h2>
-              <p className="mb-2 text-gray-300">{post.description}</p>
-              <p className="text-sm text-gray-500">
-                Posted by: <Link to={`/profile/${post.author}`} className="hover:underline text-yellow-400">{post.author}</Link>
-              </p>
-              <div className="flex items-center mt-4 space-x-4">
-                <button
-                  onClick={handleLike}
-                  className="text-yellow-400 hover:text-yellow-300 flex items-center space-x-2"
-                >
-                  {liked ? <BsHeartFill size={24} /> : <BsHeart size={24} />}
-                  <span>{post.likes}</span>
-                </button>
-                <button
-                  onClick={toggleComments}
-                  className="text-yellow-400 hover:text-yellow-300 flex items-center space-x-2"
-                >
-                  <BsChatDots size={24} />
-                  <span>{post.comments ? post.comments.length : 0}</span>
-                </button>
-              </div>
-            </div>
-            {showComments && (
-              <>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                  <CommentList comments={post.comments || []} />
-                </div>
-                <div className="flex items-center mt-4">
-                  <input
-                    className="flex-grow px-4 py-2 rounded-l-md border border-gray-600 bg-zinc-800 text-gray-200 focus:outline-none"
-                    type="text"
-                    value={commentValue}
-                    onChange={onCommentChange}
-                    placeholder="Add a comment"
-                  />
-                  <button
-                    className="px-4 py-2 bg-yellow-500 text-zinc-900 hover:bg-yellow-600 rounded-r-md transition duration-300"
-                    onClick={onCommentSubmit}
-                  >
-                    Send
-                  </button>
+
+                  <div className="mt-[5px]">
+                    <p className="text-black text-[16px]">{post.name}</p>
+
+                    <p className="text-[#ACACAC] text-[16px] line-clamp-3 break-words">{post.description}</p>
+
+                    <p className="text-[#ACACAC] text-[16px] mt-[11px]">{post.author}</p>
+
+                  </div>
                 </div>
               </>
             )}
           </div>
+
         </div>
       </div>
-      {isPostFullScreen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <PostFullScreen
-            post={post}
-            onClose={togglePostFullScreen}
-            commentValue={commentValue}
-            onCommentChange={onCommentChange}
-            onCommentSubmit={onCommentSubmit}
-            handleLike={handleLike}
-          />
-        </div>
-      )}
-      {isImageFullScreen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-opacity-70 flex items-center justify-center z-50">
-          <FullScreenImage imageUrl={fullScreenImageUrl} onClose={closeFullScreenImage} />
-        </div>
-      )}
     </>
   );
 }

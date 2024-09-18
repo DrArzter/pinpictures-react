@@ -17,9 +17,9 @@ export default function PostList({ posts, setPosts, user }) {
   const handleCommentSubmit = async (postId) => {
     await api.uploadComment(postId, commentValues[postId], setCommentValues, posts, setPosts, user);
   };
-
+// h-[96vh] w -[100vw]
   return (
-    <div className="space-y-8">
+    <div className="3xl:columns-8 md:columns-4 columns-2 gap-x-[16px] space-y-[15px] ">
       {posts.map((post) => (
         <Post
           key={post.id}

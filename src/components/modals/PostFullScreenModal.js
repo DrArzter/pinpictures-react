@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsHeart, BsChatDots, BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { BsHeart, BsChatDots, BsArrowLeft, BsArrowRight, BsHeartFill } from "react-icons/bs";
 import CommentList from "../CommentList";
 import FullScreenImage from "./FullScreenImageModal";
 import { Link } from "react-router-dom";
@@ -14,7 +14,8 @@ export default function PostFullScreen({
   commentValue,
   onCommentChange,
   onCommentSubmit,
-  handleLike
+  handleLike,
+  liked
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
@@ -47,18 +48,27 @@ export default function PostFullScreen({
     };
 
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
+
   }, [onClose]);
 
   
 
+  function handleClickOutside(event) {
+    if (event.target.id === 'FullScreenModal') {
+      onClose();
+    }
+  }
+
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-90 overflow-auto">
-      <div className="relative w-full h-full p-6 flex flex-col bg-zinc-800 rounded-lg">
-        <FaRegWindowClose className="absolute top-4 right-4 text-white hover:text-red-500 transition duration-300 text-3xl cursor-pointer" onClick={onClose} />
+    <div id="FullScreenModal" className="fixed md:inset-[-2%] inset-0 z-50 overflow-auto flex md:bg-black md:bg-opacity-40 items-center justify-center">
+      <div className="relative 5xl:w-6/12 4xl:w-8/12 3xl:w-10/12 w-full md:h-5/6 h-full md:p-6 flex flex-col bg-white shadow-2xl md:rounded-lg"> 
+        <FaRegWindowClose className="absolute z-50 top-4 right-4 text-black hover:text-red-500 transition duration-300 text-3xl cursor-pointer" onClick={onClose} />
         <div className="flex flex-col md:flex-row h-full">
           <div className="w-full md:w-1/2 flex flex-col items-center relative overflow-hidden">
             {post.images && post.images.length > 0 && (
@@ -66,8 +76,8 @@ export default function PostFullScreen({
                 <img
                   src={`${post.images[currentImageIndex].picpath}`}
                   alt={post.name}
-                  onClick={() => openFullScreenImage(`${config.apiUrl.replace("/api", "")}/${post.images[currentImageIndex].picpath}`)}
-                  className="w-full h-full object-cover rounded-lg"
+                  onClick={() => openFullScreenImage(`${post.images[currentImageIndex].picpath}`)}
+                  className="w-full h-full object-cover rounded-lg md:max-h-[100vh] max-h-[70vh]"
                 />
                 {hasMultipleImages && (
                   <>
@@ -90,7 +100,7 @@ export default function PostFullScreen({
           </div>
           <div className="w-full md:w-1/2 flex flex-col p-4 overflow-y-auto">
             <h2 className="text-4xl font-bold mb-4 text-yellow-400">{post.name}</h2>
-            <p className="mb-4 text-gray-300">{post.description}</p>
+            <p className="mb-4 text-gray-300 break-words">{post.description}</p>
             <p className="text-sm text-gray-500">
               Posted by: <Link to={`/profile/${post.author}`} className="hover:underline text-yellow-400">{post.author}</Link>
             </p>
@@ -99,7 +109,7 @@ export default function PostFullScreen({
                 onClick={handleLike}
                 className="text-yellow-400 hover:text-yellow-300 flex items-center space-x-2"
               >
-                <BsHeart size={24} />
+                {liked ? <BsHeartFill size={24} /> : <BsHeart size={24} />}
                 <span>{post.likes || 0}</span>
               </button>
               <button
@@ -132,11 +142,11 @@ export default function PostFullScreen({
         </div>
       </div>
       {isImageFullScreen && (
-        <FullScreenImage
-          imageUrl={fullScreenImageUrl}
-          onClose={closeFullScreenImage}
-        />
-      )}
+      <FullScreenImage
+        imageUrl={fullScreenImageUrl}
+        onClose={closeFullScreenImage}
+      />
+    )}
     </div>
   );
 }

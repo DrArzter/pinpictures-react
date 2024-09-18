@@ -32,9 +32,10 @@ export default async function uploadComment(postId, comment, setCommentValues, p
 
     const newComment = response.data.newComment;
     newComment.author = user.name;
-    console.log(newComment);
+    newComment.created_at = new Date();
 
     setPosts(prevPosts => {
+      console.log(newComment);
       const updatedPosts = addCommentToPost(prevPosts, postId, newComment);
       resetCommentValues(setCommentValues);
       return updatedPosts;
