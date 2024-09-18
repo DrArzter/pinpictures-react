@@ -22,10 +22,13 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
   post.likes = post.likes || 0;
 
   useEffect(() => {
-    if (user.id) {
-      if (post.liked_user_ids && post.liked_user_ids.includes(user.id)) {
-        setLiked(true);
+    if (user) {
+      if (user.id) {
+        if (post.liked_user_ids && post.liked_user_ids.includes(user.id)) {
+          setLiked(true);
+        }
       }
+
     }
     
   }, [user])
