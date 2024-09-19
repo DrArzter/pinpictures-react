@@ -23,7 +23,8 @@ export default function Main({ user,
   createPostModal, 
   setCreatePostModal, 
   notifications, 
-  setNotifications 
+  setNotifications,
+  isMobile
 }) {
   const location = useLocation();
   const { isDarkMode } = useContext(ThemeContext);
@@ -52,7 +53,7 @@ export default function Main({ user,
             />
             <Route path="/support" element={<Support  />} /> 
             <Route path="/license" element={<License  />} /> 
-            <Route path="/authentification" element={<Authentication setUser={setUser} user={user}  />} /> 
+            <Route path="/authentification" element={<Authentication setUser={setUser} user={user} isMobile={isMobile}  />} /> 
             <Route path="/settings" element={<AccountSettings user={user}  />} /> 
             <Route path="/profile/:username" element={<Profile user={user} setUser={setUser}  />} /> 
             <Route path="/chats" element={<Chats user={user}  />} /> 

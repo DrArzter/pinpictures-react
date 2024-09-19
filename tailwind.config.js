@@ -38,7 +38,9 @@ module.exports = {
         'darkModeText': '#f2f2f2',
         'darkModeSecondaryText': '#767676',
 
-        'lightModeBackground': '#f2f2f2',
+        'ACDC': '#ACACAC',
+
+        'lightModeBackground': '#FFFF',
         'lightModeSecondaryBackground': '#e5e5e5',
         'darkModeBackground': '#333333',
         'darkModeSecondaryBackground': '#555555',

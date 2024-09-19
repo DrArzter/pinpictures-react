@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useContext } from "react";
 import { FaRegMoon, FaSun } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { CiBookmarkPlus } from "react-icons/ci";
+import { RiLogoutBoxFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 import config from "../api/config";
-
+import * as api from "../api/index";
 import ThemeContext from "./ThemeContext";
 
 export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
@@ -16,6 +17,14 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       toggleDropdown();
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await api.logout(); // Подождать завершения logout
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
   };
 
@@ -56,7 +65,7 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
       </Link>
       <div className={`p-4 flex flex-col gap-4 ${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`}>
         <div className="flex flex-row items-center justify-between gap-4">
-          {/*Dark Mode Toggle */}
+          {/* Dark Mode Toggle */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={toggleTheme}>
             <div
               className={`relative w-16 h-8 rounded-full p-1 flex items-center transition-colors duration-300 ${
@@ -88,6 +97,12 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
         <div className="flex items-center gap-2 cursor-pointer">
           <CiBookmarkPlus className={`${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`} />
           <span>Bookmark</span>
+        </div>
+
+        {/* Logout Section */}
+        <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
+          <RiLogoutBoxFill className={`${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`} />
+          <span>Logout</span>
         </div>
       </div>
     </div>

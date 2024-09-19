@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 import FullScreenImage from "../components/modals/FullScreenImageModal";
 import UpdateImageModal from "../components/modals/UpdateImageModal";
@@ -21,11 +21,15 @@ function Profile({ user, setUser }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const location = useLocation();
+
   const redirectToChat = (id) => {
     navigate(`/chat/${id}`);
   };
 
   useEffect(() => {
+    console.log("location", location);
+
     const fetchUser = async () => {
       try {
         const userData = await api.getUserByName(username);
@@ -48,7 +52,7 @@ function Profile({ user, setUser }) {
   };
 
   const handleAddFriendClick = () => {
-    if (!profile) return;
+    if (!profile || !user) return;
     api.addFriend(profile.id).then(() => {
       setUser({ ...user, friends: [...user.friends, profile] });
     });
@@ -68,10 +72,18 @@ function Profile({ user, setUser }) {
       : config.apiUrl.replace("/api", "/") + profile.bgpicpath;
   }, [profile]);
 
-  if (!profile) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center w-full h-64">
         <FaSpinner className="text-yellow-500 text-4xl animate-spin" />
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="flex justify-center items-center w-full h-64">
+        <p>Profile not found</p>
       </div>
     );
   }
@@ -98,7 +110,7 @@ function Profile({ user, setUser }) {
               {profile.name}
             </p>
           </div>
-          {profile.name !== user.name && (
+          {user && profile.name !== user.name && (
             <div className="flex gap-4 mt-32 hidden md:flex">
               <AiOutlineMessage
                 className="text-3xl cursor-pointer"
@@ -106,7 +118,7 @@ function Profile({ user, setUser }) {
               />
               <AiOutlineUserAdd
                 className="text-3xl cursor-pointer"
-                onClick={() => handleAddFriendClick(profile.id)}
+                onClick={handleAddFriendClick}
               />
             </div>
           )}

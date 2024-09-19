@@ -24,13 +24,16 @@ export default function Posts({
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
+  
+  let page = 1;
 
   const { isDarkMode } = useContext(ThemeContext);
 
   useEffect(() => {
+
     const fetchPosts = async () => {
       try {
-        const fetchedPosts = await api.getPosts();
+        const fetchedPosts = await api.getPosts(page);
         const initializedPosts = fetchedPosts.map((post) => ({
           ...post,
           comments: post.comments || [],

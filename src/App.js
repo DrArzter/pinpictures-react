@@ -38,7 +38,7 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <div className="bg-slate-100"> 
+        <> 
           <Header 
             user={user}
             createPostModal={createPostModal}
@@ -46,7 +46,7 @@ function App() {
           />
           <Notification
             notifications={notifications}
-            setNotifications={setNotifications}
+            setNotifications={setNotifications} 
           />
           {createPostModal && (
           <CreatePostModal
@@ -70,8 +70,8 @@ function App() {
             notifications={notifications}
             setNotifications={setNotifications}
           />
-          <Footer />
-        </div>
+          <Footer user={user}/>
+        </>
       </ThemeProvider>
     </Router>
   );

@@ -6,15 +6,19 @@ const clearAuthToken = () => {
 
 export default function logout(setUser) {
   try {
-    if (!Cookies.get('token')) {
+    const token = Cookies.get('token');
+
+    if (!token) {
       console.warn('No token found, user might already be logged out.');
       return;
     }
 
     clearAuthToken();
+    
+    window.location.reload();
+    
     setUser(null);
-    console.log('User successfully logged out.');
   } catch (error) {
-    console.error('Error during logout:', error);
+    
   }
 }
