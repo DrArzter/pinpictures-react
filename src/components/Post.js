@@ -11,7 +11,7 @@ import config from "../api/config";
 import * as api from "../api";
 import * as utils from "../utils";
 
-export default function Post({ post, commentValue, user, onCommentChange, onCommentSubmit }) {
+export default function Post({ post, commentValue, user, onCommentChange, onCommentSubmit, isDarkMode }) {
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
   const [fullScreenImageUrl, setFullScreenImageUrl] = useState("");
   const [showComments, setShowComments] = useState(false);
@@ -23,14 +23,10 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
   post.likes = post.likes || 0;
 
   useEffect(() => {
-    if (user) {
-      if (user.id) {
-        if (post.liked_user_ids && post.liked_user_ids.includes(user.id)) {
-          setLiked(true);
-        }
-      }
+    if (user && user.id) {
+      setLiked(post.liked_user_ids && post.liked_user_ids.includes(user.id));
     }
-  }, [user]);
+  }, [user, post.liked_user_ids]);
 
   const openFullScreenImage = (imageUrl, index) => {
     setFullScreenImageUrl(imageUrl);
@@ -55,10 +51,10 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
       .then(res => {
         if (res.data.message === 'liked') {
           setLiked(true);
-          post.likes = post.likes + 1;
+          post.likes += 1;
         } else if (res.data.message === 'unliked') {
           setLiked(false);
-          post.likes = post.likes - 1;
+          post.likes -= 1;
         } else {
           console.error('Error liking post:', res.data.message);
         }
@@ -91,40 +87,39 @@ export default function Post({ post, commentValue, user, onCommentChange, onComm
       )}
       <div
         key={post.id}
-        className={` hover:scale-105 focus:scale-105 transition-all duration-300`}
+        className={`hover:scale-105 focus:scale-105 transition-transform duration-300 
+        ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-white text-black"}`} 
       >
         <div className="flex flex-col md:flex-row">
-          <div className="w-full group relative"> {/* Добавляем relative для позиционирования кнопок */}
+          <div className="w-full group relative">
             {post.images && (
               <>
-                <div className="w-full overflow-hidden rounded-lg">
+                <div className={`w-full overflow-hidden rounded-lg 
+                ${isDarkMode ? "bg-darkModeBackground" : "bg-lightModeBackground"}`}> 
                   {hasMultipleImages && (
                     <FiLayers
-                      className="absolute top-4 right-4 text-black hover:text-yellow-500 transition duration-300 text-3xl"
+                      className={`absolute top-4 right-4 text-3xl transition-colors duration-300 
+                      ${isDarkMode ? "text-darkModeText hover:text-yellow-400" : "text-lightModeText hover:text-yellow-500"}`}
                     />
-                  )
-                  }
-
-                    < img
+                  )}
+                  <img
                     src={`${post.images[currentImageIndex].picpath}`}
-                  alt={post.name}
-                  className="w-full object-cover max-h-[512px]" // Задаем ширину изображения на 100%
-                  onClick={togglePostFullScreen}
+                    alt={post.name}
+                    className="w-full object-cover max-h-[512px]"
+                    onClick={togglePostFullScreen}
                   />
-
-                  <div className="mt-[5px]">
-                    <p className="text-black text-[16px]">{post.name}</p>
-
-                    <p className="text-[#ACACAC] text-[16px] line-clamp-3 break-words">{post.description}</p>
-
-                    <p className="text-[#ACACAC] text-[16px] mt-[11px]">{post.author}</p>
-
+                  <div className={`mt-[5px] 
+                  ${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`}>
+                    <p className="text-[16px]">{post.name}</p>
+                    <p className={`text-[16px] line-clamp-3 break-words 
+                    ${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`}>{post.description}</p>
+                    <p className={`text-[16px] mt-[11px] 
+                    ${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`}>{post.author}</p>
                   </div>
                 </div>
               </>
             )}
           </div>
-
         </div>
       </div>
     </>

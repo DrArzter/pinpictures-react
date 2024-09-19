@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PostList from "../components/PostList";
 import CreatePostModal from "../components/modals/CreatePostModal";
 import { TbSquarePlus } from "react-icons/tb";
@@ -6,6 +6,8 @@ import { FaSpinner } from "react-icons/fa";
 
 import * as api from "../api";
 import * as utils from "../utils";
+
+import ThemeContext from "../components/ThemeContext";
 
 export default function Posts({
   user,
@@ -21,6 +23,8 @@ export default function Posts({
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -79,19 +83,21 @@ export default function Posts({
   };
 
   return (
-    <div className="p-4">
+    <div className={`p-4 ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}>
       {loading ? (
         <div className="flex justify-center items-center w-full h-64">
-          <FaSpinner className="text-yellow-500 text-4xl animate-spin" />
+          <FaSpinner className={`text-4xl animate-spin ${isDarkMode ? "text-yellow-400" : "text-yellow-500"}`} />
         </div>
       ) : (
         <div
           id="posts"
-          className="w-full p-[14px] animate-slide-up">
+          className={`w-full p-[14px] animate-slide-up 
+          ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}
+        >
           {filteredPosts.length > 0 ? (
-            <PostList posts={filteredPosts} setPosts={setPosts} user={user} />
+            <PostList posts={filteredPosts} setPosts={setPosts} user={user} isDarkMode={isDarkMode} />
           ) : (
-            <div className="text-center text-zinc-500">
+            <div className={`text-center ${isDarkMode ? "text-gray-400" : "text-zinc-500"}`}>
               <p>No posts found. Try searching for something else or create a new post!</p>
             </div>
           )}

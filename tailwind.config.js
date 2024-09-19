@@ -33,7 +33,18 @@ module.exports = {
       },
       colors: {
         // Дополнительные цвета (если понадобятся)
+        'lightModeText': '#333333',
+        'lightModeSecondaryText': '#555555',
+        'darkModeText': '#f2f2f2',
+        'darkModeSecondaryText': '#767676',
+
+        'lightModeBackground': '#f2f2f2',
+        'lightModeSecondaryBackground': '#e5e5e5',
+        'darkModeBackground': '#333333',
+        'darkModeSecondaryBackground': '#555555',
+
         'custom-gray': '#767676',
+        
         'icon-hover': '#555555',
       },
     },

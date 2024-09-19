@@ -4,7 +4,7 @@ import Post from "./Post";
 import * as api from "../api";
 import * as utils from "../utils";
 
-export default function PostList({ posts, setPosts, user }) {
+export default function PostList({ posts, setPosts, user, isDarkMode }) {
   const [commentValues, setCommentValues] = useState({});
 
   const handleCommentChange = (postId, value) => {
@@ -17,9 +17,12 @@ export default function PostList({ posts, setPosts, user }) {
   const handleCommentSubmit = async (postId) => {
     await api.uploadComment(postId, commentValues[postId], setCommentValues, posts, setPosts, user);
   };
-// h-[96vh] w -[100vw]
+
   return (
-    <div className="3xl:columns-8 md:columns-4 columns-2 gap-x-[16px] space-y-[15px] ">
+    <div
+      className={`3xl:columns-8 md:columns-4 columns-2 gap-x-[16px] space-y-[15px] 
+      ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}
+    >
       {posts.map((post) => (
         <Post
           key={post.id}
@@ -28,6 +31,7 @@ export default function PostList({ posts, setPosts, user }) {
           commentValue={commentValues[post.id] || ""}
           onCommentChange={(e) => handleCommentChange(post.id, e.target.value)}
           onCommentSubmit={() => handleCommentSubmit(post.id)}
+          isDarkMode={isDarkMode} // Pass isDarkMode to Post component
         />
       ))}
     </div>
