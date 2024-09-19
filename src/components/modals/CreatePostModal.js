@@ -1,13 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import FullScreenImage from "./FullScreenImageModal";
 import { MdImageNotSupported } from "react-icons/md";
 import { FaSpinner } from "react-icons/fa";
 
+import ThemeContext from "../ThemeContext";
+
 import * as api from "../../api";
 import * as utils from "../../utils";
+import { RiContactsBook2Fill } from "react-icons/ri";
 
 export default function CreatePostModal({
   setCreatePostModal,
+  createPostModal,
   posts,
   setPosts,
   filteredPosts,
@@ -24,6 +28,9 @@ export default function CreatePostModal({
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
+  
+  const isDarkMode = useContext(ThemeContext).isDarkMode;
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -33,14 +40,17 @@ export default function CreatePostModal({
       const newPost = responseData.newPost;
       const message = responseData.message;
       const status = responseData.status;
+
+      console.log(newPost);
+      console.log(status);
   
       setNotifications([...notifications, { message, status }]);
       setPosts([newPost, ...posts]);
-      setFilteredPosts([newPost, ...filteredPosts]);
       closeModal();
     } catch (error) {
       const status = error.response?.data?.status || "error";
       const message = error.response?.data?.message || "An unexpected error occurred";
+      console.log(error);
       
       setNotifications([...notifications, { message, status }]);
     } finally {
@@ -52,6 +62,7 @@ export default function CreatePostModal({
 
   function closeModal() {
     setCreatePostModal(false);
+    console.log("createPostModal", createPostModal);
   }
 
   function handleImageChange(e) {
@@ -93,14 +104,17 @@ export default function CreatePostModal({
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-[49] overflow-y-auto bg-black bg-opacity-50" onClick={handleClickOutside}>
-      <div className="lg:w-1/2 w-11/12 bg-zinc-800 text-zinc-100 p-6 rounded-lg relative overflow-y-auto shadow-xl">
+    <div className={`fixed md:inset-[-2%] inset-0 z-50 overflow-auto flex items-center justify-center 
+      ${isDarkMode ? "bg-darkModeBackground bg-opacity-80" : "md:bg-black md:bg-opacity-40"}`} onClick={handleClickOutside}>
+      <div className={`relative 5xl:w-5/12 4xl:w-6/12 3xl:w-7/12 w-full md:h-5/6 h-full md:p-6 flex flex-col shadow-2xl md:rounded-lg
+        ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 h-[80vh] items-center">
           <input
             type="text"
             name="title"
-            placeholder="Title"
-            className="input w-5/6 rounded-md p-2 bg-zinc-700 border border-zinc-600 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 transition-all duration-300"
+            placeholder="Title" 
+            className={`input w-5/6 rounded-md p-2 border transition-all duration-300
+              ${isDarkMode ? "bg-darkModeBackground text-darkModeText border-zinc-600" : "bg-lightModeBackground text-lightModeText border-zinc-800"}`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -108,7 +122,8 @@ export default function CreatePostModal({
           <textarea
             name="description"
             placeholder="Description"
-            className="input w-5/6 rounded-md p-2 bg-zinc-700 border border-zinc-600 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 transition-all duration-300 min-h-24 max-h-96"
+            className={`input w-5/6 rounded-md p-2 border transition-all duration-300 min-h-24 max-h-96
+              ${isDarkMode ? "bg-darkModeBackground text-darkModeText border-zinc-600" : "bg-lightModeBackground text-lightModeText border-zinc-800"}`}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
@@ -145,7 +160,8 @@ export default function CreatePostModal({
           {images.length < 10 && (
             <div className="w-full flex justify-center mt-2">
               <div
-                className="relative flex items-center justify-center w-5/6 bg-zinc-700 text-zinc-400 p-6 rounded-lg cursor-pointer hover:bg-zinc-600 transition-colors duration-300"
+                className={`relative flex items-center justify-center w-5/6 p-6 rounded-lg cursor-pointer transition-colors duration-300 border
+                  ${isDarkMode ? "bg-darkModeBackground hover:bg-lightModeBackground hover:text-lightModeText text-darkModeText border-zinc-600 hover border-zinc-500" : "bg-lightModeBackground hover:bg-black hover:text-white text-lightModeText border-zinc-800"}`}
                 onClick={handleFileInputClick}
               >
                 <span>Click to select images (max {10 - images.length})</span>

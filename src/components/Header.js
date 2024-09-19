@@ -9,13 +9,18 @@ import DropdownMenu from "./DropdownMenu";
 import config from "../api/config";
 import ThemeContext from "./ThemeContext";
 
-export default function Header({ user }) {
+export default function Header({ user, createPostModal, setCreatePostModal }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { isDarkMode } = useContext(ThemeContext)
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleCreatePostModal = () => {
+    console.log("createPostModal", createPostModal);
+    setCreatePostModal(!createPostModal);
   };
 
   return (
@@ -71,7 +76,8 @@ export default function Header({ user }) {
             <div className="flex items-center gap-4 hidden lg:flex">
               <CiSquarePlus
                 className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6"
-                color={isDarkMode ? "white" : "#333"} 
+                color={isDarkMode ? "white" : "#333"}
+                onClick={toggleCreatePostModal} 
               />
               <FaBell
                 className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6"

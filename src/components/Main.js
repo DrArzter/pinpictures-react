@@ -40,13 +40,13 @@ export default function Main({ user,
               path="/" 
               element={
                 <Posts 
-                  posts={posts} 
-                  setPosts={setPosts} 
                   user={user} 
                   createPostModal={createPostModal}
                   setCreatePostModal={setCreatePostModal} 
                   notifications={notifications}
                   setNotifications={setNotifications}
+                  posts={posts} 
+                  setPosts={setPosts} 
                 />
               } 
             />

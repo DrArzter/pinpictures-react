@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 export default function Notification({ notifications, setNotifications }) {
     useEffect(() => {
+        console.log(notifications);
         const timers = notifications.map((notification, index) =>
             setTimeout(() => {
                 setNotifications((prevNotifications) =>
@@ -14,6 +15,7 @@ export default function Notification({ notifications, setNotifications }) {
             timers.forEach(clearTimeout);
         };
     }, [notifications, setNotifications]);
+    
 
     return (
         <div

@@ -15,9 +15,10 @@ export default function Posts({
   createPostModal,
   setCreatePostModal,
   notifications,
-  setNotifications
+  setNotifications,
+  posts,
+  setPosts
 }) {
-  const [posts, setPosts] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
