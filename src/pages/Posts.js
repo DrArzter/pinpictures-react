@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import PostList from "../components/PostList";
-import CreatePostModal from "../components/modals/CreatePostModal";
-import { TbSquarePlus } from "react-icons/tb";
-import { FaSpinner } from "react-icons/fa";
-
-import * as api from "../api";
-import * as utils from "../utils";
-
+import LoadingIndicator from "../components/LoadingIndicator";
+import NoPostsFound from "../components/NoPostsFound";
+import * as postUtils from "../utils/postUtils";
 import ThemeContext from "../components/ThemeContext";
 
 export default function Posts({
@@ -17,92 +13,86 @@ export default function Posts({
   notifications,
   setNotifications,
   posts,
-  setPosts
+  setPosts,
 }) {
-  const [sortBy, setSortBy] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [suggestions, setSuggestions] = useState([]);
-  
-  let page = 1;
+  const [page, setPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
 
   const { isDarkMode } = useContext(ThemeContext);
 
   useEffect(() => {
-
     const fetchPosts = async () => {
-      try {
-        const fetchedPosts = await api.getPosts(page);
-        const initializedPosts = fetchedPosts.map((post) => ({
-          ...post,
-          comments: post.comments || [],
-        }));
-        console.log(initializedPosts);
-        setPosts(initializedPosts);
-        setFilteredPosts(initializedPosts);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setLoading(false); // Stop loading
+      if (hasMorePosts) {
+        setLoading(page === 1);
+        setLoadingMore(page > 1);
+        const newPosts = await postUtils.fetchPosts(page);
+        if (newPosts.length === 0) {
+          setHasMorePosts(false);
+        } else {
+          setPosts((prevPosts) =>
+            page === 1 ? newPosts : [...prevPosts, ...newPosts]
+          );
+        }
+      }
+      setLoading(false);
+      setLoadingMore(false);
+    };
+    fetchPosts();
+  }, [page, hasMorePosts]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.scrollY + window.innerHeight >= document.body.scrollHeight - 100 &&
+        !loadingMore &&
+        hasMorePosts
+      ) {
+        setPage((prevPage) => prevPage + 1);
       }
     };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadingMore, hasMorePosts]);
 
-    fetchPosts();
-  }, []);
-
-  const handleSortByChange = (e) => {
-    const newSortBy = e.target.value;
-    if (newSortBy === sortBy) {
-      return;
-    }
-    setSortBy(newSortBy);
-    utils.sortPosts(newSortBy, posts, setPosts);
-    utils.sortPosts(newSortBy, filteredPosts, setFilteredPosts);
-  };
-
-  const handleSearchClick = () => {
-    api.searchPost(posts, setFilteredPosts, searchTerm);
-  };
-
-  const handleSearchChange = (e) => {
-    const newValue = e.target.value;
-    setSearchTerm(newValue);
-
-    // Generate suggestions based on input
-    if (newValue.length > 2) {
-      const newSuggestions = posts
-        .filter((post) =>
-          post.name.toLowerCase().includes(newValue.toLowerCase())
-        )
-        .map((post) => post.name);
-      setSuggestions(newSuggestions);
-    } else {
-      setSuggestions([]);
-    }
-  };
-
-  const toggleCreatePostModal = () => {
-    setCreatePostModal(!createPostModal);
+  const handleLoadMore = () => {
+    setHasMorePosts(true); // Сбрасываем флаг, чтобы разрешить загрузку
+    // НЕ увеличиваем номер страницы, а оставляем текущий
   };
 
   return (
-    <div className={`p-4 ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}>
-      {loading ? (
-        <div className="flex justify-center items-center w-full h-64">
-          <FaSpinner className={`text-4xl animate-spin ${isDarkMode ? "text-yellow-400" : "text-yellow-500"}`} />
-        </div>
+    <div
+      className={`p-4 ${
+        isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""
+      }`}
+    >
+      {loading && page === 1 ? (
+        <LoadingIndicator isDarkMode={isDarkMode} />
       ) : (
         <div
           id="posts"
-          className={`w-full p-[14px] animate-slide-up 
-          ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}
+          className={`w-full p-[14px] animate-slide-up ${
+            isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""
+          }`}
         >
-          {filteredPosts.length > 0 ? (
-            <PostList posts={filteredPosts} setPosts={setPosts} user={user} isDarkMode={isDarkMode} />
+          {posts.length > 0 ? (
+            <PostList
+              posts={posts}
+              setPosts={setPosts}
+              user={user}
+              isDarkMode={isDarkMode}
+            />
           ) : (
-            <div className={`text-center ${isDarkMode ? "text-gray-400" : "text-zinc-500"}`}>
-              <p>No posts found. Try searching for something else or create a new post!</p>
+            <NoPostsFound isDarkMode={isDarkMode} />
+          )}
+          {loadingMore && hasMorePosts && <LoadingIndicator isDarkMode={isDarkMode} />}
+          {!hasMorePosts && (
+            <div
+              className="flex justify-center items-center mt-16 text-center cursor-pointer"
+              onClick={handleLoadMore}
+            >
+              <p className="text-lg font-semibold text-yellow-400">That's all for now, but you can try again later :)</p>
             </div>
           )}
         </div>

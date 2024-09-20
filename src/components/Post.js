@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { BsChatDots, BsHeart, BsHeartFill, BsArrowsFullscreen, BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import React, { useEffect, useState, useContext } from "react";
 import { FiLayers } from "react-icons/fi";
-import FullScreenImage from "./modals/FullScreenImageModal";
+
 import PostFullScreen from "./modals/PostFullScreenModal";
-import CommentList from "./CommentList";
+
 import likePost from "../api/likePost";
 
-import config from "../api/config";
-import * as api from "../api";
-import * as utils from "../utils";
+import ThemeContext from "./ThemeContext";
 
-export default function Post({ post, commentValue, user, onCommentChange, onCommentSubmit, isDarkMode }) {
+export default function Post({ post, commentValue, user, onCommentChange, onCommentSubmit }) {
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
   const [fullScreenImageUrl, setFullScreenImageUrl] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [isPostFullScreen, setIsPostFullScreen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liked, setLiked] = useState(false);
+
+  const { isDarkMode } = useContext(ThemeContext);
+
   const hasMultipleImages = post.images && post.images.length > 1;
 
   post.likes = post.likes || 0;

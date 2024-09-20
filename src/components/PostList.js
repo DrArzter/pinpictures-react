@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Post from "./Post";
 
 import * as api from "../api";
-import * as utils from "../utils";
 
-export default function PostList({ posts, setPosts, user, isDarkMode }) {
+import ThemeContext from "./ThemeContext";
+
+export default function PostList({ posts, setPosts, user }) {
+
   const [commentValues, setCommentValues] = useState({});
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const handleCommentChange = (postId, value) => {
     setCommentValues((prevValues) => ({
@@ -31,7 +35,6 @@ export default function PostList({ posts, setPosts, user, isDarkMode }) {
           commentValue={commentValues[post.id] || ""}
           onCommentChange={(e) => handleCommentChange(post.id, e.target.value)}
           onCommentSubmit={() => handleCommentSubmit(post.id)}
-          isDarkMode={isDarkMode} // Pass isDarkMode to Post component
         />
       ))}
     </div>
