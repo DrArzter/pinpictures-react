@@ -25,7 +25,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
 
   return (
     <header
-      className={`header px-[32px] py-2 shadow-2xl flex justify-between items-center  shadow-xl
+      className={`header px-[32px] py-2 shadow-2xl flex justify-between items-center
       ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}
     >
       <div className="container mx-auto flex justify-between items-center">

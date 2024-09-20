@@ -57,8 +57,7 @@ export default function Posts({
   }, [loadingMore, hasMorePosts]);
 
   const handleLoadMore = () => {
-    setHasMorePosts(true); // Сбрасываем флаг, чтобы разрешить загрузку
-    // НЕ увеличиваем номер страницы, а оставляем текущий
+    setHasMorePosts(true);
   };
 
   return (
