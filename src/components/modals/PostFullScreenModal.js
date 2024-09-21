@@ -157,15 +157,15 @@ export default function PostFullScreen({
             <div className="flex items-center">
               <input
                 className={`flex-grow px-4 py-2 rounded-l-md border focus:outline-none 
-                ${isDarkMode ? "border-gray-600 bg-darkModeBackground text-darkModeText" : "border-gray-300 bg-lightModeBackground text-lightModeText"}`}
+                ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}
                 type="text"
                 value={commentValue}
                 onChange={onCommentChange}
-                placeholder="Add a comment"
+                placeholder="Add a comment..."
               />
               <button
-                className={`px-4 py-2 rounded-r-md transition duration-300 
-                ${isDarkMode ? "bg-yellow-500 text-zinc-900 hover:bg-yellow-600" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+                className={`px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300 
+                ${isDarkMode ? "text-darkModeText bg-darkModeBackground" : "text-lightModeText bg-lightModeBackground"}`}
                 onClick={onCommentSubmit}
               >
                 Send

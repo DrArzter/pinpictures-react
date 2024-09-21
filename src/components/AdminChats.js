@@ -19,28 +19,28 @@ export default function AdminMain({ users, posts, likes, comments }) {
             <h1 className={`text-2xl font-bold ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"} p-2 rounded-2xl mx-auto md:w-1/4 sm:w-1/2 w-full`}>Основная статистика</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
             <div className={`${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"} p-4 rounded-2xl`}>
-                    <h2 className="text-xl font-bold">Пользователи</h2>
-                    <p>Всего: {usersCount}</p>
-                    <p>Активные: WIP</p>
-                    <p>Заблокированные: WIP</p>
+                    <h2 className="text-xl font-bold">Users</h2>
+                    <p>Total: {usersCount}</p>
+                    <p>Active: WIP</p>
+                    <p>Blocked: WIP</p>
                 </div>
                 <div className={`${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"} p-4 rounded-2xl`}>
-                    <h2 className="text-xl font-bold">Посты</h2>
-                    <p>Всего: {postsCount}</p>
-                    <p>Просмотров всего: WIP</p>
-                    <p>Лайков всего: {likesCount}</p>
+                    <h2 className="text-xl font-bold">Posts</h2>
+                    <p>Total: {postsCount}</p>
+                    <p>Views total: WIP</p>
+                    <p>Likes total: {likesCount}</p>
                 </div>
                 <div className={`${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"} p-4 rounded-2xl`}>
-                    <h2 className="text-xl font-bold">Чаты</h2>
-                    <p>Всего: 0</p>
-                    <p>Активные: WIP</p>
-                    <p>Групповые: WIP</p>
+                    <h2 className="text-xl font-bold">Chats</h2>
+                    <p>Total: 0</p>
+                    <p>Active: WIP</p>
+                    <p>Group: WIP</p>
                 </div>
                 <div className={`${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"} p-4 rounded-2xl`}>
-                    <h2 className="text-xl font-bold">Комментарии</h2>
-                    <p>Всего: {commentsCount}</p>
-                    <p>Активные: WIP</p>
-                    <p>Групповые: WIP</p>
+                    <h2 className="text-xl font-bold">Comments</h2>
+                    <p>Total: {commentsCount}</p>
+                    <p>Active: WIP</p>
+                    <p>Group: WIP</p>
                 </div>
             </div>
         </div>

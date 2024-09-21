@@ -78,7 +78,7 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
                 }`}
               >
                 {isDarkMode ? (
-                  <FaRegMoon className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400" />
+                  <FaRegMoon className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-yellow-500" />
                 ) : (
                   <FaSun className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-yellow-500" />
                 )}
@@ -88,19 +88,19 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
 
           <div className="flex items-center gap-2 cursor-pointer">
             <Link to="/Settings">
-              <FaGear className={`${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`} />
+              <FaGear className={`hover:text-yellow-500 ${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`} />
             </Link>
           </div>
         </div>
 
         {/* Bookmark Section */}
-        <div className="flex items-center gap-2 cursor-pointer">
+        <div className="flex items-center gap-2 cursor-pointer hover:text-yellow-500">
           <CiBookmarkPlus className={`${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`} />
           <span>Bookmark</span>
         </div>
 
         {/* Logout Section */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
+        <div className="flex items-center gap-2 cursor-pointer hover:text-yellow-500" onClick={handleLogout}>
           <RiLogoutBoxFill className={`${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`} />
           <span>Logout</span>
         </div>

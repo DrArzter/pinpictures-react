@@ -90,7 +90,7 @@ function Admin({ user, setUser, isMobile }) {
                 <button
                     onClick={() => { setMainPage(false); setUsersPage(false); setPostsPage(false); setChatsPage(true); setSettingsPage(false) }}
                     className={`p-2 rounded-2xl w-full transition ease-in-out duration-800 ${isDarkMode ? "bg-darkModeBackground text-darkModeText hover:bg-lightModeBackground hover:text-lightModeText" : "bg-lightModeBackground text-lightModeText hover:bg-darkModeBackground hover:text-darkModeText"}`}>
-                    <p>Родина слышит</p>
+                    <p>KGB mode</p>
                 </button>
                 <button
                     onClick={() => { setMainPage(false); setUsersPage(false); setPostsPage(false); setChatsPage(false); setSettingsPage(true) }}
