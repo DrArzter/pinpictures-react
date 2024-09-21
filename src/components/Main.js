@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import Posts from "../pages/Posts";
+import Post from "../pages/Post";
 import Support from "../pages/Support";
 import License from "../pages/License";
 import Authentication from "../pages/Authentication";
@@ -10,6 +11,7 @@ import NotFound from "../pages/NotFound";
 import AccountSettings from "../pages/AccountSettings";
 import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
+import Admin from "../pages/Admin";
 import Chat from "../pages/Chat";
 
 import ThemeContext from "./ThemeContext";
@@ -55,9 +57,11 @@ export default function Main({ user,
             <Route path="/license" element={<License  />} /> 
             <Route path="/authentification" element={<Authentication setUser={setUser} user={user} isMobile={isMobile}  />} /> 
             <Route path="/settings" element={<AccountSettings user={user}  />} /> 
-            <Route path="/profile/:username" element={<Profile user={user} setUser={setUser}  />} /> 
+            <Route path="/profile/:username" element={<Profile user={user} setUser={setUser}  />} />
+            <Route path="/post/:id" element={<Post user={user}  />} />
             <Route path="/chats" element={<Chats user={user}  />} /> 
-            <Route path="/chat/:id" element={<Chat user={user}  />} /> 
+            <Route path="/chat/:id" element={<Chat setUser={setUser} user={user} isMobile={isMobile}  />} /> 
+            <Route path="/admin" element={<Admin user={user}   />} /> 
             <Route path="secret" element={<NotFound  />} /> 
             <Route path="*" element={<NotFound />} /> 
           </Routes>

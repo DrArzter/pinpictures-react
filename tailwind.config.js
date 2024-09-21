@@ -47,7 +47,10 @@ module.exports = {
 
         'custom-gray': '#767676',
         
-        'icon-hover': '#555555',
+        'icon-hover': '#555555'
+      },
+      backgroundImage: {
+        'bananaStyle': "url(https://storage.yandexcloud.net/pinpictures/otherImages/%D0%91%D0%B0%D0%BD%D0%B0%D0%BD%D1%8B.jpg)",
       },
     },
   },

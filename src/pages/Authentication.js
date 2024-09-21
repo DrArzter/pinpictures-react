@@ -6,6 +6,7 @@ import * as utils from "../utils";
 
 import LoginForm from "../components/LoginForm";
 import RegistrationForm from "../components/RegistrationForm";
+import ForgetPasswordForm from "../components/ForgotPasswordForm";
 
 export default function Authentication({ setUser }) {
   const [registration, setRegistration] = useState(true); // Переключение между регистрацией и логином
@@ -71,28 +72,17 @@ export default function Authentication({ setUser }) {
           toggleRegistration={toggleRegistration}
         />
       ) : forgotPassword ? (
-        <div className="w-full max-w-sm">
-          <h2 className="text-xl font-bold mb-4">Reset Password</h2>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mb-4 p-2 w-full border"
-            />
-            <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
-              Send Reset Link
-            </button>
-            <button
-              type="button"
-              onClick={() => setForgotPassword(false)}
-              className="text-blue-500 mt-4 block"
-            >
-              Back to Login
-            </button>
-          </form>
-        </div>
+        <ForgetPasswordForm
+          username={username}
+          setUsername={setUsername}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleSubmit={handleSubmit}
+          toggleRegistration={toggleRegistration}
+          toggleForgotPassword={toggleForgotPassword}
+        />
       ) : (
         <LoginForm
           username={username}
