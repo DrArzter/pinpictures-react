@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
+
+import ThemeContext from "./ThemeContext";
 
 export default function LoginForm({ 
   username, 
@@ -8,10 +10,12 @@ export default function LoginForm({
   handleSubmit, 
   toggleRegistration, 
   toggleForgotPassword, 
-  isDarkMode 
 }) {
+
+  const { isDarkMode } = useContext(ThemeContext);
+
   return (
-    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl ${isDarkMode ? "bg-darkModeBackground" : "bg-lightModeBackground"}`}>
+    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl`}>
       <div className="text-center">
         <h2 className="text-2xl">Login to PinPictures</h2>
       </div>
@@ -39,10 +43,10 @@ export default function LoginForm({
         <button type="submit" className={`w-full py-2 rounded-3xl text-darkModeText bg-red-500`}>
           Login
         </button>
-        <button onClick={toggleForgotPassword} className="mt-4 text-lightModeText">
+        <button onClick={toggleForgotPassword} className="mt-4">
           Forgot Password?
         </button>
-        <button onClick={toggleRegistration} className="mt-2 text-lightModeText">
+        <button onClick={toggleRegistration} className="mt-2">
           Don't have an account? Sign up
         </button>
       </form>

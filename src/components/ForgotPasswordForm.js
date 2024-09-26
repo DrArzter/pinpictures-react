@@ -9,10 +9,9 @@ export default function LoginForm({
   handleSubmit, 
   toggleRegistration, 
   toggleForgotPassword, 
-  isDarkMode 
 }) {
   return (
-    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl ${isDarkMode ? "bg-darkModeBackground" : "bg-lightModeBackground"}`}>
+    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl md:shadow-2xl`}>
       <div className="text-center">
         <h2 className="text-2xl">Reset password</h2>
       </div>
@@ -27,13 +26,13 @@ export default function LoginForm({
             className="w-full p-2 border rounded"
           />
         </div>
-        <button type="submit" className={`w-full py-2 rounded-3xl text-darkModeText bg-red-500`}>
+        <button type="submit" className={`w-full py-2 rounded-3xl bg-red-500`}>
           Reset
         </button>
-        <button onClick={toggleForgotPassword} className="mt-4 text-lightModeText">
+        <button onClick={toggleForgotPassword} className="mt-4">
           Back
         </button>
-        <button onClick={toggleRegistration} className="mt-2 text-lightModeText">
+        <button onClick={toggleRegistration} className="mt-2">
           Don't have an account? Sign up
         </button>
       </form>

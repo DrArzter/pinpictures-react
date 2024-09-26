@@ -8,11 +8,12 @@ import { SlMagnifier } from "react-icons/sl";
 import DropdownMenu from "./DropdownMenu";
 import config from "../api/config";
 import ThemeContext from "./ThemeContext";
+import ChangeTheme from "./ChangeTheme";
 
 export default function Header({ user, createPostModal, setCreatePostModal }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { isDarkMode } = useContext(ThemeContext)
+  const { isDarkMode } = useContext(ThemeContext);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -25,15 +26,16 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
 
   return (
     <header
-      className={`header px-[32px] py-2 shadow-2xl flex justify-between items-center
+      className={`header px-8 py-3 shadow-lg flex justify-between items-center
       ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}
     >
       <div className="container mx-auto flex justify-between items-center">
-        <Link className="flex items-center gap-2" to="/">
+        {/* Logo */}
+        <Link className="flex items-center gap-3" to="/">
           <svg
             width="40px"
             height="40"
-            className={`fill-lightModeText hover:fill-yellow-500 transition duration-300 
+            className={`hover:fill-yellow-500 transition duration-300 
             ${isDarkMode ? "fill-darkModeText" : "fill-lightModeText"}`} 
             version="1.1"
             viewBox="0 0 1200 1200"
@@ -45,47 +47,49 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
               <path d="m720 484.8h-60c-25.199 0-37.199 12-37.199 39.602v136.8c0 21.602 12 34.801 32.398 34.801 20.398 0 32.398-12 32.398-34.801v-33.602h32.402c50.398 0 90-15.602 90-72 0-55.203-39.602-70.801-90-70.801zm3.6016 93.598h-36v-43.199h32.398c15.602 0 25.199 8.3984 25.199 21.602 0 14.398-10.801 21.598-21.598 21.598z" />
             </g>
           </svg>
-          <p className={`text-2xl py-2 hidden lg:block 
+          <p className={`text-2xl py-2 hidden lg:block font-bold 
           ${isDarkMode ? "text-darkModeText" : "text-lightModeText"}`}>PinPictures</p>
         </Link>
 
+        {/* Search Bar */}
         <div
           className={`flex items-center flex-grow max-w-xl mx-4 rounded-full hidden lg:flex 
-          ${isDarkMode ? "bg-[#555]" : "bg-[#D9D9D9]"}`}
+          ${isDarkMode ? "bg-[#555] text-white" : "bg-[#D9D9D9] text-lightModeText"} shadow-sm`}
         >
           <input
-            className={`w-full rounded-full px-4 py-2 focus:outline-none 
+            className={`w-full rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 
             ${isDarkMode ? "bg-[#555] text-white" : "bg-[#D9D9D9] text-lightModeText"}`}
             placeholder="Search..."
           />
           <div
             id="search"
-            className={`bg-[#ACACAC] rounded-full hover:bg-[#D9D9D9] cursor-pointer overflow-hidden p-2 
-            ${isDarkMode ? "bg-[#777] hover:bg-[#555]" : "bg-[#ACACAC] hover:bg-[#D9D9D9]"}`}
+            className={`p-2 rounded-full cursor-pointer transition-all duration-300 hover:bg-[#D9D9D9] 
+            ${isDarkMode ? "bg-[#777] hover:bg-[#555]" : "bg-[#ACACAC]"}`}
           >
             <SlMagnifier
               size={24}
-              className={`transition duration-500 
+              className={`transition-all duration-300 
               ${isDarkMode ? "fill-[#D9D9D9] hover:fill-white" : "fill-[#D9D9D9] hover:fill-black"}`}
             />
           </div>
         </div>
 
+        {/* User Actions */}
         {user ? (
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-4 hidden lg:flex">
               <CiSquarePlus
-                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6"
+                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-200"
                 color={isDarkMode ? "#f2f2f2" : "#333333"}
                 onClick={toggleCreatePostModal} 
               />
               <FaBell
-                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6"
+                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-200"
                 color={isDarkMode ? "#f2f2f2" : "#333333"} 
               />
               <Link to={`/Chats`}>
                 <AiOutlineMessage
-                  className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6"
+                  className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-200"
                   color={isDarkMode ? "#f2f2f2" : "#333333"} 
                 />
               </Link>
@@ -96,7 +100,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
               loading="lazy"
               onClick={toggleDropdown}
               style={{ objectFit: "cover" }}
-              className="w-10 h-10 rounded-full cursor-pointer"
+              className="w-10 h-10 rounded-full cursor-pointer hover:scale-105 transition-transform duration-200"
             />
             {isDropdownOpen && (
               <DropdownMenu
@@ -107,9 +111,10 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
             )}
           </div>
         ) : (
-          <div className="flex items-center">
+          <div className="flex gap-4 items-center">
+            <ChangeTheme />
             <Link to="/Authentification">
-              <div className={`rounded-full bg-[#ACACAC] flex justify-center items-center p-2 
+              <div className={`rounded-full p-3 flex justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-200 
               ${isDarkMode ? "bg-[#777]" : "bg-[#ACACAC]"}`}>
                 <RiLoginBoxFill size={32} color="#fff" /> 
               </div>

@@ -32,7 +32,7 @@ export default function Main({ user,
   const { isDarkMode } = useContext(ThemeContext);
 
   return (
-    <div id="main" className={`min-h-screen
+    <div id="main" className={`min-h-screen md:mt-8
     ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
 
       <utils.scrollToTop />

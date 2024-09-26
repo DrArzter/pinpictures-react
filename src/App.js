@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
@@ -11,9 +11,9 @@ import * as api from "./api";
 
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "../src/components/ThemeContext";
+import ThemeContext from "../src/components/ThemeContext";
 
 function App() {
-  
   const [posts, setPosts] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [user, setUser] = useState(null);
@@ -26,9 +26,9 @@ function App() {
       if (user) {
         setUser(user);
       }
+      setLoading(false); // Переместите сюда, чтобы избежать лишних рендеров
     }
     fetchData();
-    setLoading(false);
   }, []);
 
   if (loading) {
@@ -38,42 +38,67 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <> 
-          <Header 
-            user={user}
-            createPostModal={createPostModal}
-            setCreatePostModal={setCreatePostModal}
-          />
-          <Notification
-            notifications={notifications}
-            setNotifications={setNotifications} 
-          />
-          {createPostModal && (
-          <CreatePostModal
-            setCreatePostModal={setCreatePostModal}
-            createPostModal={createPostModal}
-            posts={posts}
-            setPosts={setPosts}
-            user={user}
-            notifications={notifications}
-            setNotifications={setNotifications}
-          />
-            
-          )}
-          <Main
-            user={user}
-            setUser={setUser}
-            posts={posts} 
-            setPosts={setPosts} 
-            createPostModal={createPostModal}
-            setCreatePostModal={setCreatePostModal}
-            notifications={notifications}
-            setNotifications={setNotifications}
-          />
-          <Footer user={user}/>
-        </>
+        <AppContent 
+          user={user} 
+          setUser={setUser} // Передаем setUser сюда
+          createPostModal={createPostModal} 
+          setCreatePostModal={setCreatePostModal} 
+          posts={posts} 
+          setPosts={setPosts}
+          notifications={notifications}
+          setNotifications={setNotifications}
+        />
       </ThemeProvider>
     </Router>
+  );
+}
+
+function AppContent({ 
+  user, 
+  setUser, // Добавили setUser
+  createPostModal, 
+  setCreatePostModal,
+  posts,
+  setPosts,
+  notifications,
+  setNotifications
+}) {
+  const { isDarkMode } = useContext(ThemeContext);
+  
+  return (
+    <div className={`h-screen md:h-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}> 
+      <Header 
+        user={user}
+        createPostModal={createPostModal}
+        setCreatePostModal={setCreatePostModal}
+      />
+      <Notification
+        notifications={notifications}
+        setNotifications={setNotifications} 
+      />
+      {createPostModal && (
+        <CreatePostModal
+          setCreatePostModal={setCreatePostModal}
+          createPostModal={createPostModal}
+          posts={posts}
+          setPosts={setPosts}
+          user={user}
+          notifications={notifications}
+          setNotifications={setNotifications}
+        />
+      )}
+      <Main
+        user={user}
+        setUser={setUser} // Передаем setUser в Main
+        posts={posts} 
+        setPosts={setPosts} 
+        createPostModal={createPostModal}
+        setCreatePostModal={setCreatePostModal}
+        notifications={notifications}
+        setNotifications={setNotifications}
+      />
+      <Footer user={user}/>
+    </div>
   );
 }
 

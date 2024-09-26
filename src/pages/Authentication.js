@@ -59,7 +59,7 @@ export default function Authentication({ setUser }) {
   }
 
   return (
-    <div className={`flex flex-col items-center md:mt-40 mt-20 w-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}>
+    <div className={`flex flex-col items-center md:py-40 py-20 w-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
       {registration ? (
         <RegistrationForm
           username={username}
