@@ -26,7 +26,7 @@ function App() {
       if (user) {
         setUser(user);
       }
-      setLoading(false); // Переместите сюда, чтобы избежать лишних рендеров
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -89,7 +89,7 @@ function AppContent({
       )}
       <Main
         user={user}
-        setUser={setUser} // Передаем setUser в Main
+        setUser={setUser}
         posts={posts} 
         setPosts={setPosts} 
         createPostModal={createPostModal}

@@ -8,7 +8,6 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const isDarkModeStorage = localStorage.getItem("DarkTheme");
-    console.log("isDarkMode", isDarkModeStorage);
     if (isDarkModeStorage == 1) {
       setIsDarkMode(!isDarkMode);
     }
@@ -18,7 +17,6 @@ export const ThemeProvider = ({ children }) => {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem("DarkTheme", isDarkMode ? 0 : 1);
     const isDarkModeStorage = localStorage.getItem("DarkTheme");
-    console.log("isDarkMode", isDarkModeStorage);
 
   };
 

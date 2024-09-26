@@ -7,20 +7,7 @@ import ThemeContext from "./ThemeContext";
 
 export default function PostList({ posts, setPosts, user }) {
 
-  const [commentValues, setCommentValues] = useState({});
-
-  const { isDarkMode } = useContext(ThemeContext);
-
-  const handleCommentChange = (postId, value) => {
-    setCommentValues((prevValues) => ({
-      ...prevValues,
-      [postId]: value,
-    }));
-  };
-
-  const handleCommentSubmit = async (postId) => {
-    await api.uploadComment(postId, commentValues[postId], setCommentValues, posts, setPosts, user);
-  };
+  const { isDarkMode } = useContext(ThemeContext);  
 
   return (
     <div
@@ -32,9 +19,6 @@ export default function PostList({ posts, setPosts, user }) {
           key={post.id}
           post={post}
           user={user}
-          commentValue={commentValues[post.id] || ""}
-          onCommentChange={(e) => handleCommentChange(post.id, e.target.value)}
-          onCommentSubmit={() => handleCommentSubmit(post.id)}
         />
       ))}
     </div>

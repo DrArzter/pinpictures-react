@@ -15,7 +15,7 @@ const resetCommentValues = (setCommentValues) => {
   setCommentValues({});
 };
 
-export default async function uploadComment(postId, comment, setCommentValues, posts, setPosts, user) {
+export default async function uploadComment(postId, comment, setCommentValues, setPosts, user) {
   try {
     const response = await axios.post(
       `${config.apiUrl}/comments`,

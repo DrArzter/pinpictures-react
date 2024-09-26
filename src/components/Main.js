@@ -28,13 +28,13 @@ export default function Main({ user,
   setNotifications,
   isMobile
 }) {
+  
   const location = useLocation();
   const { isDarkMode } = useContext(ThemeContext);
 
   return (
     <div id="main" className={`min-h-screen md:mt-8
     ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
-
       <utils.scrollToTop />
       <TransitionGroup component={null}>
         <CSSTransition key={location.key} classNames="fade" timeout={300}>

@@ -62,7 +62,7 @@ export default function Posts({
 
   return (
     <div
-      className={`p-4 ${
+      className={`px-4 ${
         isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""
       }`}
     >

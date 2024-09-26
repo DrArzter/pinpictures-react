@@ -7,6 +7,8 @@ export {default as getMessages} from './getMessages'
 export {default as getPosts} from './getPosts'
 export {default as searchPost} from './searchPost'
 export {default as uploadPost} from './uploadPost'
+export {default as getPostById} from './getPostById'
+export {default as likePost} from './likePost'
 
 //COMMENTS
 export {default as uploadComment} from './uploadComment'
