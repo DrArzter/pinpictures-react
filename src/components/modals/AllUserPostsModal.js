@@ -38,7 +38,7 @@ export default function AdminUserModal({
           <p>{post.name}</p>
           <p className="break-words line-clamp-3">{post.description}</p>
           <p>{new Date(post.created_at).toLocaleDateString()}</p>
-          <button onClick={() => window.open("/posts/id/" + post.id, "_blank")} className="mt-2 bg-cyan-600 hover:bg-cyan-500 text-white py-1 px-2 rounded">Open</button>
+          <button onClick={() => window.open("/post/" + post.id, "_blank")} className="mt-2 bg-cyan-600 hover:bg-cyan-500 text-white py-1 px-2 rounded">Open</button>
           </div>
          
 

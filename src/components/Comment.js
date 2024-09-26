@@ -29,7 +29,7 @@ const Comment = ({ comment }) => {
             {comment.author}
           </Link>
         </p>
-        <p className="text-xs text-gray-500 mt-1">{comment.created_at}</p>
+        <p className="text-xs text-gray-500 mt-1">{new Date(comment.created_at).toLocaleString()}</p>
       </div>
     </div>
   );

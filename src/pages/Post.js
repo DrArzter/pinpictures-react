@@ -10,12 +10,15 @@ import * as api from "../api";
 import LoadingIndicator from "../components/LoadingIndicator";
 import ThemeContext from "../components/ThemeContext";
 
-export default function Post() {
+export default function Post(user) {
+
+  var user = user.user;
 
   const { id } = useParams();
   const [post, setPost] = useState({});
-  const [commentValue, setCommentValue] = useState({});
 
+  
+  const [commentValue, setCommentValue] = useState({});
 
   const [loading, setLoading] = useState(true);
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
@@ -58,10 +61,33 @@ export default function Post() {
       [postId]: value,
     }));
   };
-  
+
   const handleCommentSubmit = async (postId) => {
-    await api.uploadComment(postId, commentValues[postId], setCommentValues, setPosts, user);
+    try {
+      const sosu = await api.uploadComment(postId, commentValue[postId], setCommentValue, user);
+      if (sosu) {
+        setPost((prevPost) => {
+  
+          // Ensure comments is an array
+          const currentComments = Array.isArray(prevPost.comments) ? prevPost.comments : [];
+  
+          return {
+            ...prevPost,
+            comments: [...currentComments, sosu],
+          };
+        });
+  
+        // Reset the comment value for the specific postId
+        setCommentValue((prevValues) => ({
+          ...prevValues,
+          [postId]: "",
+        }));
+      }
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
   };
+  
 
   const handleLike = () => {
     api.likePost(post.id)
@@ -88,6 +114,12 @@ export default function Post() {
     const fetchPost = async () => {
       const response = await api.getPostById(id);
       if (response) {
+        if (response.liked_user_ids) {
+          response.likes = response.liked_user_ids.length || 0;
+          if (response.liked_user_ids.includes(user.id)) {
+            setLiked(true);
+          }
+        }
         setPost(response);
       }
       setLoading(false);
@@ -175,25 +207,25 @@ export default function Post() {
                 <span>{post.comments ? post.comments.length : 0}</span>
               </button>
             </div>
-            <div className="flex-grow mb-4">
-              <CommentList comments={post.comments || []} isDarkMode={isDarkMode} /> {/* Передайте isDarkMode в CommentList */}
-            </div>
             <div className="flex items-center">
               <input
                 className={`flex-grow px-4 py-2 rounded-l-md border focus:outline-none 
                 ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}
                 type="text"
-                value={commentValue}
-                onChange={onCommentChange}
+                value={commentValue[post.id] || ""}
+                onChange={(e) => handleCommentChange(post.id, e.target.value)}
                 placeholder="Add a comment..."
               />
               <button
                 className={`px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300 
                 ${isDarkMode ? "text-darkModeText bg-darkModeBackground" : "text-lightModeText bg-lightModeBackground"}`}
-                onClick={onCommentSubmit}
+                onClick={() => handleCommentSubmit(post.id)}
               >
                 Send
               </button>
+            </div>
+            <div className="flex-grow mt-4">
+              <CommentList comments={post.comments || []} isDarkMode={isDarkMode} /> {/* Передайте isDarkMode в CommentList */}
             </div>
           </div>
         </div>

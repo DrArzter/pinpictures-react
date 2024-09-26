@@ -32,7 +32,9 @@ export default function Post({ post, user }) {
                       ${isDarkMode ? "text-darkModeText hover:text-yellow-400" : "text-darkModeText hover:text-yellow-500"}`}
                     />
                   )}
-                  <Link to={`/post/${post.id}`}>
+                  <Link to={{
+                    pathname: `/post/${post.id}`,
+                  }}>
                   <img
                     src={`${post.images[currentImageIndex].picpath}`}
                     alt={post.name}

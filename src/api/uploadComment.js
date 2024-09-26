@@ -15,7 +15,7 @@ const resetCommentValues = (setCommentValues) => {
   setCommentValues({});
 };
 
-export default async function uploadComment(postId, comment, setCommentValues, setPosts, user) {
+export default async function uploadComment(postId, comment, setCommentValues, user) {
   try {
     const response = await axios.post(
       `${config.apiUrl}/comments`,
@@ -32,14 +32,9 @@ export default async function uploadComment(postId, comment, setCommentValues, s
 
     const newComment = response.data.newComment;
     newComment.author = user.name;
-    newComment.created_at = new Date();
-
-    setPosts(prevPosts => {
-      console.log(newComment);
-      const updatedPosts = addCommentToPost(prevPosts, postId, newComment);
-      resetCommentValues(setCommentValues);
-      return updatedPosts;
-    });
+    newComment.created_at = new Date().toLocaleString();
+    
+    return newComment;
 
   } catch (error) {
     console.error('Failed to add comment', error);
