@@ -55,7 +55,7 @@ function App() {
 
 function AppContent({ 
   user, 
-  setUser, // Добавили setUser
+  setUser, 
   createPostModal, 
   setCreatePostModal,
   posts,
@@ -66,7 +66,7 @@ function AppContent({
   const { isDarkMode } = useContext(ThemeContext);
   
   return (
-    <div className={`h-screen md:h-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}> 
+    <div className={`h-screen md:h-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
       <Header 
         user={user}
         createPostModal={createPostModal}

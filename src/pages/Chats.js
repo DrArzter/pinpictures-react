@@ -98,7 +98,7 @@ export default function Chats({ user }) {
                 <li key={chat.chatId}>
                   <Link
                     to={`/Chat/${chat.chatId}`}
-                    className="flex items-center justify-between p-4 hover:bg-zinc-700 rounded-lg transition"
+                    className="flex items-center justify-between p-4 hover:bg-zinc-700 rounded-lg transition duration-300"
                   >
                     <div className="flex items-center">
                       <img

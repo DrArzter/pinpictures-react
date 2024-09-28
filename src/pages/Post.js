@@ -1,237 +1,199 @@
 import React, { useEffect, useState, useContext } from "react";
-import { BsHeart, BsChatDots, BsArrowLeft, BsArrowRight, BsHeartFill } from "react-icons/bs";
+import { BsHeart, BsChatDots, BsHeartFill } from "react-icons/bs";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import CommentList from "../components/CommentList";
 import FullScreenImage from "../components/modals/FullScreenImageModal";
 import { Link, useParams } from "react-router-dom";
-import { FaRegWindowClose } from "react-icons/fa";
-
 import * as api from "../api";
-
 import LoadingIndicator from "../components/LoadingIndicator";
 import ThemeContext from "../components/ThemeContext";
 
-export default function Post(user) {
-
-  var user = user.user;
-
+export default function Post({ user }) {
   const { id } = useParams();
-  const [post, setPost] = useState({});
-
-  
-  const [commentValue, setCommentValue] = useState({});
-
+  const [post, setPost] = useState(null);
+  const [commentValue, setCommentValue] = useState("");
   const [loading, setLoading] = useState(true);
   const [isImageFullScreen, setIsImageFullScreen] = useState(false);
   const [liked, setLiked] = useState(false);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const [fullScreenImageUrl, setFullScreenImageUrl] = useState("");
-  
+  const [imageTransition, setImageTransition] = useState(false);
 
   const isDarkMode = useContext(ThemeContext);
 
-  const hasMultipleImages = post.images && post.images.length > 1;
-
-  const openFullScreenImage = (imageUrl) => {
-    setFullScreenImageUrl(imageUrl);
+  const handleImageClick = (index) => {
+    setCurrentImageIndex(index);
     setIsImageFullScreen(true);
   };
 
-  const closeFullScreenImage = () => {
-    setIsImageFullScreen(false);
-  };
-
   const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : post.images.length - 1
-    );
+    setImageTransition(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : post.images.length - 1
+      );
+      setImageTransition(false);
+    }, 300);
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex < post.images.length - 1 ? prevIndex + 1 : 0
-    );
+    setImageTransition(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex < post.images.length - 1 ? prevIndex + 1 : 0
+      );
+      setImageTransition(false);
+    }, 300);
   };
 
+  const handleCommentChange = (e) => setCommentValue(e.target.value);
 
-  const handleCommentChange = (postId, value) => {
-    setCommentValue((prevValues) => ({
-      ...prevValues,
-      [postId]: value,
-    }));
-  };
-
-  const handleCommentSubmit = async (postId) => {
+  const handleCommentSubmit = async () => {
     try {
-      const sosu = await api.uploadComment(postId, commentValue[postId], setCommentValue, user);
-      if (sosu) {
-        setPost((prevPost) => {
-  
-          // Ensure comments is an array
-          const currentComments = Array.isArray(prevPost.comments) ? prevPost.comments : [];
-  
-          return {
-            ...prevPost,
-            comments: [...currentComments, sosu],
-          };
-        });
-  
-        // Reset the comment value for the specific postId
-        setCommentValue((prevValues) => ({
-          ...prevValues,
-          [postId]: "",
+      const newComment = await api.uploadComment(post.id, commentValue, setCommentValue, user);
+      if (newComment) {
+        setPost((prevPost) => ({
+          ...prevPost,
+          comments: [...(prevPost.comments || []), newComment],
         }));
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
     }
   };
-  
 
   const handleLike = () => {
     api.likePost(post.id)
-      .then(res => {
-        if (res.data.message === 'liked') {
+      .then((res) => {
+        if (res.data.message === "liked") {
           setLiked(true);
-          post.likes += 1;
-        } else if (res.data.message === 'unliked') {
+          setPost((prevPost) => ({ ...prevPost, likes: (prevPost.likes || 0) + 1 }));
+        } else if (res.data.message === "unliked") {
           setLiked(false);
-          post.likes -= 1;
+          setPost((prevPost) => ({ ...prevPost, likes: (prevPost.likes || 0) - 1 }));
         } else {
-          console.error('Error liking post:', res.data.message);
+          console.error("Error liking post:", res.data.message);
         }
       })
-      .catch(error => {
-        console.error('Error liking post:', error);
+      .catch((error) => {
+        console.error("Error liking post:", error);
       });
   };
 
   useEffect(() => {
-
-    
-
     const fetchPost = async () => {
       const response = await api.getPostById(id);
       if (response) {
-        if (response.liked_user_ids) {
-          response.likes = response.liked_user_ids.length || 0;
-          if (response.liked_user_ids.includes(user.id)) {
-            setLiked(true);
-          }
-        }
+        response.likes = response.liked_user_ids?.length || 0;
+        setLiked(user ? response.liked_user_ids?.includes(user.id) || false : false);
         setPost(response);
       }
       setLoading(false);
     };
     fetchPost();
-  }, []);
+  }, [id, user]);
 
   if (loading) {
     return <LoadingIndicator isDarkMode={isDarkMode} />;
   }
 
+  console.log(isDarkMode.isDarkMode);
+
   return (
-    <div
-      id="FullScreenModal"
-      className={`fixed md:inset-[-2%] inset-0 z-50 overflow-auto flex items-center justify-center 
-      ${isDarkMode ? "bg-darkModeBackground bg-opacity-80" : "md:bg-black md:bg-opacity-40"}`}
-    >
-      <div
-        className={`relative 5xl:w-6/12 4xl:w-8/12 3xl:w-10/12 w-full md:h-5/6 h-full md:p-6 flex flex-col shadow-2xl md:rounded-lg
-        ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}
-      >
-        <div className="flex flex-col md:flex-row h-full">
-          <div className="w-full md:w-1/2 flex flex-col items-center relative overflow-hidden">
-            {post.images && post.images.length > 0 && (
-              <div className="relative w-full h-full group">
-                <img
-                  src={`${post.images[currentImageIndex].picpath}`}
-                  alt={post.name}
-                  onClick={() => openFullScreenImage(`${post.images[currentImageIndex].picpath}`)}
-                  className="w-full h-full object-cover rounded-lg md:max-h-[100vh] max-h-[70vh]"
-                />
-                {hasMultipleImages && (
-                  <>
-                    <button
-                      onClick={handlePrevImage}
-                      className={`absolute top-1/2 left-4 transform -translate-y-1/2 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                      ${isDarkMode ? "bg-darkModeBackground text-yellow-400 hover:text-yellow-300" : "bg-lightModeBackground text-yellow-400 hover:text-yellow-300"}`}
-                    >
-                      <BsArrowLeft size={24} />
-                    </button>
-                    <button
-                      onClick={handleNextImage}
-                      className={`absolute top-1/2 right-4 transform -translate-y-1/2 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                      ${isDarkMode ? "bg-darkModeBackground text-yellow-400 hover:text-yellow-300" : "bg-lightModeBackground text-yellow-400 hover:text-yellow-300"}`}
-                    >
-                      <BsArrowRight size={24} />
-                    </button>
-                  </>
-                )}
+    <div className={`flex flex-col lg:flex-row max-h-[80vh] mt-8 mx-8 gap-8`}>
+
+      <div className="w-full lg:w-2/3 h-[80vh] flex flex-col items-center relative overflow-hidden rounded-lg shadow-md">
+        {post.images && post.images.length > 0 ? (
+          <>
+            <div
+              className={`w-full h-full flex items-center justify-center transition-opacity duration-300 ${
+                imageTransition ? "opacity-0" : "opacity-100"
+              }`}
+              style={{ maxHeight: "100vh" }}
+            >
+              <img
+                src={post.images[currentImageIndex].picpath}
+                alt={post.name}
+                style={{ height: "100%", width: "100%", objectFit: "cover" }}
+                className="cursor-pointer transition-all duration-300 hover:shadow-xl"
+                onClick={() => handleImageClick(currentImageIndex)}
+              />
+            </div>
+
+            {post.images.length > 1 && (
+              <div className="absolute flex justify-between w-full top-1/2 transform -translate-y-1/2 px-4 ">
+                <button
+                  onClick={handlePrevImage}
+                  className={`p-2 bg-opacity-0 transition-colors hover:bg-opacity-100 duration-300 rounded-full`}
+                >
+                  <IoIosArrowBack className="hover:fill-yellow-500" size={24} />
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className={`p-2 bg-opacity-0 transition-colors hover:bg-opacity-100 duration-300 rounded-full`}
+                >
+                  <IoIosArrowForward className="hover:fill-yellow-500" size={24} />
+                </button>
               </div>
             )}
-          </div>
-          <div className={`w-full md:w-1/2 flex flex-col p-4 overflow-y-auto 
-          ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""}`}>
-            <h2 className={`text-4xl font-bold mb-4 
-            ${isDarkMode ? "text-yellow-400" : "text-yellow-500"}`}>{post.name}</h2>
-            <p className={`mb-4 break-words 
-            ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>{post.description}</p>
-            <p className={`text-sm 
-            ${isDarkMode ? "text-gray-500" : "text-gray-600"}`}>
-              Posted by:{" "}
-              <Link
-                to={`/profile/${post.author}`}
-                className={`hover:underline 
-                ${isDarkMode ? "text-yellow-400" : "text-yellow-500"}`}
-              >
-                {post.author}
-              </Link>
-            </p>
-            <div className="flex items-center space-x-4 mb-4 mt-4">
-              <button
-                onClick={handleLike}
-                className={`flex items-center space-x-2 
-                ${isDarkMode ? "text-yellow-400 hover:text-yellow-300" : "text-yellow-500 hover:text-yellow-400"}`}
-              >
-                {liked ? <BsHeartFill size={24} /> : <BsHeart size={24} />}
-                <span>{post.likes || 0}</span>
-              </button>
-              <button
-                onClick={() => {}}
-                className={`flex items-center space-x-2 
-                ${isDarkMode ? "text-yellow-400 hover:text-yellow-300" : "text-yellow-500 hover:text-yellow-400"}`} 
-              >
-                <BsChatDots size={24} />
-                <span>{post.comments ? post.comments.length : 0}</span>
-              </button>
-            </div>
-            <div className="flex items-center">
-              <input
-                className={`flex-grow px-4 py-2 rounded-l-md border focus:outline-none 
-                ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}
-                type="text"
-                value={commentValue[post.id] || ""}
-                onChange={(e) => handleCommentChange(post.id, e.target.value)}
-                placeholder="Add a comment..."
-              />
-              <button
-                className={`px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300 
-                ${isDarkMode ? "text-darkModeText bg-darkModeBackground" : "text-lightModeText bg-lightModeBackground"}`}
-                onClick={() => handleCommentSubmit(post.id)}
-              >
-                Send
-              </button>
-            </div>
-            <div className="flex-grow mt-4">
-              <CommentList comments={post.comments || []} isDarkMode={isDarkMode} /> {/* Передайте isDarkMode в CommentList */}
-            </div>
+          </>
+        ) : (
+          <div className="w-full h-64 bg-gray-300 animate-pulse rounded-lg"></div>
+        )}
+      </div>
+
+      <div className={`w-full lg:w-1/3 flex flex-col p-4 overflow-y-auto rounded-lg shadow-md`}>
+        <h2 className={`text-3xl font-bold mb-4`}>
+          {post.name}
+        </h2>
+        <p className={`mb-4 break-words`}>{post.description}</p>
+        <p className={`text-sm mb-4`}>
+          Posted by:{" "}
+          <Link to={`/profile/${post.author}`} className={`hover:underline`}>
+            {post.author}
+          </Link>
+        </p>
+
+        <div className="flex items-center space-x-4 mb-4">
+          <button
+            onClick={handleLike}
+            className={`flex items-center space-x-2 hover:text-yellow-500`}
+          >
+            {liked ? <BsHeartFill size={20} /> : <BsHeart size={20} />}
+            <span>{post.likes || 0}</span>
+          </button>
+          <div className={`flex items-center space-x-2 hover:text-yellow-500`}>
+            <BsChatDots size={20} />
+            <span>{post.comments ? post.comments.length : 0}</span>
           </div>
         </div>
+
+        <div className="flex items-center mb-4">
+          <input
+            className={`flex-grow px-4 py-2 rounded-l-md border focus:outline-none}`}
+            type="text"
+            value={commentValue}
+            onChange={handleCommentChange}
+            placeholder="Add a comment..."
+          />
+          <button
+            className={`px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300`}
+            onClick={handleCommentSubmit}
+          >
+            Send
+          </button>
+        </div>
+
+        <div className="flex-grow">
+          <CommentList comments={post.comments || []} isDarkMode={isDarkMode} />
+        </div>
       </div>
+
       {isImageFullScreen && (
-        <FullScreenImage imageUrl={fullScreenImageUrl} onClose={closeFullScreenImage} isDarkMode={isDarkMode} />
+        <FullScreenImage
+          imageUrl={post.images[currentImageIndex].picpath}
+          onClose={() => setIsImageFullScreen(false)}
+          isDarkMode={isDarkMode}
+        />
       )}
     </div>
   );

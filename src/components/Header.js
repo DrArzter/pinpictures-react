@@ -63,17 +63,17 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
           <> 
             <div className="flex items-center gap-4 hidden lg:flex">
               <CiSquarePlus
-                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-200"
+                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-300"
                 color={isDarkMode ? "#f2f2f2" : "#333333"}
                 onClick={toggleCreatePostModal} 
               />
               <FaBell
-                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-200"
+                className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-300"
                 color={isDarkMode ? "#f2f2f2" : "#333333"} 
               />
               <Link to={`/Chats`}>
                 <AiOutlineMessage
-                  className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-200"
+                  className="cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-300"
                   color={isDarkMode ? "#f2f2f2" : "#333333"} 
                 />
               </Link>
@@ -85,7 +85,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
                 loading="lazy"
                 onClick={toggleDropdown}
                 style={{ objectFit: "cover" }}
-                className="w-10 h-10 rounded-full cursor-pointer hover:scale-105 transition-transform duration-200"
+                className="w-10 h-10 rounded-full cursor-pointer hover:scale-105 transition-transform duration-300"
               />
               {isDropdownOpen && (
                 <DropdownMenu
@@ -100,7 +100,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
           <div className="flex gap-4 items-center">
             <ChangeTheme />
             <Link to="/Authentification">
-              <div className={`rounded-full p-3 flex justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-200 
+              <div className={`rounded-full p-3 flex justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-300 
               ${isDarkMode ? "bg-[#777]" : "bg-[#ACACAC]"}`}>
                 <RiLoginBoxFill size={32} color="#fff" /> 
               </div>
