@@ -20,7 +20,6 @@ export default function Post({ user }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageTransition, setImageTransition] = useState(false);
 
-
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
     setIsImageFullScreen(true);
@@ -124,7 +123,6 @@ export default function Post({ user }) {
   const commentInputClassName = `flex-grow px-4 py-2 rounded-l-md border focus:outline-none`;
 
   const commentSendButtonClassName = `px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300`;
-
 
   return (
     <div className={postContainerClassName}>
