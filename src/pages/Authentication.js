@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import ThemeContext from "../components/ThemeContext";
 
 import * as api from "../api";
 import * as utils from "../utils";
@@ -9,57 +8,55 @@ import RegistrationForm from "../components/RegistrationForm";
 import ForgetPasswordForm from "../components/ForgotPasswordForm";
 
 export default function Authentication({ setUser }) {
-  const [registration, setRegistration] = useState(true); // Переключение между регистрацией и логином
-  const [forgotPassword, setForgotPassword] = useState(false); // Переключение между логином и сбросом пароля
+  const [registration, setRegistration] = useState(true);
+  const [forgotPassword, setForgotPassword] = useState(false);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isDarkMode } = useContext(ThemeContext);
-
   const redirect = utils.useRedirectToMainPage();
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       let userData;
       if (registration) {
         userData = await api.registration(username, email, password);
-        setRegistration(false); // После успешной регистрации переключаемся на логин
+        setRegistration(false);
       } else if (forgotPassword) {
-        // TODO: добавить функциональность сброса пароля
-        //await utils.forgotPassword(email); 
-        setForgotPassword(false); // Возвращаемся к логину после сброса пароля
+        setForgotPassword(false);
       } else {
         userData = await api.login(username, password);
       }
-      
+
       if (!forgotPassword) {
-        setUser(userData); // Устанавливаем данные пользователя после успешного логина
-        redirect(); // Перенаправляем на главную страницу
+        setUser(userData);
+        redirect();
       }
     } catch (error) {
       console.error("Error during authentication:", error);
     }
-  }
+  };
 
-  function toggleRegistration() {
+  const toggleRegistration = () => {
     setRegistration(!registration);
     setForgotPassword(false);
     setUsername("");
     setPassword("");
-  }
+  };
 
-  function toggleForgotPassword() {
+  const toggleForgotPassword = () => {
     setForgotPassword(!forgotPassword);
     setRegistration(false);
     setUsername("");
     setPassword("");
-  }
+  };
+
+  const containerClassName = "flex flex-col items-center md:py-40 py-20 w-full";
 
   return (
-    <div className={`flex flex-col items-center md:py-40 py-20 w-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
+    <div className={containerClassName}>
       {registration ? (
         <RegistrationForm
           username={username}

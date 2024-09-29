@@ -5,11 +5,16 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  transition: transform 0.5s ease-in-out;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
+  }
+
+  .App-logo:hover {
+    transform: scale(1.1);
   }
 }
 
@@ -22,10 +27,17 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .App-link {
   color: #61dafb;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.App-link:hover {
+  color: #21a1f1;
+  transform: scale(1.05);
 }
 
 @keyframes App-logo-spin {
@@ -52,7 +64,6 @@
 
 .fade-exit-active {
   opacity: 0;
-  transition: opacity 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .loader {
@@ -62,10 +73,44 @@
   width: 120px;
   height: 120px;
   animation: spin 2s linear infinite;
+  transition: transform 0.3s ease-in-out;
 }
 
+.loader:hover {
+  transform: scale(1.1);
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.transition-colors {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.hover:shadow-lg {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.hover:shadow-lg:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hover:scale-up {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover:scale-up:hover {
+  transform: scale(1.05);
+}
+
+.slide-in {
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.slide-out {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
 }

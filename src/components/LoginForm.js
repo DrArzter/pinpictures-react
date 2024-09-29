@@ -1,21 +1,22 @@
 import React, { useContext } from "react";
 
-import ThemeContext from "./ThemeContext";
-
-export default function LoginForm({ 
-  username, 
-  setUsername, 
-  password, 
-  setPassword, 
-  handleSubmit, 
-  toggleRegistration, 
-  toggleForgotPassword, 
+export default function LoginForm({
+  username,
+  setUsername,
+  password,
+  setPassword,
+  handleSubmit,
+  toggleRegistration,
+  toggleForgotPassword,
 }) {
 
-  const { isDarkMode } = useContext(ThemeContext);
+  const containerClassName = `flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl`;
+
+  const buttonClassName = `w-full py-2 rounded-3xl bg-red-500`;
+
 
   return (
-    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl`}>
+    <div className={containerClassName}>
       <div className="text-center">
         <h2 className="text-2xl">Login to PinPictures</h2>
       </div>
@@ -40,7 +41,7 @@ export default function LoginForm({
             className="w-full p-2 border rounded"
           />
         </div>
-        <button type="submit" className={`w-full py-2 rounded-3xl text-darkModeText bg-red-500`}>
+        <button type="submit" className={buttonClassName}>
           Login
         </button>
         <button onClick={toggleForgotPassword} className="mt-4">

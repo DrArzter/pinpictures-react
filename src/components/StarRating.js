@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const StarRating = ({ rating, postId, setPosts }) => {
   const MAX_STARS = 5;
@@ -7,7 +7,7 @@ const StarRating = ({ rating, postId, setPosts }) => {
 
   const updatePostRating = async (postId, newRating) => {
     try {
-      await axios.patch(`http://localhost:3000/api/posts/`, {
+      await axios.patch("http://localhost:3000/api/posts/", {
         type: "updateRating",
         id: postId,
         rating: newRating,
@@ -20,18 +20,20 @@ const StarRating = ({ rating, postId, setPosts }) => {
         )
       );
     } catch (error) {
-      console.error('Failed to update post rating:', error);
+      console.error("Failed to update post rating:", error);
     }
   };
 
   const handleStarClick = (index) => {
-    const newRating = index + 1;
-    updatePostRating(postId, newRating);
+    updatePostRating(postId, index + 1);
   };
 
   useEffect(() => {
     setCurrentRating(rating);
   }, [rating]);
+
+  const starClassName = (index) =>
+    `h-5 w-5 fill-current cursor-pointer ${index < currentRating ? "text-yellow-500" : "text-gray-400"}`;
 
   return (
     <div className="flex">
@@ -39,7 +41,7 @@ const StarRating = ({ rating, postId, setPosts }) => {
         <svg
           key={`star-${index}`}
           xmlns="http://www.w3.org/2000/svg"
-          className={`h-5 w-5 fill-current cursor-pointer ${index < currentRating ? 'text-yellow-500' : 'text-gray-400'}`}
+          className={starClassName(index)}
           viewBox="0 0 20 20"
           onClick={() => handleStarClick(index)}
         >

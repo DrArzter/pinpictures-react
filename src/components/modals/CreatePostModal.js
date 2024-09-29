@@ -6,16 +6,12 @@ import { FaSpinner } from "react-icons/fa";
 import ThemeContext from "../ThemeContext";
 
 import * as api from "../../api";
-import * as utils from "../../utils";
-import { RiContactsBook2Fill } from "react-icons/ri";
 
 export default function CreatePostModal({
   setCreatePostModal,
   createPostModal,
   posts,
   setPosts,
-  filteredPosts,
-  setFilteredPosts,
   user,
   notifications,
   setNotifications
@@ -28,8 +24,7 @@ export default function CreatePostModal({
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  
-  const isDarkMode = useContext(ThemeContext).isDarkMode;
+  const { isDarkMode } = useContext(ThemeContext);
 
   async function handleSubmit(e) {
     e.preventDefault();

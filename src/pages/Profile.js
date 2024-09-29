@@ -9,7 +9,6 @@ import { FaSpinner } from "react-icons/fa";
 
 import config from "../api/config";
 import * as api from "../api";
-import * as utils from "../utils";
 
 function Profile({ user, setUser }) {
   const [profile, setProfile] = useState(null);
@@ -18,18 +17,8 @@ function Profile({ user, setUser }) {
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  const location = useLocation();
-
-  const redirectToChat = (id) => {
-    navigate(`/chat/${id}`);
-  };
 
   useEffect(() => {
-    console.log("location", location);
-
     const fetchUser = async () => {
       try {
         const userData = await api.getUserByName(username);
@@ -48,7 +37,6 @@ function Profile({ user, setUser }) {
 
   const handleProfilePicClick = () => {
     setShowFullScreen(true);
-    setIsDropdownOpen((prev) => !prev);
   };
 
   const handleAddFriendClick = () => {
@@ -56,6 +44,10 @@ function Profile({ user, setUser }) {
     api.addFriend(profile.id).then(() => {
       setUser({ ...user, friends: [...user.friends, profile] });
     });
+  };
+
+  const redirectToChat = (id) => {
+    navigate(`/chat/${id}`);
   };
 
   const profilePicSrc = useMemo(() => {
@@ -71,6 +63,23 @@ function Profile({ user, setUser }) {
       ? profile.bgpicpath
       : config.apiUrl.replace("/api", "/") + profile.bgpicpath;
   }, [profile]);
+
+  const profileHeaderClassName = `relative w-full h-[40vh] flex flex-col items-center mb-16`;
+
+  const profileBackgroundClassName = `w-full h-full object-cover rounded-b-3xl`;
+
+  const profileInfoClassName = `flex w-3/4 mt-[-5rem] items-center justify-between`;
+
+  const profilePicClassName = `w-40 h-40 rounded-full border-4 border-white cursor-pointer`;
+
+  const profileUsernameClassName = `text-3xl font-bold mt-32`;
+
+  const actionsContainerClassName = `flex gap-4 mt-32 hidden md:flex`;
+
+  const friendListContainerClassName = `lg:w-3/4 flex justify-center items-center bg-zinc-800 rounded-full gap-4 mt-20`;
+
+  const iconClassName = `text-3xl cursor-pointer`;
+
 
   if (loading) {
     return (
@@ -90,50 +99,39 @@ function Profile({ user, setUser }) {
 
   return (
     <div className="flex flex-col items-center mx-auto">
-      <div className="relative w-full h-[40vh] flex flex-col items-center mb-16">
+      <div className={profileHeaderClassName}>
         <img
           id="profileBackground"
-          className="w-full h-full object-cover rounded-b-3xl"
+          className={profileBackgroundClassName}
           src={profileBackground}
           alt="Profile Background"
         />
-        <div className="flex w-3/4 mt-[-5rem] items-center justify-between">
+        <div className={profileInfoClassName}>
           <div className="flex items-center">
             <img
               id="profilePic"
-              className="w-40 h-40 rounded-full border-4 border-white cursor-pointer"
+              className={profilePicClassName}
               src={profilePicSrc}
               onClick={handleProfilePicClick}
               alt="Profile Pic"
             />
-            <p className="text-3xl font-bold mt-32" id="profileUsername">
+            <p className={profileUsernameClassName} id="profileUsername">
               {profile.name}
             </p>
           </div>
           {user && profile.name !== user.name && (
-            <div className="flex gap-4 mt-32 hidden md:flex">
-              <AiOutlineMessage
-                className="text-3xl cursor-pointer"
-                onClick={() => redirectToChat(profile.id)}
-              />
-              <AiOutlineUserAdd
-                className="text-3xl cursor-pointer"
-                onClick={handleAddFriendClick}
-              />
+            <div className={actionsContainerClassName}>
+              <AiOutlineMessage className={iconClassName} onClick={() => redirectToChat(profile.id)} />
+              <AiOutlineUserAdd className={iconClassName} onClick={handleAddFriendClick} />
             </div>
           )}
         </div>
       </div>
 
-      <div className="lg:w-3/4 flex justify-center items-center bg-zinc-800 rounded-full gap-4 mt-20">
-        FRIEND LIST COMING SOON
-      </div>
+      <div className={friendListContainerClassName}>FRIEND LIST COMING SOON</div>
 
       {showFullScreen && (
-        <FullScreenImage
-          imageUrl={profilePicSrc}
-          onClose={() => setShowFullScreen(false)}
-        />
+        <FullScreenImage imageUrl={profilePicSrc} onClose={() => setShowFullScreen(false)} />
       )}
 
       {showUpdateModal && (

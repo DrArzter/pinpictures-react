@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
+
 import { BsHeart, BsChatDots, BsHeartFill } from "react-icons/bs";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+
 import CommentList from "../components/CommentList";
 import FullScreenImage from "../components/modals/FullScreenImageModal";
-import { Link, useParams } from "react-router-dom";
-import * as api from "../api";
 import LoadingIndicator from "../components/LoadingIndicator";
-import ThemeContext from "../components/ThemeContext";
+
+import * as api from "../api";
 
 export default function Post({ user }) {
   const { id } = useParams();
@@ -18,7 +20,6 @@ export default function Post({ user }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageTransition, setImageTransition] = useState(false);
 
-  const isDarkMode = useContext(ThemeContext);
 
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
@@ -84,7 +85,7 @@ export default function Post({ user }) {
       const response = await api.getPostById(id);
       if (response) {
         response.likes = response.liked_user_ids?.length || 0;
-        setLiked(user ? response.liked_user_ids?.includes(user.id) || false : false);
+        setLiked(user ? response.liked_user_ids?.includes(user.id) : false);
         setPost(response);
       }
       setLoading(false);
@@ -93,23 +94,44 @@ export default function Post({ user }) {
   }, [id, user]);
 
   if (loading) {
-    return <LoadingIndicator isDarkMode={isDarkMode} />;
+    return <LoadingIndicator />;
   }
 
-  console.log(isDarkMode.isDarkMode);
+  const postContainerClassName = `flex flex-col lg:flex-row max-h-[80vh] mt-8 mx-8 gap-8`;
+
+  const imageSliderContainerClassName = `w-full lg:w-2/3 h-[80vh] flex flex-col items-center relative overflow-hidden rounded-lg shadow-md`;
+
+  const imageContainerClassName = `w-full h-full flex items-center justify-center transition-opacity duration-300 ${
+    imageTransition ? "opacity-0" : "opacity-100"
+  }`;
+
+  const navigationButtonClassName = `p-2 bg-opacity-0 transition-colors hover:bg-opacity-100 duration-300 rounded-full`;
+
+  const postInfoContainerClassName = `w-full lg:w-1/3 flex flex-col p-4 overflow-y-auto rounded-lg shadow-md`;
+
+  const postTitleClassName = `text-3xl font-bold mb-4`;
+
+  const postDescriptionClassName = `mb-4 break-words`;
+
+  const postAuthorClassName = `text-sm mb-4`;
+
+  const postActionsClassName = `flex items-center space-x-4 mb-4`;
+
+  const likeButtonClassName = `flex items-center space-x-2 hover:text-yellow-500`;
+
+  const commentButtonClassName = `flex items-center space-x-2 hover:text-yellow-500`;
+
+  const commentInputClassName = `flex-grow px-4 py-2 rounded-l-md border focus:outline-none`;
+
+  const commentSendButtonClassName = `px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300`;
+
 
   return (
-    <div className={`flex flex-col lg:flex-row max-h-[80vh] mt-8 mx-8 gap-8`}>
-
-      <div className="w-full lg:w-2/3 h-[80vh] flex flex-col items-center relative overflow-hidden rounded-lg shadow-md">
+    <div className={postContainerClassName}>
+      <div className={imageSliderContainerClassName}>
         {post.images && post.images.length > 0 ? (
           <>
-            <div
-              className={`w-full h-full flex items-center justify-center transition-opacity duration-300 ${
-                imageTransition ? "opacity-0" : "opacity-100"
-              }`}
-              style={{ maxHeight: "100vh" }}
-            >
+            <div className={imageContainerClassName} style={{ maxHeight: "100vh" }}>
               <img
                 src={post.images[currentImageIndex].picpath}
                 alt={post.name}
@@ -120,17 +142,11 @@ export default function Post({ user }) {
             </div>
 
             {post.images.length > 1 && (
-              <div className="absolute flex justify-between w-full top-1/2 transform -translate-y-1/2 px-4 ">
-                <button
-                  onClick={handlePrevImage}
-                  className={`p-2 bg-opacity-0 transition-colors hover:bg-opacity-100 duration-300 rounded-full`}
-                >
+              <div className="absolute flex justify-between w-full top-1/2 transform -translate-y-1/2 px-4">
+                <button onClick={handlePrevImage} className={navigationButtonClassName}>
                   <IoIosArrowBack className="hover:fill-yellow-500" size={24} />
                 </button>
-                <button
-                  onClick={handleNextImage}
-                  className={`p-2 bg-opacity-0 transition-colors hover:bg-opacity-100 duration-300 rounded-full`}
-                >
+                <button onClick={handleNextImage} className={navigationButtonClassName}>
                   <IoIosArrowForward className="hover:fill-yellow-500" size={24} />
                 </button>
               </div>
@@ -141,27 +157,22 @@ export default function Post({ user }) {
         )}
       </div>
 
-      <div className={`w-full lg:w-1/3 flex flex-col p-4 overflow-y-auto rounded-lg shadow-md`}>
-        <h2 className={`text-3xl font-bold mb-4`}>
-          {post.name}
-        </h2>
-        <p className={`mb-4 break-words`}>{post.description}</p>
-        <p className={`text-sm mb-4`}>
+      <div className={postInfoContainerClassName}>
+        <h2 className={postTitleClassName}>{post.name}</h2>
+        <p className={postDescriptionClassName}>{post.description}</p>
+        <p className={postAuthorClassName}>
           Posted by:{" "}
-          <Link to={`/profile/${post.author}`} className={`hover:underline`}>
+          <Link to={`/profile/${post.author}`} className="hover:underline">
             {post.author}
           </Link>
         </p>
 
-        <div className="flex items-center space-x-4 mb-4">
-          <button
-            onClick={handleLike}
-            className={`flex items-center space-x-2 hover:text-yellow-500`}
-          >
+        <div className={postActionsClassName}>
+          <button onClick={handleLike} className={likeButtonClassName}>
             {liked ? <BsHeartFill size={20} /> : <BsHeart size={20} />}
             <span>{post.likes || 0}</span>
           </button>
-          <div className={`flex items-center space-x-2 hover:text-yellow-500`}>
+          <div className={commentButtonClassName}>
             <BsChatDots size={20} />
             <span>{post.comments ? post.comments.length : 0}</span>
           </div>
@@ -169,22 +180,19 @@ export default function Post({ user }) {
 
         <div className="flex items-center mb-4">
           <input
-            className={`flex-grow px-4 py-2 rounded-l-md border focus:outline-none}`}
+            className={commentInputClassName}
             type="text"
             value={commentValue}
             onChange={handleCommentChange}
             placeholder="Add a comment..."
           />
-          <button
-            className={`px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300`}
-            onClick={handleCommentSubmit}
-          >
+          <button className={commentSendButtonClassName} onClick={handleCommentSubmit}>
             Send
           </button>
         </div>
 
         <div className="flex-grow">
-          <CommentList comments={post.comments || []} isDarkMode={isDarkMode} />
+          <CommentList comments={post.comments || []} />
         </div>
       </div>
 
@@ -192,7 +200,6 @@ export default function Post({ user }) {
         <FullScreenImage
           imageUrl={post.images[currentImageIndex].picpath}
           onClose={() => setIsImageFullScreen(false)}
-          isDarkMode={isDarkMode}
         />
       )}
     </div>

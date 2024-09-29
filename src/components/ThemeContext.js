@@ -1,6 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 
-const ThemeContext = createContext({ isDarkMode: false, toggleTheme: () => {}, isMobile: false });
+const ThemeContext = createContext({
+  isDarkMode: false,
+  toggleTheme: () => {},
+  isMobile: false,
+  setIsMobile: () => {},
+});
 
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -8,16 +13,14 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const isDarkModeStorage = localStorage.getItem("DarkTheme");
-    if (isDarkModeStorage == 1) {
-      setIsDarkMode(!isDarkMode);
+    if (isDarkModeStorage === "1") {
+      setIsDarkMode(true); 
     }
   }, []);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
-    localStorage.setItem("DarkTheme", isDarkMode ? 0 : 1);
-    const isDarkModeStorage = localStorage.getItem("DarkTheme");
-
+    localStorage.setItem("DarkTheme", isDarkMode ? "0" : "1");
   };
 
   return (
@@ -27,4 +30,4 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-export default ThemeContext; 
+export default ThemeContext;

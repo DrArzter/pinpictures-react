@@ -1,14 +1,12 @@
 import React from "react";
 import { FaSpinner } from "react-icons/fa";
 
-export default function LoadingIndicator({ isDarkMode }) {
+export default function LoadingIndicator() {
+
+  const spinnerClassName = `text-4xl animate-spin text-yellow-500`;
   return (
     <div className="flex justify-center items-center w-full h-64">
-      <FaSpinner
-        className={`text-4xl animate-spin ${
-          isDarkMode ? "text-yellow-400" : "text-yellow-500"
-        }`}
-      />
+      <FaSpinner className={spinnerClassName} />
     </div>
   );
 }

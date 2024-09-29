@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -14,60 +14,61 @@ import Chats from "../pages/Chats";
 import Admin from "../pages/Admin";
 import Chat from "../pages/Chat";
 
-import ThemeContext from "./ThemeContext";
-
 import * as utils from "../utils";
 
-export default function Main({ user, 
-  setUser, 
-  posts, 
-  setPosts, 
-  createPostModal, 
-  setCreatePostModal, 
-  notifications, 
+export default function Main({
+  user,
+  setUser,
+  posts,
+  setPosts,
+  createPostModal,
+  setCreatePostModal,
+  notifications,
   setNotifications,
-  isMobile
+  isMobile,
 }) {
-  
   const location = useLocation();
-  const { isDarkMode } = useContext(ThemeContext);
+
+  const mainClassName = "min-h-screen md:mt-8";
 
   return (
-    <div id="main" className={`min-h-screen md:mt-8
-    ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
+    <div id="main" className={mainClassName}>
       <utils.scrollToTop />
       <TransitionGroup component={null}>
         <CSSTransition key={location.key} classNames="fade" timeout={300}>
           <Routes location={location}>
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
-                <Posts 
-                  user={user} 
+                <Posts
+                  user={user}
                   createPostModal={createPostModal}
-                  setCreatePostModal={setCreatePostModal} 
+                  setCreatePostModal={setCreatePostModal}
                   notifications={notifications}
                   setNotifications={setNotifications}
-                  posts={posts} 
-                  setPosts={setPosts} 
+                  posts={posts}
+                  setPosts={setPosts}
                 />
-              } 
+              }
             />
-            <Route path="/support" element={<Support  />} /> 
-            <Route path="/license" element={<License  />} /> 
-            <Route path="/authentification" element={<Authentication setUser={setUser} user={user} isMobile={isMobile}  />} /> 
-            <Route path="/settings" element={<AccountSettings user={user}  />} /> 
-            <Route path="/profile/:username" element={<Profile user={user} setUser={setUser}  />} />
-            <Route path="/post/:id" element={<Post user={user}  />} />
-            <Route path="/chats" element={<Chats user={user}  />} /> 
-            <Route path="/chat/:id" element={<Chat setUser={setUser} user={user} isMobile={isMobile}  />} /> 
-            <Route path="/admin" element={<Admin user={user}   />} /> 
-            <Route path="secret" element={<NotFound  />} /> 
-            <Route path="*" element={<NotFound />} /> 
+            <Route path="/support" element={<Support />} />
+            <Route path="/license" element={<License />} />
+            <Route
+              path="/authentification"
+              element={<Authentication setUser={setUser} user={user} isMobile={isMobile} />}
+            />
+            <Route path="/settings" element={<AccountSettings user={user} />} />
+            <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} />} />
+            <Route path="/post/:id" element={<Post user={user} />} />
+            <Route path="/chats" element={<Chats user={user} />} />
+            <Route path="/chat/:id" element={<Chat setUser={setUser} user={user} isMobile={isMobile} />} />
+            <Route path="/admin" element={<Admin user={user} />} />
+            <Route path="secret" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>
-      
+
       <div className="h-40"></div>
     </div>
   );

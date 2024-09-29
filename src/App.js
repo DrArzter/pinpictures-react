@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+
 import "./App.css";
+
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
 import Notification from "./components/Notifications";
 import CreatePostModal from "./components/modals/CreatePostModal";
 
-import * as utils from "./utils";
-import * as api from "./api";
-
-import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "../src/components/ThemeContext";
 import ThemeContext from "../src/components/ThemeContext";
+
+import * as api from "./api";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -40,7 +41,7 @@ function App() {
       <ThemeProvider>
         <AppContent 
           user={user} 
-          setUser={setUser} // Передаем setUser сюда
+          setUser={setUser}
           createPostModal={createPostModal} 
           setCreatePostModal={setCreatePostModal} 
           posts={posts} 
@@ -66,7 +67,10 @@ function AppContent({
   const { isDarkMode } = useContext(ThemeContext);
   
   return (
-    <div className={`h-screen md:h-full ${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"}`}>
+    <div className={`h-screen md:h-full transition-all duration-300 ease-in-out 
+      ${isDarkMode ? "bg-darkModeBackground text-darkModeText fill-darkModeText"
+      : "bg-lightModeBackground text-lightModeText fill-lightModeText"} 
+      transition-colors`}>
       <Header 
         user={user}
         createPostModal={createPostModal}

@@ -1,17 +1,20 @@
-
 import React from "react";
 
-export default function LoginForm({ 
-  username, 
-  setUsername, 
-  password, 
-  setPassword, 
-  handleSubmit, 
-  toggleRegistration, 
-  toggleForgotPassword, 
+export default function LoginForm({
+  username,
+  setUsername,
+  password,
+  setPassword,
+  handleSubmit,
+  toggleRegistration,
+  toggleForgotPassword,
 }) {
+  const containerClassName = `flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl md:shadow-2xl`;
+
+  const buttonClassName = `w-full py-2 rounded-3xl bg-red-500`;
+
   return (
-    <div className={`flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl md:shadow-2xl`}>
+    <div className={containerClassName}>
       <div className="text-center">
         <h2 className="text-2xl">Reset password</h2>
       </div>
@@ -26,7 +29,7 @@ export default function LoginForm({
             className="w-full p-2 border rounded"
           />
         </div>
-        <button type="submit" className={`w-full py-2 rounded-3xl bg-red-500`}>
+        <button type="submit" className={buttonClassName}>
           Reset
         </button>
         <button onClick={toggleForgotPassword} className="mt-4">

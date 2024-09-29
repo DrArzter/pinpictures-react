@@ -1,7 +1,4 @@
 import React, { useEffect } from 'react';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import { FaRegWindowClose } from 'react-icons/fa';
 
 export default function FullScreenImage({ imageUrl, onClose }) {
 

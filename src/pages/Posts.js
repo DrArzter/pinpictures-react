@@ -1,46 +1,43 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
+
 import PostList from "../components/PostList";
 import LoadingIndicator from "../components/LoadingIndicator";
 import NoPostsFound from "../components/NoPostsFound";
-import * as postUtils from "../utils/postUtils";
-import ThemeContext from "../components/ThemeContext";
 
-export default function Posts({
-  user,
-  setUser,
-  createPostModal,
-  setCreatePostModal,
-  notifications,
-  setNotifications,
-  posts,
-  setPosts,
-}) {
+import * as postUtils from "../utils/postUtils";
+
+export default function Posts({ user, posts, setPosts }) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMorePosts, setHasMorePosts] = useState(true);
-
-  const { isDarkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
       if (hasMorePosts) {
         setLoading(page === 1);
         setLoadingMore(page > 1);
-        const newPosts = await postUtils.fetchPosts(page);
-        if (newPosts.length === 0) {
-          setHasMorePosts(false);
-        } else {
-          setPosts((prevPosts) =>
-            page === 1 ? newPosts : [...prevPosts, ...newPosts]
-          );
+
+        try {
+          const newPosts = await postUtils.fetchPosts(page);
+          if (newPosts.length === 0) {
+            setHasMorePosts(false);
+          } else {
+            setPosts((prevPosts) =>
+              page === 1 ? newPosts : [...prevPosts, ...newPosts]
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        } finally {
+          setLoading(false);
+          setLoadingMore(false);
         }
       }
-      setLoading(false);
-      setLoadingMore(false);
     };
+
     fetchPosts();
-  }, [page, hasMorePosts]);
+  }, [page, hasMorePosts, setPosts]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,6 +49,7 @@ export default function Posts({
         setPage((prevPage) => prevPage + 1);
       }
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadingMore, hasMorePosts]);
@@ -60,38 +58,27 @@ export default function Posts({
     setHasMorePosts(true);
   };
 
+  const postsContainerClassName = "w-full p-[14px] animate-slide-up";
+
+  const loadMoreButtonClassName = `flex justify-center items-center mt-16 text-center cursor-pointer`;
+
   return (
-    <div
-      className={`px-4 ${
-        isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""
-      }`}
-    >
+    <div className={'px-4'}>
       {loading && page === 1 ? (
-        <LoadingIndicator isDarkMode={isDarkMode} />
+        <LoadingIndicator />
       ) : (
-        <div
-          id="posts"
-          className={`w-full p-[14px] animate-slide-up ${
-            isDarkMode ? "bg-darkModeBackground text-darkModeText" : ""
-          }`}
-        >
+        <div id="posts" className={postsContainerClassName}>
           {posts.length > 0 ? (
-            <PostList
-              posts={posts}
-              setPosts={setPosts}
-              user={user}
-              isDarkMode={isDarkMode}
-            />
+            <PostList posts={posts} user={user} />
           ) : (
-            <NoPostsFound isDarkMode={isDarkMode} />
+            <NoPostsFound />
           )}
-          {loadingMore && hasMorePosts && <LoadingIndicator isDarkMode={isDarkMode} />}
+          {loadingMore && hasMorePosts && <LoadingIndicator />}
           {!hasMorePosts && (
-            <div
-              className="flex justify-center items-center mt-16 text-center cursor-pointer"
-              onClick={handleLoadMore}
-            >
-              <p className="text-lg font-semibold text-yellow-400">That's all for now, but you can try again later :)</p>
+            <div className={loadMoreButtonClassName} onClick={handleLoadMore}>
+              <p className="text-lg font-semibold text-yellow-400">
+                That's all for now, but you can try again later :)
+              </p>
             </div>
           )}
         </div>
