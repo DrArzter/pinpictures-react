@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -13,6 +13,8 @@ import Profile from "../pages/Profile";
 import Chats from "../pages/Chats";
 import Admin from "../pages/Admin";
 import Chat from "../pages/Chat";
+import Search from "../pages/Search";
+import Test from "../pages/Test";
 
 import * as utils from "../utils";
 
@@ -34,40 +36,42 @@ export default function Main({
   return (
     <div id="main" className={mainClassName}>
       <utils.scrollToTop />
-      <TransitionGroup component={null}>
-        <CSSTransition key={location.key} classNames="fade" timeout={300}>
-          <Routes location={location}>
-            <Route
-              path="/"
-              element={
-                <Posts
-                  user={user}
-                  createPostModal={createPostModal}
-                  setCreatePostModal={setCreatePostModal}
-                  notifications={notifications}
-                  setNotifications={setNotifications}
-                  posts={posts}
-                  setPosts={setPosts}
-                />
-              }
-            />
-            <Route path="/support" element={<Support />} />
-            <Route path="/license" element={<License />} />
-            <Route
-              path="/authentification"
-              element={<Authentication setUser={setUser} user={user} isMobile={isMobile} />}
-            />
-            <Route path="/settings" element={<AccountSettings user={user} />} />
-            <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} />} />
-            <Route path="/post/:id" element={<Post user={user} />} />
-            <Route path="/chats" element={<Chats user={user} />} />
-            <Route path="/chat/:id" element={<Chat setUser={setUser} user={user} isMobile={isMobile} />} />
-            <Route path="/admin" element={<Admin user={user} />} />
-            <Route path="secret" element={<NotFound />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </CSSTransition>
-      </TransitionGroup>
+        <TransitionGroup component={null}>
+          <CSSTransition key={location.key} classNames="fade" timeout={300}>
+            <Routes location={location}>
+              <Route
+                path="/"
+                element={
+                  <Posts
+                    user={user}
+                    createPostModal={createPostModal}
+                    setCreatePostModal={setCreatePostModal}
+                    notifications={notifications}
+                    setNotifications={setNotifications}
+                    posts={posts}
+                    setPosts={setPosts}
+                  />
+                }
+              />
+              <Route path="/support" element={<Support />} />
+              <Route path="/license" element={<License />} />
+              <Route
+                path="/authentification"
+                element={<Authentication setUser={setUser} user={user} isMobile={isMobile} />}
+              />
+              <Route path="/settings" element={<AccountSettings user={user} />} />
+              <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} />} />
+              <Route path="/post/:id" element={<Post user={user} />} />
+              <Route path="/chats" element={<Chats user={user} />} />
+              <Route path="/chat/:id" element={<Chat setUser={setUser} user={user} isMobile={isMobile} />} />
+              <Route path="/admin" element={<Admin user={user} />} />
+              <Route path="secret" element={<NotFound />} />
+              <Route path="search/:searchTerm" element={<Search />} />
+              <Route path="test" element={<Test />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </CSSTransition>
+        </TransitionGroup>
 
       <div className="h-40"></div>
     </div>

@@ -1,22 +1,27 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 import FullScreenImage from "../components/modals/FullScreenImageModal";
 import UpdateImageModal from "../components/modals/UpdateImageModal";
+import LoadingIndicator from "../components/LoadingIndicator";
+import { ThemeProvider } from "../components/ThemeContext";
 
 import { AiOutlineUserAdd, AiOutlineSetting, AiOutlineMessage } from "react-icons/ai";
-import { FaSpinner } from "react-icons/fa";
 
 import config from "../api/config";
 import * as api from "../api";
+import UserList from "../components/UserList";
 
 function Profile({ user, setUser }) {
   const [profile, setProfile] = useState(null);
+  const [friends, setFriends] = useState([]);
   const { username } = useParams();
   const navigate = useNavigate();
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const isDarkMode = useContext(ThemeProvider);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -25,15 +30,29 @@ function Profile({ user, setUser }) {
         setProfile(userData);
       } catch (error) {
         console.error("Error fetching profile:", error);
-      } finally {
-        setLoading(false);
       }
     };
-
+  
+    const fetchFriends = async () => {
+      try {
+        const friendsData = await api.getFriends(username);
+        setFriends(friendsData);
+      } catch (error) {
+        console.error("Error fetching friends:", error);
+      }
+    };
+  
+    const loadProfileData = async () => {
+      setLoading(true);
+      await Promise.all([fetchUser(), fetchFriends()]);
+      setLoading(false);
+    };
+  
     if (username) {
-      fetchUser();
+      loadProfileData();
     }
   }, [username]);
+  
 
   const handleProfilePicClick = () => {
     setShowFullScreen(true);
@@ -42,7 +61,6 @@ function Profile({ user, setUser }) {
   const handleAddFriendClick = () => {
     if (!profile || !user) return;
     api.addFriend(profile.id).then(() => {
-      setUser({ ...user, friends: [...user.friends, profile] });
     });
   };
 
@@ -76,17 +94,13 @@ function Profile({ user, setUser }) {
 
   const actionsContainerClassName = `flex gap-4 mt-32 hidden md:flex`;
 
-  const friendListContainerClassName = `lg:w-3/4 flex justify-center items-center bg-zinc-800 rounded-full gap-4 mt-20`;
+  const friendListContainerClassName = `lg:w-3/4 flex justify-center rounded-full gap-4 mt-20 ${isDarkMode ? "bg-zinc-800" : "bg-zinc-700"}`;
 
   const iconClassName = `text-3xl cursor-pointer`;
 
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center w-full h-64">
-        <FaSpinner className="text-yellow-500 text-4xl animate-spin" />
-      </div>
-    );
+    return <LoadingIndicator />;
   }
 
   if (!profile) {
@@ -128,7 +142,9 @@ function Profile({ user, setUser }) {
         </div>
       </div>
 
-      <div className={friendListContainerClassName}>FRIEND LIST COMING SOON</div>
+      <div className={friendListContainerClassName}>
+        <UserList users={friends} />
+      </div>
 
       {showFullScreen && (
         <FullScreenImage imageUrl={profilePicSrc} onClose={() => setShowFullScreen(false)} />
