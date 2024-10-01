@@ -3,7 +3,7 @@ import axios from 'axios';
 import config from "./config";
 
 const getPostsUrl = (page) => {
-  return `${config.apiUrl}/posts?page=${page}`;
+  return `${config.apiUrl}/posts/${page}`;
 };
 
 export default async function getPosts(page) {

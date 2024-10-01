@@ -12,7 +12,7 @@ export default async function searchPost(posts, setFilteredPosts, searchTerm) {
 
   try {
     const response = await axios.get(
-      `${config.apiUrl}/posts/search?searchTerm=${encodeURIComponent(searchTerm)}`
+      `${config.apiUrl}/search/${encodeURIComponent(searchTerm)}`
     );
     setFilteredPosts(response.data);
   } catch (error) {

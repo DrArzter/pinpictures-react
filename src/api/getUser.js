@@ -18,9 +18,7 @@ export default async function getUser() {
     if (!headers) {
       return null;
     }
-    
     const response = await axios.get(getUserUrl(), headers);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching user:', error);

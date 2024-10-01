@@ -6,7 +6,7 @@ import NoPostsFound from "../components/NoPostsFound";
 
 import * as postUtils from "../utils/postUtils";
 
-export default function Posts({ user, posts, setPosts }) {
+export default function Posts({ posts, setPosts }) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -69,7 +69,7 @@ export default function Posts({ user, posts, setPosts }) {
       ) : (
         <div id="posts" className={postsContainerClassName}>
           {posts.length > 0 ? (
-            <PostList posts={posts} user={user} />
+            <PostList posts={posts} />
           ) : (
             <NoPostsFound />
           )}
