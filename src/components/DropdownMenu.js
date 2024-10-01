@@ -74,18 +74,18 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
       <div className={menuItemsClassName}>
         <div className="flex items-center justify-between gap-4">
           <ChangeTheme />
-          <Link to="/Settings" className="cursor-pointer hover:text-yellow-500 transition-transform hover:scale-105">
+          <Link to="/Settings" className="cursor-pointer transition-transform hover:scale-105">
             <FaGear className={iconClassName} />
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 cursor-pointer hover:text-yellow-500 transition-transform hover:scale-105">
+        <div className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105">
           <CiBookmarkPlus className={iconClassName} />
           <span>Bookmark</span>
         </div>
 
         <div
-          className="flex items-center gap-2 cursor-pointer hover:text-yellow-500 transition-transform hover:scale-105"
+          className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105"
           onClick={handleLogout}
         >
           <RiLogoutBoxFill className={iconClassName} />

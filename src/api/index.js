@@ -20,6 +20,7 @@ export {default as getUserByName} from './getUserByName'
 
 //FRIENDS
 export {default as addFriend} from './addFriend'
+export {default as getFriends} from './getFriends'
 
 //PROFILE
 export {default as uploadProfileImage} from './uploadProfileImage'
@@ -37,3 +38,6 @@ export {default as getChatById} from './getChatById'
 
 //MESSAGES
 export {default as uploadMessage} from './uploadMessage'
+
+//SEARCH
+export {default as search} from './search'

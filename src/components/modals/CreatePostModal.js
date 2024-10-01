@@ -52,8 +52,6 @@ export default function CreatePostModal({
       setLoading(false);
     }
   }
-  
-  
 
   function closeModal() {
     setCreatePostModal(false);

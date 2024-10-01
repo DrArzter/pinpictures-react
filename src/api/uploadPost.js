@@ -23,7 +23,7 @@ const createFormData = (title, description, images) => {
   const formData = new FormData();
   formData.append('name', title);
   formData.append('description', description);
-  images.forEach((image, index) => {
+  images.forEach((image) => {
     formData.append('images', image);
   });
   return formData;
@@ -42,7 +42,6 @@ export default async function uploadPost(title, description, images, author) {
     });
     response.data.author = author;
     response.data.comments = [];
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
