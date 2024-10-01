@@ -5,11 +5,11 @@ import { FaBell } from "react-icons/fa";
 import { CiSquarePlus } from "react-icons/ci";
 import { AiOutlineMessage } from "react-icons/ai";
 import { RiLoginBoxFill } from "react-icons/ri";
-import { SlMagnifier } from "react-icons/sl";
 
 import DropdownMenu from "./DropdownMenu";
 import ThemeContext from "./ThemeContext";
 import ChangeTheme from "./ChangeTheme";
+import SearchBar from "./SearchBar";
 
 import config from "../api/config";
 import { Logo } from "../resources/Logo";
@@ -25,18 +25,6 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
 
   const logoTextClassName = "text-2xl py-2 hidden lg:block font-bold";
 
-  const searchBarClassName = `flex items-center flex-grow max-w-xl mx-4 rounded-full hidden lg:flex transition-colors ${
-    isDarkMode ? "bg-[#555] text-white" : "bg-[#D9D9D9]"
-  } shadow-sm`;
-
-  const searchInputClassName = `w-full rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors ${
-    isDarkMode ? "bg-[#555]" : "bg-[#D9D9D9]"
-  }`;
-
-  const searchIconContainerClassName = `p-2 rounded-full cursor-pointer hover:bg-[#D9D9D9] transition-colors ${
-    isDarkMode ? "bg-[#777]" : "bg-[#ACACAC]"
-  }`;
-
   const iconClassName = "cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-300";
 
   const loginButtonClassName = `rounded-full p-3 flex justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-300 ${
@@ -50,12 +38,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
         <p className={logoTextClassName}>PinPictures</p>
       </Link>
 
-      <div className={searchBarClassName}>
-        <input className={searchInputClassName} placeholder="Search..." />
-        <div className={searchIconContainerClassName}>
-          <SlMagnifier size={24} />
-        </div>
-      </div>
+      <SearchBar />
 
       <div className="flex items-center gap-4">
         {user ? (
