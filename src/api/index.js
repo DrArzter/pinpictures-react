@@ -20,7 +20,9 @@ export {default as getUserByName} from './getUserByName'
 
 //FRIENDS
 export {default as addFriend} from './addFriend'
+export {default as confirmFriend} from './confirmFriend'
 export {default as getFriends} from './getFriends'
+export {default as removeFriend} from './removeFriend'
 
 //PROFILE
 export {default as uploadProfileImage} from './uploadProfileImage'

@@ -6,7 +6,7 @@ import UpdateImageModal from "../components/modals/UpdateImageModal";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { ThemeProvider } from "../components/ThemeContext";
 
-import { AiOutlineUserAdd, AiOutlineSetting, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineUserAdd, AiOutlineSetting, AiOutlineMessage, AiOutlineUserDelete } from "react-icons/ai";
 
 import config from "../api/config";
 import * as api from "../api";
@@ -32,7 +32,7 @@ function Profile({ user, setUser }) {
         console.error("Error fetching profile:", error);
       }
     };
-  
+
     const fetchFriends = async () => {
       try {
         const friendsData = await api.getFriends(username);
@@ -41,18 +41,18 @@ function Profile({ user, setUser }) {
         console.error("Error fetching friends:", error);
       }
     };
-  
+
     const loadProfileData = async () => {
       setLoading(true);
       await Promise.all([fetchUser(), fetchFriends()]);
       setLoading(false);
     };
-  
+
     if (username) {
       loadProfileData();
     }
   }, [username]);
-  
+
 
   const handleProfilePicClick = () => {
     setShowFullScreen(true);
@@ -61,6 +61,18 @@ function Profile({ user, setUser }) {
   const handleAddFriendClick = () => {
     if (!profile || !user) return;
     api.addFriend(profile.id).then(() => {
+    });
+  };
+
+  const handleConfirmFriendClick = () => {
+    if (!profile || !user) return;
+    api.confirmFriend(profile.id).then(() => {
+    });
+  };
+
+  const handleDeleteFriendClick = () => {
+    if (!profile || !user) return;
+    api.removeFriend(profile.id).then(() => {
     });
   };
 
@@ -136,14 +148,24 @@ function Profile({ user, setUser }) {
           {user && profile.name !== user.name && (
             <div className={actionsContainerClassName}>
               <AiOutlineMessage className={iconClassName} onClick={() => redirectToChat(profile.id)} />
-              <AiOutlineUserAdd className={iconClassName} onClick={handleAddFriendClick} />
+            {friends.some(friend => friend.name === user.name && friend.status === "confirmed") ? (
+              <AiOutlineUserDelete
+                className={iconClassName}
+                onClick={handleDeleteFriendClick}
+              />
+            ) : (
+              <AiOutlineUserAdd
+                className={iconClassName}
+                onClick={friends.some(friend => friend.name === user.name && friend.status === "pending") ? handleConfirmFriendClick : handleAddFriendClick}
+              />
+            )}
             </div>
           )}
         </div>
       </div>
 
       <div className={friendListContainerClassName}>
-        <UserList users={friends} />
+        <UserList users={friends.filter(friend => friend.status === "confirmed")} />
       </div>
 
       {showFullScreen && (
