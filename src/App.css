@@ -5,6 +5,18 @@
   width: 100%;
 }
 
+.hover-transform {
+  transition: all 0.3s ease;
+}
+.hover-transform:hover {
+  transform: scale(1.1);
+  color: #FFD700;
+}
+.hover-transform:focus {
+  transform: scale(1.1);
+  color: #FFD700;
+}
+
 .fade-enter-active,
 .fade-exit-active {
   opacity: 1;

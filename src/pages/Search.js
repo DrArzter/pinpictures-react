@@ -3,8 +3,12 @@ import { useParams } from "react-router-dom";
 
 
 import LoadingIndicator from "../components/LoadingIndicator";
+
 import PostList from "../components/PostList";
 import NoPostsFound from "../components/NoPostsFound";
+
+import UserList from "../components/UserList";
+import NoUsersFound from "../components/NoUsersFound";
 
 import * as api from "../api";
 
@@ -33,15 +37,13 @@ export default function Search() {
 
     return (
         <div>
-            <h2>Search Results</h2>
-            <div>
-                <h3>Users:</h3>
-                {users.length ? users.map(user => (
-                    <div key={user.id}>
-                        <p>{user.name}</p>
-                        <img src={user.picpath} alt="User profile" />
-                    </div>
-                )) : <p>No users found.</p>}
+            
+            <div id="users" className={postsContainerClassName}>
+                {users.length > 0 ? (
+                    <UserList users={users} />
+                ) : (
+                    <NoUsersFound />
+                )}
             </div>
 
             <div id="posts" className={postsContainerClassName}>

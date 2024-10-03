@@ -46,12 +46,12 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
     };
   }, [isDropdownOpen, toggleDropdown]);
 
-  const dropdownClassName = `absolute z-[999] right-0 top-16 w-[10vw] rounded-md shadow-lg transform transition-all duration-300 ease-in-out 
+  const dropdownClassName = `absolute z-[999] right-0 top-16 lg:w-[10vw] w-32 rounded-md shadow-lg transform transition-all duration-300 ease-in-out 
     ${isDropdownOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"} 
     ${isDarkMode ? "bg-darkModeBackground" : "bg-lightModeBackground"} 
     transition-transform transition-opacity`;
 
-  const menuItemsClassName = `p-4 flex flex-col gap-4 
+  const menuItemsClassName = `p-4 flex flex-col gap-4 w-[50%]
     ${isDarkMode ? "text-darkModeText" : "text-lightModeText"} 
     transition-colors`;
 
@@ -67,25 +67,25 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
               : `${config.apiUrl.replace("/api", "/")}${user.picpath}`
           }
           alt="Profile"
-          className="w-full h-24 object-cover rounded-t-md transition-transform hover:scale-105"
+          className="w-full h-24 object-cover rounded-t-md hover-transform cursor-pointer"
         />
       </Link>
 
       <div className={menuItemsClassName}>
         <div className="flex items-center justify-between gap-4">
           <ChangeTheme />
-          <Link to="/Settings" className="cursor-pointer transition-transform hover:scale-105">
+          <Link to="/Settings" className="cursor-pointer hover-transform">
             <FaGear className={iconClassName} />
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105">
+        <div className="flex items-center gap-2 cursor-pointer hover-transform">
           <CiBookmarkPlus className={iconClassName} />
           <span>Bookmark</span>
         </div>
 
         <div
-          className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-105"
+          className="flex items-center gap-2 cursor-pointer hover-transform"
           onClick={handleLogout}
         >
           <RiLogoutBoxFill className={iconClassName} />

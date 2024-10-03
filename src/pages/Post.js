@@ -120,9 +120,11 @@ export default function Post({ user }) {
 
   const commentButtonClassName = `flex items-center space-x-2 hover:text-yellow-500`;
 
-  const commentInputClassName = `flex-grow px-4 py-2 rounded-l-md border focus:outline-none`;
+  const commentInputClassName = `flex-grow px-4 py-2 rounded-l-md border focus:border-yellow-500 focus:outline-none`;
 
-  const commentSendButtonClassName = `px-4 py-2 rounded-r-md hover:bg-yellow-500 border transition duration-300`;
+  const ArrowButtonClassName = `hover-transform`
+
+  const commentSendButtonClassName = `px-4 py-2 rounded-r-md border hover:bg-yellow-500`;
 
   return (
     <div className={postContainerClassName}>
@@ -142,10 +144,10 @@ export default function Post({ user }) {
             {post.images.length > 1 && (
               <div className="absolute flex justify-between w-full top-1/2 transform -translate-y-1/2 px-4">
                 <button onClick={handlePrevImage} className={navigationButtonClassName}>
-                  <IoIosArrowBack className="hover:fill-yellow-500" size={24} />
+                  <IoIosArrowBack className={ArrowButtonClassName} size={24} />
                 </button>
                 <button onClick={handleNextImage} className={navigationButtonClassName}>
-                  <IoIosArrowForward className="hover:fill-yellow-500" size={24} />
+                  <IoIosArrowForward className={ArrowButtonClassName} size={24} />
                 </button>
               </div>
             )}
