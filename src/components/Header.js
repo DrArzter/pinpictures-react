@@ -23,11 +23,11 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
 
   const headerClassName = "header py-3 px-8 shadow-lg justify-between items-center flex flex-row gap-4 transition-colors duration-300";
 
-  const logoTextClassName = "text-2xl py-2 hidden lg:block font-bold";
+  const logoTextClassName = "text-2xl py-2 hidden lg:block font-bold hover:scale-110 hover:text-yellow-500 transition-all duration-300";
 
   const iconClassName = "cursor-pointer lg:h-8 lg:w-8 md:h-6 md:w-6 hover:scale-110 transition-transform duration-300";
 
-  const loginButtonClassName = `rounded-full p-3 flex justify-center items-center cursor-pointer hover:scale-105 transition-transform duration-300 ${
+  const loginButtonClassName = `rounded-full p-3 flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-yellow-500 transition-all duration-300 ${
     isDarkMode ? "bg-[#777]" : "bg-[#ACACAC]"
   }`;
 
