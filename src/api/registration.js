@@ -25,7 +25,7 @@ export default async function registration(username, email, password) {
     const token = response.data.token;
     saveToken(token);
 
-    return response.data;
+    return response.data.user;
   } catch (error) {
     console.error('Error during registration:', error);
     alert('Error during registration. Please try again.');

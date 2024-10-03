@@ -22,8 +22,8 @@ export default async function login(username, password) {
 
     const token = response.data.token;
     saveToken(token);
-
-    return response.data;
+    
+    return response.data.user;
   } catch (error) {
     console.error('Error during login:', error);
     alert('Error during login. Please try again.');
