@@ -14,7 +14,7 @@ const RegistrationForm = ({
 
   const containerClassName = `flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl`;
 
-  const inputClassName = `w-full p-2 border rounded`;
+  const inputClassName = `w-full p-2 border rounded text-lightModeText`;
 
   const buttonClassName = `w-full py-2 rounded-3xl bg-red-500`;
 

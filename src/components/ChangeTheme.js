@@ -19,7 +19,7 @@ export default function ChangeTheme() {
 
 
   return (
-    <div className="flex items-center gap-2 cursor-pointer" onClick={toggleTheme}>
+    <div className="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform duration-300" onClick={toggleTheme}>
       <div className={containerClassName}>
         <div className={toggleClassName}>
           {isDarkMode ? (

@@ -12,6 +12,8 @@ export default function LoginForm({
 
   const containerClassName = `flex flex-col items-center w-full max-w-md gap-6 p-8 sm:p-16 rounded-3xl md:shadow-2xl`;
 
+  const inputClassName = `w-full p-2 border rounded text-lightModeText`;
+
   const buttonClassName = `w-full py-2 rounded-3xl bg-red-500`;
 
 
@@ -28,7 +30,7 @@ export default function LoginForm({
             placeholder="Enter your username..."
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={inputClassName}
           />
         </div>
         <div className="w-full">
@@ -38,7 +40,7 @@ export default function LoginForm({
             placeholder="Enter your password..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={inputClassName}
           />
         </div>
         <button type="submit" className={buttonClassName}>

@@ -38,7 +38,7 @@ export default function Footer(user) {
     };
   }, [isMobile]);
 
-  const mobileFooterClassName = `fixed flex flex-row justify-evenly bottom-0 left-0 right-0 text-center z-[999] h-[6vh] transition-all duration-800`;
+  const mobileFooterClassName = `fixed flex flex-row bg-lightModeBackground justify-evenly bottom-0 left-0 right-0 text-center z-[999] h-[6vh] transition-all duration-800`;
 
   const desktopFooterClassName = `py-4 text-center w-full fixed bottom-0 transition-transform duration-300 transform ${isVisible ? 'translate-y-0' : 'translate-y-full'}`;
 
@@ -46,31 +46,31 @@ export default function Footer(user) {
 
   const getIconClassName = (path) => `${location.pathname === path ? "text-white" : "text-ACDC"} mx-auto w-full self-center h-full`;
 
-  const profileLinkPath = user.user ? "/profile/"+user.user.name : "/Authentification";
+  const profileLinkPath = user.user ? "/profile/" + user.user.name : "/Authentification";
+
+  if (isMobile) {
+    return (
+      <footer className={mobileFooterClassName}>
+        <Link to="/" className={getLinkClassName("/")}>
+          <GoHomeFill className={getIconClassName("/")} />
+        </Link>
+        <Link to="/Search" className={getLinkClassName("/Search")}>
+          <SlMagnifier className={getIconClassName("/Search")} />
+        </Link>
+        <Link to={profileLinkPath} className={getLinkClassName(profileLinkPath)}>
+          <FaUser className={getIconClassName(profileLinkPath)} />
+        </Link>
+      </footer>
+    )
+  }
 
   return (
-    <>
-      {isMobile ? (
-        <footer className={mobileFooterClassName}>
-          <Link to="/" className={getLinkClassName("/")}>
-            <GoHomeFill className={getIconClassName("/")} />
-          </Link>
-          <Link to="/Search" className={getLinkClassName("/Search")}>
-            <SlMagnifier className={getIconClassName("/Search")} />
-          </Link>
-          <Link to={profileLinkPath} className={getLinkClassName(profileLinkPath)}>
-            <FaUser className={getIconClassName(profileLinkPath)} />
-          </Link>
-        </footer>
-      ) : (
-        <footer className={desktopFooterClassName}>
-          <div>
-            <a href="https://github.com/DrArzter" className="hover:text-gray-400">
-              GitHub
-            </a>
-          </div>
-        </footer>
-      )}
-    </>
-  );
+    <footer className={desktopFooterClassName}>
+      <div>
+        <a href="https://github.com/DrArzter" className="hover:text-gray-400">
+          GitHub
+        </a >
+      </div >
+    </footer>
+  )
 }

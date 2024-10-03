@@ -67,7 +67,7 @@ function AppContent({
   const { isDarkMode } = useContext(ThemeContext);
   
   return (
-    <div className={`h-screen md:h-full transition-all duration-300 ease-in-out 
+    <div className={`transition-all duration-300 ease-in-out 
       ${isDarkMode ? "bg-darkModeBackground text-darkModeText fill-darkModeText"
       : "bg-lightModeBackground text-lightModeText fill-lightModeText"} 
       transition-colors`}>

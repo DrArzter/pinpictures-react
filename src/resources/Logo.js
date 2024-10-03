@@ -5,7 +5,7 @@ export const Logo = ({ isDarkMode }) => {
         <svg
             width="40px"
             height="40"
-            className={`hover:fill-yellow-500 transition duration-300 
+            className={`hover:fill-yellow-500 hover:scale-110 transition-all duration-300 
             ${isDarkMode ? "fill-darkModeText" : "fill-lightModeText"}`} 
             version="1.1"
             viewBox="0 0 1200 1200"

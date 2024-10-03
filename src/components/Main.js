@@ -31,7 +31,7 @@ export default function Main({
 }) {
   const location = useLocation();
 
-  const mainClassName = "min-h-screen md:mt-8";
+  const mainClassName = "min-h-screen";
 
   return (
     <div id="main" className={mainClassName}>
@@ -72,8 +72,6 @@ export default function Main({
             </Routes>
           </CSSTransition>
         </TransitionGroup>
-
-      <div className="h-40"></div>
     </div>
   );
 }
