@@ -43,7 +43,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
             <div className="flex items-center gap-4 hidden lg:flex">
               <CiSquarePlus className={iconClassName} onClick={toggleCreatePostModal} />
               <FaBell className={iconClassName} />
-              <Link to={`/Chats`}>
+              <Link to={`/chats`}>
                 <AiOutlineMessage className={iconClassName} />
               </Link>
             </div>

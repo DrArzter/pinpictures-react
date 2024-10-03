@@ -34,8 +34,7 @@ export default function Chat({ user }) {
     await api.uploadMessage(id, { text: message });
   };
 
-  const chatContainerClassName = `w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg flex flex-col`;
-
+  const chatContainerClassName = `w-full lg:w-3/4 bg-zinc-800 p-6 rounded-lg flex flex-col`;  
 
   return (
     <div className="flex flex-col items-center mx-auto p-4">
