@@ -1,24 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
 import LoadingIndicator from "../components/LoadingIndicator";
-
 import ChatList from "../components/ChatList";
 import Chat from "../components/Chat";
-
 import config from "../api/config";
-
 import * as api from "../api";
 import * as utils from "../utils";
 import SearchBar from "../components/SearchBar";
-
-const chatsContainerStyle = `flex mx-auto h-[80vh] flex-row w-3/4 p-6 gap-4 rounded-lg flex flex-row  mt-8`;
-
-const chatListContainerStyle = `w-1/4 p-6 bg-zinc-800 rounded-lg`;
-
-const chatContainerStyle = `w-3/4 p-6 bg-zinc-800 rounded-lg`;
-
-const searchInputClassName = `w-full rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-lightModeText`;
+import ThemeContext from "../components/ThemeContext";
 
 export default function Chats({ user }) {
   const [chats, setChats] = useState([]);
@@ -26,34 +16,40 @@ export default function Chats({ user }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  const { isDarkMode } = useContext(ThemeContext);  // Using ThemeContext to access isDarkMode
+
+  const chatsContainerStyle = `flex mx-auto h-[80vh] flex-row w-3/4 p-6 gap-4 rounded-lg mt-8`;
+
+  const chatListContainerStyle = `w-1/4 p-6 ${isDarkMode ? "bg-darkModeSecondaryBackground" : "bg-lightModeSecondaryBackground"} rounded-lg`;
+
+  const chatContainerStyle = `w-3/4 p-6 ${isDarkMode ? "bg-darkModeSecondaryBackground" : "bg-lightModeSecondaryBackground"} rounded-lg`;
+
+  const searchInputClassName = `w-full rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+    isDarkMode ? "text-darkModeText" : "text-lightModeText"
+  }`;
+
   const getProfilePicPath = (picpath) =>
     picpath.startsWith("https://ui-avatars.com/")
       ? picpath
       : `${config.apiUrl.replace("/api", "/")}${picpath}`;
 
-
-
   return (
     <div className="w-full">
       <div className={chatsContainerStyle}>
         <div className={chatListContainerStyle}>
-
-          <input className={searchInputClassName}
+          <input
+            className={searchInputClassName}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             type="text"
-            placeholder="Search..." />
+            placeholder="Search..."
+          />
           <ChatList />
         </div>
         <div className={chatContainerStyle}>
-          {isLoading ? (
-            <LoadingIndicator />
-          ) : (
-            <Chat />
-          )}
+          {isLoading ? <LoadingIndicator /> : <Chat />}
         </div>
       </div>
     </div>
-
   );
 }
