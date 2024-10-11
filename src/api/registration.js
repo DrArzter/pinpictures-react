@@ -3,27 +3,17 @@ import Cookies from 'js-cookie';
 
 import config from './config';
 
-const getRegistrationUrl = () => {
-  return `${config.apiUrl}/users/register`;
-};
-
-const saveToken = (token) => {
-  if (token) {
-    Cookies.set('token', token);
-  }
-};
-
 export default async function registration(username, email, password) {
   
   try {
-    const response = await axios.post(getRegistrationUrl(), {
+    const response = await axios.post(`${config.apiUrl}/users/register`, {
       name: username,
       email: email,
       password: password
     });
 
     const token = response.data.token;
-    saveToken(token);
+    Cookies.set('token', token);
 
     return response.data.user;
   } catch (error) {

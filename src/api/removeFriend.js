@@ -12,13 +12,13 @@ const getHeaders = () => {
 };
 
 const getRemoveFriendUrl = () => {
-    return `${config.apiUrl}/users/friend/remove`;
+    return ;
 };
 
 export default async function removeFriend(friendId) {
     try {
         const response = await axios.post(
-            getRemoveFriendUrl(),
+            `${config.apiUrl}/users/friend/remove`,
             { friendId },
             getHeaders()
         );

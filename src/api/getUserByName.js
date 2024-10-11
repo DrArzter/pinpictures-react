@@ -1,13 +1,9 @@
 import axios from "axios";
 import config from "./config";  
 
-const getUserByNameUrl = (name) => {
-  return `${config.apiUrl}/users/by-name/${name}`;
-};
-
 export default async function getUserByName(name) {
   try {
-    const response = await axios.get(getUserByNameUrl(name));
+    const response = await axios.get(`${config.apiUrl}/users/by-name/${name}`);
     return response.data;
     console.log(response.data);
   } catch (error) {

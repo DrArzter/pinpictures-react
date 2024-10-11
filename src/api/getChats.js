@@ -8,10 +8,6 @@ const getHeaders = () => {
   return token ? { headers: { Authorization: token } } : null;
 };
 
-const getChatsUrl = () => {
-  return `${config.apiUrl}/chats`;
-};
-
 export default async function getChats() {
   try {
     const headers = getHeaders();
@@ -19,7 +15,7 @@ export default async function getChats() {
       return null;
     }
     
-    const response = await axios.get(getChatsUrl(), headers);
+    const response = await axios.get(`${config.apiUrl}/chats`, headers);
     return response.data;
   } catch (error) {
     console.error('Error fetching chats:', error);

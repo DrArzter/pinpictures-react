@@ -12,14 +12,14 @@ const getHeaders = () => {
 };
 
 const getConfirmFriendUrl = () => {
-    return `${config.apiUrl}/users/friend/confirm`;
+    return ;
 };
 
 
 export default async function confirmFriend(friendId) {
     try {
         const response = await axios.post(
-            getConfirmFriendUrl(),
+            `${config.apiUrl}/users/friend/confirm`,
             { friendId },
             getHeaders()
         );

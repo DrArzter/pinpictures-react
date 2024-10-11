@@ -12,13 +12,13 @@ const getHeaders = () => {
 };
 
 const getMessageUploadUrl = (chatId) => {
-  return `${config.apiUrl}/chats/messages/${chatId}`;
+  return ;
 };
 
 export default async function uploadMessage(chatId, message) {
   try {
     const response = await axios.post(
-      getMessageUploadUrl(chatId),
+      `${config.apiUrl}/chats/messages/${chatId}`,
       { message },
       getHeaders()
     );

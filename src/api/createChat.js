@@ -11,14 +11,10 @@ const getHeaders = () => {
   };
 };
 
-const getCreateChatUrl = () => {
-  return `${config.apiUrl}/chats`;
-};
-
 export default async function createChat(secondUserId) {
   try {
     const response = await axios.post(
-      getCreateChatUrl(),
+      `${config.apiUrl}/chats`,
       { secondUserId },
       getHeaders()
     );

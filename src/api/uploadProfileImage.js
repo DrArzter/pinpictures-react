@@ -3,10 +3,6 @@ import Cookies from 'js-cookie';
 
 import config from './config';
 
-const getUploadProfileImageUrl = (userId) => {
-  return `${config.apiUrl}/users/${userId}/image`;
-};
-
 const getHeaders = () => {
   const token = Cookies.get('token');
   return {
@@ -34,7 +30,7 @@ export default async function uploadProfileImage(file, userId) {
   const formData = createImageFormData(file);
 
   try {
-    const response = await axios.post(getUploadProfileImageUrl(userId), formData, {
+    const response = await axios.post(`${config.apiUrl}/users/${userId}/image`, formData, {
       headers: getHeaders()
     });
     return response.data;

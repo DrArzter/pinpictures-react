@@ -11,14 +11,10 @@ const getHeaders = () => {
     };
 };
 
-const getAddFriendUrl = () => {
-    return `${config.apiUrl}/users/friend`;
-};
-
 export default async function addFriend(friendId) {
     try {
         const response = await axios.post(
-            getAddFriendUrl(),
+            `${config.apiUrl}/users/friend`,
             { friendId },
             getHeaders()
         );

@@ -3,10 +3,6 @@ import Cookies from 'js-cookie';
 
 import config from './config';
 
-const getUploadPostUrl = () => {
-  return `${config.apiUrl}/posts`;
-};
-
 const getHeaders = () => {
   const token = Cookies.get('token');
   return {
@@ -37,7 +33,7 @@ export default async function uploadPost(title, description, images, author) {
   const formData = createFormData(title, description, images);
 
   try {
-    const response = await axios.post(getUploadPostUrl(), formData, {
+    const response = await axios.post(`${config.apiUrl}/posts`, formData, {
       headers: getHeaders()
     });
     response.data.author = author;

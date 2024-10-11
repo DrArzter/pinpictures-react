@@ -11,13 +11,9 @@ const getHeaders = () => {
   };
 };
 
-const getChatUrl = (id) => {
-  return `${config.apiUrl}/chats/${id}`;
-};
-
 export default async function getChatById(id) {
   try {
-    const response = await axios.get(getChatUrl(id), getHeaders());
+    const response = await axios.get(`${config.apiUrl}/chats/${id}`, getHeaders());
     return response.data;
   } catch (error) {
     console.error("Error fetching chat by ID:", error);
