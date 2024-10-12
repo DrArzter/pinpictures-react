@@ -1,11 +1,17 @@
-import Cookies from 'js-cookie';
+import axios from 'axios';
 
-export default function logout(setUser) {
+import config from './config';
+
+export default async function logout(setUser) {
   try {
-    Cookies.remove('token');
-    window.location.reload();
+    const response = await axios.post(`${config.apiUrl}/users/logout`,
+      {},
+      {
+        withCredentials: true
+      }
+    );
     setUser(null);
   } catch (error) {
-    
+    console.error('Error during logout:', error);
   }
 }

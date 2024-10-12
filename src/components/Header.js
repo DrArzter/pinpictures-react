@@ -14,7 +14,7 @@ import SearchBar from "./SearchBar";
 import config from "../api/config";
 import { Logo } from "../resources/Logo";
 
-export default function Header({ user, createPostModal, setCreatePostModal }) {
+export default function Header({ user, setUser, createPostModal, setCreatePostModal }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { isDarkMode } = useContext(ThemeContext);
 
@@ -61,7 +61,7 @@ export default function Header({ user, createPostModal, setCreatePostModal }) {
                 className="w-10 h-10 rounded-full cursor-pointer hover-transform"
               />
               {isDropdownOpen && (
-                <DropdownMenu isDropdownOpen={isDropdownOpen} user={user} toggleDropdown={toggleDropdown} />
+                <DropdownMenu isDropdownOpen={isDropdownOpen} user={user} setUser={setUser} toggleDropdown={toggleDropdown} />
               )}
             </div>
           </>

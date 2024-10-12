@@ -3,20 +3,12 @@ import * as utils from "../utils";
 
 import config from "./config";
 
-const getHeaders = () => {
-    return {
-        headers: {
-            Authorization: utils.getAuthToken()
-        }
-    };
-};
-
 export default async function addFriend(friendId) {
     try {
         const response = await axios.post(
             `${config.apiUrl}/users/friend`,
             { friendId },
-            getHeaders()
+            { withCredentials: true }
         );
         return response.data;
     } catch (error) {

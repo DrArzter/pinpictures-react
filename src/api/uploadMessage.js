@@ -1,26 +1,20 @@
 import axios from "axios";
-import * as utils from "../utils";
-
 import config from "./config";
 
-const getHeaders = () => {
-  return {
-    headers: {
-      'Authorization': utils.getAuthToken()
-    }
-  };
-};
-
-const getMessageUploadUrl = (chatId) => {
-  return ;
-};
-
 export default async function uploadMessage(chatId, message) {
+
+  const headers = {
+    "Content-Type": "multipart/form-data",
+  };
+
   try {
     const response = await axios.post(
       `${config.apiUrl}/chats/messages/${chatId}`,
       { message },
-      getHeaders()
+      {
+        headers,
+        withCredentials: true,
+      }
     );
     return response.data;
   } catch (error) {

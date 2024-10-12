@@ -55,6 +55,7 @@ export default function Post({ user }) {
           ...prevPost,
           comments: [...(prevPost.comments || []), newComment],
         }));
+        setCommentValue("");
       }
     } catch (error) {
       console.error("Error submitting comment:", error);

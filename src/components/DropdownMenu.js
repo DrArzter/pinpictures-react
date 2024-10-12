@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { FaGear } from "react-icons/fa6";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { RiLogoutBoxFill } from "react-icons/ri";
@@ -10,9 +12,10 @@ import * as api from "../api/index";
 import ChangeTheme from "./ChangeTheme";
 import ThemeContext from "./ThemeContext";
 
-export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
+export default function DropdownMenu({ isDropdownOpen, user, setUser, toggleDropdown }) {
   const dropdownRef = useRef(null);
   const { isDarkMode } = useContext(ThemeContext);
+  const Navigate = useNavigate();
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -22,7 +25,8 @@ export default function DropdownMenu({ isDropdownOpen, user, toggleDropdown }) {
 
   const handleLogout = async () => {
     try {
-      await api.logout();
+      await api.logout( setUser );
+      Navigate("/");
     } catch (error) {
       console.error("Error during logout:", error);
     }

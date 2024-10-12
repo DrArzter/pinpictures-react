@@ -73,6 +73,7 @@ function AppContent({
       transition-colors`}>
       <Header 
         user={user}
+        setUser={setUser}
         createPostModal={createPostModal}
         setCreatePostModal={setCreatePostModal}
       />
