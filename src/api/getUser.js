@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import config from "./config";
 
 export default async function getUser() {
@@ -9,6 +10,7 @@ export default async function getUser() {
         withCredentials: true
       }
     );
+    Cookies.set('token', response.data.sessionToken	);
     return response.data;
   } catch (error) {
     console.error('Error fetching user:', error);

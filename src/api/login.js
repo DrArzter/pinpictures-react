@@ -1,7 +1,5 @@
 import axios from "axios";
-import Cookies from 'js-cookie';
 import config from './config';
-import { redirect } from "react-router-dom";
 
 export default async function login(username, password) {
   try {
