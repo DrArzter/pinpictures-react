@@ -4,50 +4,26 @@ import ChatList from "../components/ChatList";
 import Chat from "../components/Chat";
 import ThemeContext from "../components/ThemeContext";
 import config from "../api/config";
+import { useParams } from "react-router-dom";
 
-export default function Chats({ user }) {
-    const [chats, setChats] = useState([]);
+export default function Chats({ user, socket, socketEvent, socketState }) {
+    const [chats, setChats] = useState(null);
     const [chatData, setChatData] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isLoadingChats, setIsLoadingChats] = useState(true);
     const [isLoadingChat, setIsLoadingChat] = useState(false);
     const { isDarkMode } = useContext(ThemeContext);
-    const [socket, setSocket] = useState(null);
-    const [socketEvent, setSocketEvent] = useState(null);
-    const [socketState, setSocketState] = useState(null);
 
-    const socketInit = () => {
-        const ws = new WebSocket(`${config.wsUrl}/chats`);
-        setSocket(ws);
-    };
+    let { id } = useParams();
 
     useEffect(() => {
-        if (!socket) socketInit();
-    }, [socket]);
-
-    useEffect(() => {
-        setIsLoaded(true);
-    }, [user]);
-
-    useEffect(() => {
-        if (!socket) return;
-
-        socket.onopen = () => {
-            socket.send(JSON.stringify({ type: "getAllChats" }));
-            setSocketState("open");
-        };
-
-        socket.onerror = () => setSocketState("error");
-        socket.onclose = () => setSocketState("closed");
-        socket.onmessage = (event) => setSocketEvent(JSON.parse(event.data));
-    }, [socket]);
-
-    useEffect(() => {
-        if (!socketEvent || !isLoaded) return;
+        if (!socketEvent || socketState !== "open") return;
     
         const { type, chats: receivedChats, chatId, message } = socketEvent;
-    
+        if (!chats) {
+            socket.send(JSON.stringify({ type: "getAllChats" }))
+        }
         if (type === 'allChats') {
             setChats(receivedChats);
             setIsLoadingChats(false);
@@ -87,18 +63,16 @@ export default function Chats({ user }) {
     }, [socketEvent, selectedChatId, isLoaded]);
     
 
-    useEffect(() => {
-        if (socketState === "error" || socketState === "closed") {
-            setTimeout(socketInit, 3000);
-        }
-    }, [socketState]);
-
     const handleChatSelect = (chatId) => {
         setSelectedChatId(chatId);
         setChatData(null);
         setIsLoadingChat(true);
         socket.send(JSON.stringify({ type: "getChatMessages", chatId }));
     };
+
+    if (id && id !== selectedChatId) {
+        handleChatSelect(id);
+    }
 
     const containerStyle = `flex mx-auto h-[80vh] flex-row w-3/4 p-6 gap-4 rounded-lg mt-8`;
     const listStyle = `w-1/4 p-6 ${isDarkMode ? "bg-darkModeSecondaryBackground" : "bg-lightModeSecondaryBackground"} rounded-lg`;

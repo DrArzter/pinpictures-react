@@ -9,7 +9,7 @@ import config from "../api/config";
 import * as api from "../api";
 import UserList from "../components/UserList";
 
-export default function Profile({ user, setUser, socket }) { // Добавлено socket как пропс
+export default function Profile({ user, setUser, socket, socketEvent, socketState }) { // Добавлено socket как пропс
   const [profile, setProfile] = useState(null);
   const [friends, setFriends] = useState([]);
   const { username } = useParams();
@@ -17,6 +17,7 @@ export default function Profile({ user, setUser, socket }) { // Добавлен
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const isDarkMode = useContext(ThemeProvider);
 
@@ -58,18 +59,21 @@ export default function Profile({ user, setUser, socket }) { // Добавлен
     api.removeFriend(profile.id).then(() => {});
   };
 
-  // Исправлено: закрыта функция и добавлен socket как пропс
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!socket || !profile) return;
-    
+  
     socket.send(JSON.stringify({
-      type: 'sendMessage',
-      message: {
-        recipientId: profile.id, // ID получателя
-        message: 'Привет! Это первое сообщение.', // Текст первого сообщения
-      }
+      type: 'createChat',
+      recipientId: profile.id
     }));
   };
+
+  useEffect(() => {
+    if (socketEvent.type === 'chatExists' || socketEvent.type === 'chatCreated') {
+      console.log(socketEvent);
+      navigate('/chats/' + socketEvent.id);
+    }
+  }, [socketEvent]);
 
   const profilePicSrc = useMemo(() => {
     if (!profile) return "";
@@ -133,7 +137,7 @@ export default function Profile({ user, setUser, socket }) { // Добавлен
           </div>
           {user && profile.name !== user.name && (
             <div className={actionsContainerClassName}>
-              <AiOutlineMessage className={iconClassName} onClick={handleSendMessage} />
+              <AiOutlineMessage className={iconClassName} onClick={() => handleSendMessage()} />
               {isFriend ? (
                 <AiOutlineUserDelete className={iconClassName} onClick={handleDeleteFriendClick} />
               ) : (

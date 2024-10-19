@@ -28,6 +28,9 @@ export default function Main({
   notifications,
   setNotifications,
   isMobile,
+  socket,
+  socketEvent,
+  socketState
 }) {
   const location = useLocation();
 
@@ -60,10 +63,10 @@ export default function Main({
                 element={<Authentication setUser={setUser} user={user} isMobile={isMobile} />}
               />
               <Route path="/settings" element={<AccountSettings user={user} />} />
-              <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} />} />
+              <Route path="/profile/:username" element={<Profile user={user} setUser={setUser} socket={socket} socketEvent={socketEvent} socketState={socketState} />} />
               <Route path="/post/:id" element={<Post user={user} />} />
-              <Route path="/chats" element={<Chats user={user} />} />
-              <Route path="/chat/:id" element={<Chat setUser={setUser} user={user} isMobile={isMobile} />} />
+              <Route path="/chats" element={<Chats user={user} socket={socket} socketEvent={socketEvent} socketState={socketState} />} />
+              <Route path="/chats/:id" element={<Chats user={user} socket={socket} socketEvent={socketEvent} socketState={socketState} />} />
               <Route path="/admin" element={<Admin user={user} />} />
               <Route path="secret" element={<NotFound />} />
               <Route path="search/:searchTerm" element={<Search />} />

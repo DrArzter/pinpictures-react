@@ -12,6 +12,7 @@ import CreatePostModal from "./components/modals/CreatePostModal";
 import { ThemeProvider } from "../src/components/ThemeContext";
 import ThemeContext from "../src/components/ThemeContext";
 
+import config from "./api/config";
 import * as api from "./api";
 
 function App() {
@@ -20,6 +21,35 @@ function App() {
   const [user, setUser] = useState(null);
   const [createPostModal, setCreatePostModal] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  
+  const [socket, setSocket] = useState(null);
+  const [socketEvent, setSocketEvent] = useState(null);
+  const [socketState, setSocketState] = useState(null);
+
+  const socketInit = () => {
+      const ws = new WebSocket(`${config.wsUrl}/`);
+      setSocket(ws);
+  };
+
+  useEffect(() => {
+      if (!socket) socketInit();
+  }, [socket]);
+
+  useEffect(() => {
+      if (!socket) return;
+
+      socket.onopen = () => setSocketState("open");
+      socket.onerror = () => setSocketState("error");
+      socket.onclose = () => setSocketState("closed");
+      socket.onmessage = (event) => setSocketEvent(JSON.parse(event.data));
+  }, [socket]);
+
+  useEffect(() => {
+      if (socketState === "error" || socketState === "closed") {
+          setTimeout(socketInit, 3000);
+      }
+  }, [socketState]);
 
   useEffect(() => {
     async function fetchData() {
@@ -48,6 +78,9 @@ function App() {
           setPosts={setPosts}
           notifications={notifications}
           setNotifications={setNotifications}
+          socket={socket}
+          socketEvent={socketEvent}
+          socketState={socketState}
         />
       </ThemeProvider>
     </Router>
@@ -62,7 +95,10 @@ function AppContent({
   posts,
   setPosts,
   notifications,
-  setNotifications
+  setNotifications,
+  socket,
+  socketEvent,
+  socketState
 }) {
   const { isDarkMode } = useContext(ThemeContext);
   
@@ -76,10 +112,16 @@ function AppContent({
         setUser={setUser}
         createPostModal={createPostModal}
         setCreatePostModal={setCreatePostModal}
+        socket={socket}
+        socketEvent={socketEvent}
+        socketState={socketState}
       />
       <Notification
         notifications={notifications}
         setNotifications={setNotifications} 
+        socket={socket}
+        socketEvent={socketEvent}
+        socketState={socketState}
       />
       {createPostModal && (
         <CreatePostModal
@@ -101,6 +143,9 @@ function AppContent({
         setCreatePostModal={setCreatePostModal}
         notifications={notifications}
         setNotifications={setNotifications}
+        socket={socket}
+        socketEvent={socketEvent}
+        socketState={socketState}
       />
       <Footer user={user}/>
     </div>
