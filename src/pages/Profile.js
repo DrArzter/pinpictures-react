@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 
 import FullScreenImage from "../components/modals/FullScreenImageModal";
 import UpdateImageModal from "../components/modals/UpdateImageModal";
@@ -106,7 +106,8 @@ function Profile({ user, setUser }) {
 
   const actionsContainerClassName = `flex gap-4 mt-32 hidden md:flex`;
 
-  const friendListContainerClassName = `lg:w-3/4 flex justify-center rounded-full gap-4 mt-20 ${isDarkMode ? "bg-zinc-800" : "bg-zinc-700"}`;
+  //const friendListContainerClassName = `lg:w-3/4 flex justify-center rounded-full gap-4 mt-20 ${isDarkMode ? "bg-zinc-800" : "bg-zinc-700"}`; 
+  const friendListContainerClassName = `flex justify-centerrounded-xl ${isDarkMode ? "bg-zinc-800" : ""}`;
 
   const iconClassName = `text-3xl cursor-pointer`;
 
@@ -148,26 +149,33 @@ function Profile({ user, setUser }) {
           {user && profile.name !== user.name && (
             <div className={actionsContainerClassName}>
               <AiOutlineMessage className={iconClassName} onClick={() => redirectToChat(profile.id)} />
-            {friends.some(friend => friend.name === user.name && friend.status === "confirmed") ? (
-              <AiOutlineUserDelete
-                className={iconClassName}
-                onClick={handleDeleteFriendClick}
-              />
-            ) : (
-              <AiOutlineUserAdd
-                className={iconClassName}
-                onClick={friends.some(friend => friend.name === user.name && friend.status === "pending") ? handleConfirmFriendClick : handleAddFriendClick}
-              />
-            )}
+              {friends.some(friend => friend.name === user.name && friend.status === "confirmed") ? (
+                <AiOutlineUserDelete
+                  className={iconClassName}
+                  onClick={handleDeleteFriendClick}
+                />
+              ) : (
+                <AiOutlineUserAdd
+                  className={iconClassName}
+                  onClick={friends.some(friend => friend.name === user.name && friend.status === "pending") ? handleConfirmFriendClick : handleAddFriendClick}
+                />
+              )}
             </div>
           )}
         </div>
       </div>
-
-      <div className={friendListContainerClassName}>
-        <UserList users={friends.filter(friend => friend.status === "confirmed")} />
+      <div className="flex flex-col items-center w-5/6">
+        <div className="flex flex-row w-full max-h-[15vh] justify-end">
+          <div className="flex flex-col border-2 border-dotted border-opacity-10 p-4 w-[20vw] rounded-xl">
+            <Link to={`/profile/${user.name}/friends`}>
+              <p className="px-6 pt-2 w-full border-b-2 border-dotted border-opacity-10 border-zinc-500">Friends</p>
+            </Link>
+            <div className={`${friendListContainerClassName} overflow-y-scroll cuteScrollBar2`}>
+              <UserList users={friends.filter(friend => friend.status === "confirmed")} />
+            </div>
+          </div>
+        </div>
       </div>
-
       {showFullScreen && (
         <FullScreenImage imageUrl={profilePicSrc} onClose={() => setShowFullScreen(false)} />
       )}
