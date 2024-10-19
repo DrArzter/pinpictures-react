@@ -13,18 +13,18 @@ export default function User({ user }) {
             : config.apiUrl.replace("/api", "/") + user.picpath;
     }, [user]);
 
-    const profilePicClassName = `w-20 h-20 rounded-full border-4 border-white cursor-pointer`;
+    const profilePicClassName = `w-15 h-15 rounded-full border-4 border-white cursor-pointer`;
 
     return (
         <Link to={`/profile/${user.name}`}>
-        <div className="flex flex-col items-center justify-center rounded-full cursor-pointer">
+        <div className="flex flex-col items-center gap-2 justify-center rounded-full cursor-pointer">
             <img
                 id="profilePic"
                 className={profilePicClassName}
                 src={profilePicSrc}
                 alt="Profile Pic"
             />
-            <h2 className="text-2xl font-bold">{user.name}</h2>
+            <h2 className="text-2xl font-bold max-w-full overflow-x-hidden">{user.name}</h2>
         </div>
         </Link>
     );
