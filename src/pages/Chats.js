@@ -3,84 +3,121 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import ChatList from "../components/ChatList";
 import Chat from "../components/Chat";
 import ThemeContext from "../components/ThemeContext";
+import config from "../api/config";
 
 export default function Chats({ user }) {
     const [chats, setChats] = useState([]);
-    const [selectedChatId, setSelectedChatId] = useState(null);
-    const [socket, setSocket] = useState(null);
-    const [isLoadingChats, setIsLoadingChats] = useState(true);
-    const { isDarkMode } = useContext(ThemeContext);
-    const [isLoadingChat, setIsLoadingChat] = useState(false);
     const [chatData, setChatData] = useState(null);
+    const [selectedChatId, setSelectedChatId] = useState(null);
+
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoadingChats, setIsLoadingChats] = useState(true);
+    const [isLoadingChat, setIsLoadingChat] = useState(false);
+
+    const { isDarkMode } = useContext(ThemeContext);
+
+    const [socket, setSocket] = useState(null);
+    const [socketEvent, setSocketEvent] = useState(null);
+    const [socketState, setSocketState] = useState(null);
+
+
+    function socketInit() {
+        const ws = new WebSocket(`${config.wsUrl}/chats`);
+        setSocket(ws);
+    }
+
+    if (!socket) {
+        socketInit();
+    }
+
 
     useEffect(() => {
-        let isComponentMounted = true;
-        const ws = new WebSocket(`ws://localhost:3300/api/ws/chats`);
-        setSocket(ws);
-    
-        ws.onopen = () => {
-            ws.send(JSON.stringify({ type: "getAllChats" }));
+        setIsLoaded(true);
+    }, [user]);
+
+    if (socket) {
+        socket.onopen = () => {
+            socket.send(JSON.stringify({ type: "getAllChats" }));
+            setSocketState("open");
         };
-    
-        ws.onerror = (error) => {
+
+        socket.onerror = (error) => {
             console.error("WebSocket error:", error);
+            setSocketState("error");
         };
-    
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-    
-            if (isComponentMounted) {
-                switch (data.type) {
-                    case "allChats":
-                        setChats(data.chats);
-                        setIsLoadingChats(false);
-                        break;
-                    case "chatMessages":
-                        setChatData(data);
-                        setIsLoadingChat(false);
-                        break;
-                    case "newMessage":
-                        // Обновляем чат, если открыто соответствующее окно
-                        if (data.chatId === selectedChatId) {
-                            setChatData(prevData => ({
-                                ...prevData,
-                                messages: [...prevData.messages, data.message]
-                            }));
-                        }
-                        // Обновляем список чатов
-                        setChats(prevChats => {
-                            // Находим чат с новым сообщением
-                            let updatedChats = prevChats.map(chat => {
-                                if (chat.chatId === data.chatId) {
-                                    return {
-                                        ...chat,
-                                        message: data.message.message,
-                                        messageAuthorName: data.message.senderName,
-                                        messageTimestamp: data.message.created_at,
-                                    };
-                                }
-                                return chat;
-                            });
-                            // Перемещаем обновленный чат наверх списка
-                            const updatedChatIndex = updatedChats.findIndex(chat => chat.chatId === data.chatId);
-                            if (updatedChatIndex !== -1) {
-                                const updatedChat = updatedChats.splice(updatedChatIndex, 1)[0];
-                                updatedChats = [updatedChat, ...updatedChats];
-                            }
-                            return updatedChats;
-                        });
-                        break;
-                    default:
-                        console.warn("Unknown message type:", data.type);
+
+        socket.onclose = () => {
+            setSocketState("closed");
+        };
+
+        socket.onmessage = (event) => {
+            setSocketEvent(JSON.parse(event.data));
+        };
+    }
+
+    useEffect(() => {
+        const data = socketEvent;
+        if (!data || !isLoaded) {
+            return;
+        }
+
+        switch (data.type) {
+            case "allChats":
+                setChats(data.chats);
+                setIsLoadingChats(false);
+                break;
+            case "chatMessages":
+                setChatData(data);
+                setIsLoadingChat(false);
+                break;
+            case "newMessage":
+                if (data.chatId === selectedChatId) {
+                    setChatData(prevData => ({
+                        ...prevData,
+                        messages: [...prevData.messages, data.message]
+                    }));
                 }
-            }
-        };
-    
-        return () => {
-            isComponentMounted = false;
-            ws.close();
-        };
-    }, [user, selectedChatId]);
+                
+                
+                // Обновляем список чатов
+                setChats(prevChats => {
+                    // Находим чат с новым сообщением
+                    let updatedChats = prevChats.map(chat => {
+                        if (chat.chatId === data.chatId) {
+                            return {
+                                ...chat,
+                                message: data.message.message,
+                                messageAuthorName: data.message.senderName,
+                                messageTimestamp: data.message.created_at,
+                            };
+                        }
+                        return chat;
+                    });
+                    // Перемещаем обновленный чат наверх списка
+                    const updatedChatIndex = updatedChats.findIndex(chat => chat.chatId === data.chatId);
+                    if (updatedChatIndex !== -1) {
+                        const updatedChat = updatedChats.splice(updatedChatIndex, 1)[0];
+                        updatedChats = [updatedChat, ...updatedChats];
+                    }
+                    return updatedChats;
+                });
+                break;
+            default:
+                console.warn("Unknown message type:", data.type);
+        }
+
+    }, [socketEvent]);
+
+    useEffect(() => {
+        console.log(socketState);
+        if (socketState === "error" || socketState === "closed") {
+            setTimeout(() => {
+                console.log("Reconnecting...");
+                socketInit();
+            }, 3000);
+        }
+
+    }, [socketState]);
 
     const handleChatSelect = (chatId) => {
         setSelectedChatId(chatId);

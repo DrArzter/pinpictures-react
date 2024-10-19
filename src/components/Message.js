@@ -12,9 +12,9 @@ export default function Message({ msg, isCurrentUser, showAvatarAndName, user })
                     )}
                 </div>
             )}
-            <div className={`max-w-xs ${isCurrentUser ? 'bg-yellow-500' : 'bg-lightModeBackground'} text-lightModeText p-2 rounded`}>
+            <div className={`max-w-3xll ${isCurrentUser ? 'bg-yellow-500' : 'bg-lightModeBackground'} text-lightModeText p-2 rounded`}>
                 {showAvatarAndName && !isCurrentUser && <strong>{msg.senderName}</strong>}
-                <p>{msg.message}</p>
+                <p className='break-all'>{msg.message}</p>
             </div>
 
             {isCurrentUser && (

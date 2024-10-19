@@ -14,7 +14,7 @@ export default function ChatList({ chats, onChatSelect }) {
                     <img src={chat.displayPic} alt={chat.displayName} className="w-8 h-8 rounded-full mr-2" />
                     <div>
                         <div className="font-bold">{chat.displayName}</div>
-                        <div className={'text-sm'}>
+                        <div className="text-sm text-red-500 line-clamp-1 break-words">
                             {chat.messageAuthorName}: {chat.message}
                         </div>
                     </div>

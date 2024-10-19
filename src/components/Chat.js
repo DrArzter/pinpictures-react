@@ -26,6 +26,13 @@ export default function Chat({ chat, socket, user }) {
         }
     }, [chat, socket]);
 
+    useEffect(() => {
+        if (!document.getElementById('chat-messages')){
+            return;
+        }
+        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+    }, [messages]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (newMessage.trim() !== '') {
@@ -54,8 +61,8 @@ export default function Chat({ chat, socket, user }) {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto">
-                {messages.length ? [...messages].reverse().map((msg, index) => {
+            <div id='chat-messages' className="flex-grow overflow-y-auto overflow-x-hidden cuteScrollBar pr-4">
+                {messages.length ? [...messages].map((msg, index) => {
 
                     const previousMsg = messages[index - 1];
                     const showAvatarAndName = !previousMsg || previousMsg.userid !== msg.userid;
