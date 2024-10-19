@@ -6,12 +6,13 @@ import ThemeContext from "./ThemeContext";
 import * as api from "../api";
 import * as admin from "../utils/admin";
 
-export default function AdminMain({ users, posts, likes, comments }) {
+export default function AdminMain({ users, posts, likes, comments, chats }) {
     const { isDarkMode } = useContext(ThemeContext);
     const postsCount = posts.length || 0;
     const usersCount = users.length || 0;
     const likesCount = likes.length || 0;
     const commentsCount = comments.length || 0;
+    const chatsCount = chats.length || 0;
 
 
     return (
@@ -32,7 +33,7 @@ export default function AdminMain({ users, posts, likes, comments }) {
                 </div>
                 <div className={`${isDarkMode ? "bg-darkModeBackground text-darkModeText" : "bg-lightModeBackground text-lightModeText"} p-4 rounded-2xl`}>
                     <h2 className="text-xl font-bold">Chats</h2>
-                    <p>Total: 0</p>
+                    <p>Total: {chatsCount}</p>
                     <p>Active: WIP</p>
                     <p>Group: WIP</p>
                 </div>

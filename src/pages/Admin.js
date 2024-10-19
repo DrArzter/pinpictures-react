@@ -4,7 +4,6 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import ThemeContext from "../components/ThemeContext";
 import AdminMain from "../components/AdminMain";
 import AdminUsers from "../components/AdminUsers";
-import AdminPosts from "../components/AdminPosts";
 import AdminChats from "../components/AdminChats";
 import AdminSettings from "../components/AdminGlobal";
 
@@ -24,6 +23,7 @@ function Admin({ user, setUser, isMobile }) {
     const [ChatsPage, setChatsPage] = useState(false);
     const [SettingsPage, setSettingsPage] = useState(false);
     const [users, setUsers] = useState([]);
+    const [chats, setChats] = useState([]);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
     const [comments, setComments] = useState([]);
@@ -32,11 +32,12 @@ function Admin({ user, setUser, isMobile }) {
         if (id) {
             const users = await admin.getAllUsers() || [];
             const posts = await admin.getAllPosts() || [];
+            const chs = await admin.getAllChats() || [];
             setPosts(posts.posts);
             setLikes(posts.likes);
             setComments(posts.comments);
             setUsers(users);
-            console.log("fetchData", posts);
+            setChats(chs);
             const userr = users.find((u) => u.id === id);
             userr.posts = posts.posts.filter((post) => post.userid === user.id);
             userr.likes = posts.likes.filter((like) => like.userid === user.id);
@@ -45,11 +46,13 @@ function Admin({ user, setUser, isMobile }) {
         }
         const users = await admin.getAllUsers() || [];
         const posts = await admin.getAllPosts() || [];
+        const chs = await admin.getAllChats() || [];
 
         setPosts(posts.posts);
         setLikes(posts.likes);
         setComments(posts.comments);
         setUsers(users);
+        setChats(chs);
     }
 
     useEffect(() => {
@@ -83,11 +86,6 @@ function Admin({ user, setUser, isMobile }) {
                     <p>Users</p>
                 </button>
                 <button
-                    onClick={() => { setMainPage(false); setUsersPage(false); setPostsPage(true); setChatsPage(false); setSettingsPage(false) }}
-                    className={`p-2 rounded-2xl w-full transition ease-in-out duration-800 ${isDarkMode ? "bg-darkModeBackground text-darkModeText hover:bg-lightModeBackground hover:text-lightModeText" : "bg-lightModeBackground text-lightModeText hover:bg-darkModeBackground hover:text-darkModeText"}`}>
-                    <p>Posts</p>
-                </button>
-                <button
                     onClick={() => { setMainPage(false); setUsersPage(false); setPostsPage(false); setChatsPage(true); setSettingsPage(false) }}
                     className={`p-2 rounded-2xl w-full transition ease-in-out duration-800 ${isDarkMode ? "bg-darkModeBackground text-darkModeText hover:bg-lightModeBackground hover:text-lightModeText" : "bg-lightModeBackground text-lightModeText hover:bg-darkModeBackground hover:text-darkModeText"}`}>
                     <p>KGB mode</p>
@@ -99,10 +97,9 @@ function Admin({ user, setUser, isMobile }) {
                 </button>
             </div>
             <div className="mt-16 w-full">
-                {MainPage && <AdminMain users={users} posts={posts} likes={likes} comments={comments} />}
-                {UsersPage && <AdminUsers users={users} posts={posts} likes={likes} comments={comments} fetchData={fetchData} />}
-                {PostsPage && <AdminPosts posts={posts} likes={likes} comments={comments} users={users} />}
-                {ChatsPage && <AdminChats />}
+                {MainPage && <AdminMain users={users} posts={posts} likes={likes} comments={comments} chats={chats} />}
+                {UsersPage && <AdminUsers users={users} posts={posts} likes={likes} comments={comments} fetchData={fetchData} chats={chats} />}
+                {ChatsPage && <AdminChats users={users} posts={posts} likes={likes} comments={comments} fetchData={fetchData} chats={chats}  />}
                 {SettingsPage && <AdminSettings />}
             </div>
         </div>

@@ -1,6 +1,7 @@
 import getAllUsersApi from "../api/getAllUsers";
 import getAllPostsApi from "../api/getAllPosts";
 import setBananaLevelApi from "../api/setBananaLevel";
+import getAllChatsApi from "../api/getAllChats";
 import banUserApi from "../api/banUser";
 
 
@@ -11,6 +12,12 @@ export async function getAllUsers() {
 
 export async function getAllPosts() {
     const data = getAllPostsApi();
+    return data;
+}
+
+export async function getAllChats() {
+    console.log("getAllChats");
+    const data = getAllChatsApi();
     return data;
 }
 
