@@ -9,114 +9,88 @@ export default function Chats({ user }) {
     const [chats, setChats] = useState([]);
     const [chatData, setChatData] = useState(null);
     const [selectedChatId, setSelectedChatId] = useState(null);
-
     const [isLoaded, setIsLoaded] = useState(false);
     const [isLoadingChats, setIsLoadingChats] = useState(true);
     const [isLoadingChat, setIsLoadingChat] = useState(false);
-
     const { isDarkMode } = useContext(ThemeContext);
-
     const [socket, setSocket] = useState(null);
     const [socketEvent, setSocketEvent] = useState(null);
     const [socketState, setSocketState] = useState(null);
 
-
-    function socketInit() {
+    const socketInit = () => {
         const ws = new WebSocket(`${config.wsUrl}/chats`);
         setSocket(ws);
-    }
+    };
 
-    if (!socket) {
-        socketInit();
-    }
-
+    useEffect(() => {
+        if (!socket) socketInit();
+    }, [socket]);
 
     useEffect(() => {
         setIsLoaded(true);
     }, [user]);
 
-    if (socket) {
+    useEffect(() => {
+        if (!socket) return;
+
         socket.onopen = () => {
             socket.send(JSON.stringify({ type: "getAllChats" }));
             setSocketState("open");
         };
 
-        socket.onerror = (error) => {
-            console.error("WebSocket error:", error);
-            setSocketState("error");
-        };
-
-        socket.onclose = () => {
-            setSocketState("closed");
-        };
-
-        socket.onmessage = (event) => {
-            setSocketEvent(JSON.parse(event.data));
-        };
-    }
+        socket.onerror = () => setSocketState("error");
+        socket.onclose = () => setSocketState("closed");
+        socket.onmessage = (event) => setSocketEvent(JSON.parse(event.data));
+    }, [socket]);
 
     useEffect(() => {
-        const data = socketEvent;
-        if (!data || !isLoaded) {
-            return;
+        if (!socketEvent || !isLoaded) return;
+    
+        const { type, chats: receivedChats, chatId, message } = socketEvent;
+    
+        if (type === 'allChats') {
+            setChats(receivedChats);
+            setIsLoadingChats(false);
         }
-
-        switch (data.type) {
-            case "allChats":
-                setChats(data.chats);
-                setIsLoadingChats(false);
-                break;
-            case "chatMessages":
-                setChatData(data);
-                setIsLoadingChat(false);
-                break;
-            case "newMessage":
-                if (data.chatId === selectedChatId) {
-                    setChatData(prevData => ({
-                        ...prevData,
-                        messages: [...prevData.messages, data.message]
-                    }));
-                }
-                
-                
-                // Обновляем список чатов
-                setChats(prevChats => {
-                    // Находим чат с новым сообщением
-                    let updatedChats = prevChats.map(chat => {
-                        if (chat.chatId === data.chatId) {
-                            return {
-                                ...chat,
-                                message: data.message.message,
-                                messageAuthorName: data.message.senderName,
-                                messageTimestamp: data.message.created_at,
-                            };
-                        }
-                        return chat;
-                    });
-                    // Перемещаем обновленный чат наверх списка
-                    const updatedChatIndex = updatedChats.findIndex(chat => chat.chatId === data.chatId);
-                    if (updatedChatIndex !== -1) {
-                        const updatedChat = updatedChats.splice(updatedChatIndex, 1)[0];
-                        updatedChats = [updatedChat, ...updatedChats];
-                    }
-                    return updatedChats;
-                });
-                break;
-            default:
-                console.warn("Unknown message type:", data.type);
+    
+        if (type === 'chatMessages') {
+            setChatData(socketEvent);
+            setIsLoadingChat(false);
         }
-
-    }, [socketEvent]);
+    
+        if (type === 'newMessage' && chatId === selectedChatId) {
+            setChatData((prevData) => ({
+                ...prevData,
+                messages: [...prevData.messages, message],
+            }));
+    
+            setChats((prevChats) =>
+                prevChats
+                    .map((chat) =>
+                        chat.chatId === chatId
+                            ? { 
+                                ...chat, 
+                                message: message.message, 
+                                messageAuthorName: message.senderName, 
+                                messageTimestamp: message.created_at 
+                              }
+                            : chat
+                    )
+                    .sort((a, b) => (a.chatId === chatId ? -1 : 1))
+            );
+        }
+    
+        if (type === 'newMessage' && !selectedChatId) {
+            setChats((prevChats) => [message.chat, ...prevChats]);
+            setSelectedChatId(chatId);
+        }
+    }, [socketEvent, selectedChatId, isLoaded]);
+    
 
     useEffect(() => {
-        console.log(socketState);
         if (socketState === "error" || socketState === "closed") {
-            setTimeout(() => {
-                console.log("Reconnecting...");
-                socketInit();
-            }, 3000);
+            setTimeout(socketInit, 3000);
         }
-
     }, [socketState]);
 
     const handleChatSelect = (chatId) => {
@@ -126,32 +100,18 @@ export default function Chats({ user }) {
         socket.send(JSON.stringify({ type: "getChatMessages", chatId }));
     };
 
-    const chatsContainerStyle = `flex mx-auto h-[80vh] flex-row w-3/4 p-6 gap-4 rounded-lg mt-8`;
-    const chatListContainerStyle = `w-1/4 p-6 ${isDarkMode
-        ? "bg-darkModeSecondaryBackground"
-        : "bg-lightModeSecondaryBackground"
-        } rounded-lg`;
-    const chatContainerStyle = `w-3/4 p-6 ${isDarkMode
-        ? "bg-darkModeSecondaryBackground"
-        : "bg-lightModeSecondaryBackground"
-        } rounded-lg`;
+    const containerStyle = `flex mx-auto h-[80vh] flex-row w-3/4 p-6 gap-4 rounded-lg mt-8`;
+    const listStyle = `w-1/4 p-6 ${isDarkMode ? "bg-darkModeSecondaryBackground" : "bg-lightModeSecondaryBackground"} rounded-lg`;
+    const chatStyle = `w-3/4 p-6 ${isDarkMode ? "bg-darkModeSecondaryBackground" : "bg-lightModeSecondaryBackground"} rounded-lg`;
 
     return (
         <div className="w-full">
-            <div className={chatsContainerStyle}>
-                <div className={chatListContainerStyle}>
-                    {isLoadingChats ? (
-                        <LoadingIndicator />
-                    ) : (
-                        <ChatList chats={chats} onChatSelect={handleChatSelect} />
-                    )}
+            <div className={containerStyle}>
+                <div className={listStyle}>
+                    {isLoadingChats ? <LoadingIndicator /> : <ChatList chats={chats} onChatSelect={handleChatSelect} />}
                 </div>
-                <div className={chatContainerStyle}>
-                    {isLoadingChat ? (
-                        <LoadingIndicator />
-                    ) : (
-                        <Chat chat={chatData} socket={socket} user={user} />
-                    )}
+                <div className={chatStyle}>
+                    {isLoadingChat ? <LoadingIndicator /> : <Chat chat={chatData} socket={socket} user={user} />}
                 </div>
             </div>
         </div>

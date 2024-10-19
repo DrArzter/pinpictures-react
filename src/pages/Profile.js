@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-
+import { useParams, useNavigate, Link } from "react-router-dom";
 import FullScreenImage from "../components/modals/FullScreenImageModal";
 import UpdateImageModal from "../components/modals/UpdateImageModal";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { ThemeProvider } from "../components/ThemeContext";
-
-import { AiOutlineUserAdd, AiOutlineSetting, AiOutlineMessage, AiOutlineUserDelete } from "react-icons/ai";
-
+import { AiOutlineUserAdd, AiOutlineMessage, AiOutlineUserDelete } from "react-icons/ai";
 import config from "../api/config";
 import * as api from "../api";
 import UserList from "../components/UserList";
 
-function Profile({ user, setUser }) {
+export default function Profile({ user, setUser, socket }) { // Добавлено socket как пропс
   const [profile, setProfile] = useState(null);
   const [friends, setFriends] = useState([]);
   const { username } = useParams();
@@ -24,60 +21,54 @@ function Profile({ user, setUser }) {
   const isDarkMode = useContext(ThemeProvider);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await api.getUserByName(username);
-        setProfile(userData);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
-    };
-
-    const fetchFriends = async () => {
-      try {
-        const friendsData = await api.getFriends(username);
-        setFriends(friendsData);
-      } catch (error) {
-        console.error("Error fetching friends:", error);
-      }
-    };
-
+    if (!username) return;
+    
     const loadProfileData = async () => {
       setLoading(true);
-      await Promise.all([fetchUser(), fetchFriends()]);
+      try {
+        const [userData, friendsData] = await Promise.all([
+          api.getUserByName(username),
+          api.getFriends(username)
+        ]);
+        setProfile(userData);
+        setFriends(friendsData);
+      } catch (error) {
+        console.error("Error fetching profile or friends:", error);
+      }
       setLoading(false);
     };
 
-    if (username) {
-      loadProfileData();
-    }
+    loadProfileData();
   }, [username]);
 
-
-  const handleProfilePicClick = () => {
-    setShowFullScreen(true);
-  };
+  const handleProfilePicClick = () => setShowFullScreen(true);
 
   const handleAddFriendClick = () => {
     if (!profile || !user) return;
-    api.addFriend(profile.id).then(() => {
-    });
+    api.addFriend(profile.id).then(() => {});
   };
 
   const handleConfirmFriendClick = () => {
     if (!profile || !user) return;
-    api.confirmFriend(profile.id).then(() => {
-    });
+    api.confirmFriend(profile.id).then(() => {});
   };
 
   const handleDeleteFriendClick = () => {
     if (!profile || !user) return;
-    api.removeFriend(profile.id).then(() => {
-    });
+    api.removeFriend(profile.id).then(() => {});
   };
 
-  const redirectToChat = (id) => {
-    navigate(`/chat/${id}`);
+  // Исправлено: закрыта функция и добавлен socket как пропс
+  const handleSendMessage = () => {
+    if (!socket || !profile) return;
+    
+    socket.send(JSON.stringify({
+      type: 'sendMessage',
+      message: {
+        recipientId: profile.id, // ID получателя
+        message: 'Привет! Это первое сообщение.', // Текст первого сообщения
+      }
+    }));
   };
 
   const profilePicSrc = useMemo(() => {
@@ -95,22 +86,16 @@ function Profile({ user, setUser }) {
   }, [profile]);
 
   const profileHeaderClassName = `relative w-full h-[40vh] flex flex-col items-center mb-16`;
-
   const profileBackgroundClassName = `w-full h-full object-cover rounded-b-3xl`;
-
-  const profileInfoClassName = `flex w-3/4 mt-[-5rem] items-center justify-between`;
-
+  const profileInfoClassName = `flex w-5/6 mt-[-5rem] items-center justify-between`;
   const profilePicClassName = `w-40 h-40 rounded-full border-4 border-white cursor-pointer`;
-
   const profileUsernameClassName = `text-3xl font-bold mt-32`;
-
   const actionsContainerClassName = `flex gap-4 mt-32 hidden md:flex`;
-
-  //const friendListContainerClassName = `lg:w-3/4 flex justify-center rounded-full gap-4 mt-20 ${isDarkMode ? "bg-zinc-800" : "bg-zinc-700"}`; 
-  const friendListContainerClassName = `flex justify-centerrounded-xl ${isDarkMode ? "bg-zinc-800" : ""}`;
-
+  const friendListContainerClassName = `flex justify-center rounded-xl ${isDarkMode ? "bg-zinc-800" : ""}`;
   const iconClassName = `text-3xl cursor-pointer`;
 
+  const isFriend = friends.some(friend => friend.name === user.name && friend.status === "confirmed");
+  const isPending = friends.some(friend => friend.name === user.name && friend.status === "pending");
 
   if (loading) {
     return <LoadingIndicator />;
@@ -148,16 +133,13 @@ function Profile({ user, setUser }) {
           </div>
           {user && profile.name !== user.name && (
             <div className={actionsContainerClassName}>
-              <AiOutlineMessage className={iconClassName} onClick={() => redirectToChat(profile.id)} />
-              {friends.some(friend => friend.name === user.name && friend.status === "confirmed") ? (
-                <AiOutlineUserDelete
-                  className={iconClassName}
-                  onClick={handleDeleteFriendClick}
-                />
+              <AiOutlineMessage className={iconClassName} onClick={handleSendMessage} />
+              {isFriend ? (
+                <AiOutlineUserDelete className={iconClassName} onClick={handleDeleteFriendClick} />
               ) : (
                 <AiOutlineUserAdd
                   className={iconClassName}
-                  onClick={friends.some(friend => friend.name === user.name && friend.status === "pending") ? handleConfirmFriendClick : handleAddFriendClick}
+                  onClick={isPending ? handleConfirmFriendClick : handleAddFriendClick}
                 />
               )}
             </div>
@@ -176,10 +158,7 @@ function Profile({ user, setUser }) {
           </div>
         </div>
       </div>
-      {showFullScreen && (
-        <FullScreenImage imageUrl={profilePicSrc} onClose={() => setShowFullScreen(false)} />
-      )}
-
+      {showFullScreen && <FullScreenImage imageUrl={profilePicSrc} onClose={() => setShowFullScreen(false)} />}
       {showUpdateModal && (
         <UpdateImageModal
           onClose={() => setShowUpdateModal(false)}
@@ -192,5 +171,3 @@ function Profile({ user, setUser }) {
     </div>
   );
 }
-
-export default Profile;
