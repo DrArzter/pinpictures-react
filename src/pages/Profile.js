@@ -17,7 +17,6 @@ export default function Profile({ user, setUser, socket, socketEvent, socketStat
   const [showFullScreen, setShowFullScreen] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const isDarkMode = useContext(ThemeProvider);
 
@@ -69,6 +68,7 @@ export default function Profile({ user, setUser, socket, socketEvent, socketStat
   };
 
   useEffect(() => {
+    if (!socketEvent) return;
     if (socketEvent.type === 'chatExists' || socketEvent.type === 'chatCreated') {
       console.log(socketEvent);
       navigate('/chats/' + socketEvent.id);

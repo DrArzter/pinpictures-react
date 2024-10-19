@@ -34,7 +34,7 @@ function App() {
 
   useEffect(() => {
       if (!socket) socketInit();
-  }, [socket]);
+  }, [socket, user]);
 
   useEffect(() => {
       if (!socket) return;
@@ -115,6 +115,8 @@ function AppContent({
         socket={socket}
         socketEvent={socketEvent}
         socketState={socketState}
+        notifications={notifications}
+        setNotifications={setNotifications}
       />
       <Notification
         notifications={notifications}

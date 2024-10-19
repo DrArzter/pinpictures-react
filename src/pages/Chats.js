@@ -20,7 +20,8 @@ export default function Chats({ user, socket, socketEvent, socketState }) {
     useEffect(() => {
         if (!socketEvent || socketState !== "open") return;
     
-        const { type, chats: receivedChats, chatId, message } = socketEvent;
+        let { type, chats: receivedChats, chatId, message } = socketEvent;
+        chatId = parseInt(chatId);
         if (!chats) {
             socket.send(JSON.stringify({ type: "getAllChats" }))
         }
@@ -33,33 +34,32 @@ export default function Chats({ user, socket, socketEvent, socketState }) {
             setChatData(socketEvent);
             setIsLoadingChat(false);
         }
-    
         if (type === 'newMessage' && chatId === selectedChatId) {
-            setChatData((prevData) => ({
+            setChatData((prevData) => {
+                if (!prevData) {
+                    return ;
+                }
+                return ({
                 ...prevData,
                 messages: [...prevData.messages, message],
-            }));
+            })});
     
-            setChats((prevChats) =>
-                prevChats
-                    .map((chat) =>
-                        chat.chatId === chatId
-                            ? { 
-                                ...chat, 
-                                message: message.message, 
-                                messageAuthorName: message.senderName, 
-                                messageTimestamp: message.created_at 
-                              }
-                            : chat
-                    )
-                    .sort((a, b) => (a.chatId === chatId ? -1 : 1))
-            );
+            setChats(prevChats => { 
+                console.log(prevChats);
+                return prevChats.map(chat => chat.chatId === chatId ? {...chat, message: message.message, messageAuthorName: message.senderName, messageTimestamp: message.created_at} : chat).sort((a, b) => a.chatId === chatId ? -1 : 1)});
         }
+
+
+        /* TODO: Тут сокет обкакивается и почему-то склеивает newMessage и allChats */
     
         if (type === 'newMessage' && !selectedChatId) {
-            setChats((prevChats) => [message.chat, ...prevChats]);
+            setChats((prevChats) => {
+                console.log(message);
+                return[message, ...prevChats]});
             setSelectedChatId(chatId);
         }
+
+        /* -------------------------------------------------------------------------- */
     }, [socketEvent, selectedChatId, isLoaded]);
     
 

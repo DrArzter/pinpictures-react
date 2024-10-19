@@ -15,7 +15,8 @@ export default function ChatList({ chats, onChatSelect }) {
                     <div>
                         <div className="font-bold">{chat.displayName}</div>
                         <div className="text-sm text-red-500 line-clamp-1 break-words">
-                            {chat.messageAuthorName}: {chat.message}
+                            { chat.message ? `${chat.messageAuthorName}: ${chat.message}` : <div>No messages yet</div> }
+                            
                         </div>
                     </div>
                 </button>
