@@ -143,14 +143,18 @@ export default function Post({ user }) {
             </div>
 
             {post.images.length > 1 && (
-              <div className="absolute flex justify-between w-full top-1/2 transform -translate-y-1/2 px-4">
+              <>
+              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 px-4">
                 <button onClick={handlePrevImage} className={navigationButtonClassName}>
                   <IoIosArrowBack className={ArrowButtonClassName} size={24} />
                 </button>
+              </div>
+              <div className="absolute right-0 top-1/2 transform -translate-y-1/2 px-4">
                 <button onClick={handleNextImage} className={navigationButtonClassName}>
                   <IoIosArrowForward className={ArrowButtonClassName} size={24} />
                 </button>
               </div>
+              </>
             )}
           </>
         ) : (

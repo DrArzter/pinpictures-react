@@ -6,11 +6,11 @@ export default function NotFound() {
 
   const containerClassName = `flex flex-col items-center min-h-screen p-4`;
 
-  const errorHeaderClassName = `w-full lg:w-3/4 p-6 bg-zinc-800 rounded-lg shadow-lg`;
+  const errorHeaderClassName = `w-full lg:w-5/6 p-6 rounded-lg shadow-lg`;
 
-  const errorContentClassName = `w-full lg:w-3/4 p-6 bg-zinc-800 rounded-lg shadow-lg mt-4`;
+  const errorContentClassName = `w-full lg:w-5/6 p-6 rounded-lg shadow-lg mt-4`;
 
-  const linkClassName = `text-blue-400 hover:underline cursor-pointer`;
+  const linkClassName = `hover-transform hover:underline cursor-pointer`;
 
   return (
     <div className={containerClassName}>

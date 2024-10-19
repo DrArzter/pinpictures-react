@@ -9,7 +9,7 @@ module.exports = {
         3: '3',
       },
       fontSize: {
-        // Кастомные размеры для иконок
+        // Custom icon sizes
         'icon-sm': '1.5rem',
         'icon-md': '3rem',
         'icon-lg': '5rem',
@@ -31,8 +31,25 @@ module.exports = {
         '14xl': '5120px',
         '15xl': '7680px', // 8K
       },
+      maxWidth: {
+        'xss': '20rem',      // 320px
+        'xdd': '24rem',      // 384px
+        'xii': '28rem',      // 448px
+        'xuu': '32rem',      // 512px
+        'xkk': '36rem',      // 576px
+        'xlll': '40rem',      // 640px
+        '2xll': '48rem',     // 768px
+        '3xll': '56rem',     // 896px
+        '4xll': '64rem',     // 1024px
+        '5xll': '72rem',     // 1152px
+        '6xll': '80rem',     // 1280px
+        '7xll': '88rem',     // 1408px
+        'full': '100%',     // Full width
+        'min': 'min-content',
+        'max': 'max-content',
+      },
       colors: {
-        // Дополнительные цвета (если понадобятся)
+        // Additional colors if needed
         'lightModeText': '#333333',
         'lightModeSecondaryText': '#555555',
         'darkModeText': '#f2f2f2',
