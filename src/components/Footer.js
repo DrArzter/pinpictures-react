@@ -41,12 +41,12 @@ export default function Footer(user) {
   const mobileFooterClassName = `fixed flex flex-row bg-lightModeBackground justify-evenly bottom-0 left-0 right-0 text-center z-[999] h-[6vh] transition-all duration-800`;
 
   const desktopFooterClassName = `py-4 text-center w-full fixed bottom-0 transition-transform duration-300 transform ${isVisible ? 'translate-y-0' : 'translate-y-full'}`;
+  const profileLinkPath = user.user ? "/profile/" + user.user.name : "/Authentification";
 
-  const getLinkClassName = (path) => `${location.pathname === path ? "bg-black" : "bg-white"} rounded-b-[25px] w-full p-[7px]`;
+  const getLinkClassName = (path) => `${location.pathname === path ? "bg-black" : "bg-white"} ${location.pathname === "/" ? "rounded-br-[25px]" : location.pathname === "/Search" ? "rounded-b-[25px]" : location.pathname === profileLinkPath ? "rounded-bl-[25px]" : "" } w-full p-[7px]`;
 
   const getIconClassName = (path) => `${location.pathname === path ? "text-white" : "text-ACDC"} mx-auto w-full self-center h-full`;
 
-  const profileLinkPath = user.user ? "/profile/" + user.user.name : "/Authentification";
 
   if (isMobile) {
     return (
