@@ -1,19 +1,16 @@
-import Cookies from 'js-cookie';
+import axios from 'axios';
 
-const clearAuthToken = () => {
-  Cookies.remove('token');
-};
+import config from './config';
 
-export default function logout(setUser) {
+export default async function logout(setUser) {
   try {
-    if (!Cookies.get('token')) {
-      console.warn('No token found, user might already be logged out.');
-      return;
-    }
-
-    clearAuthToken();
+    const response = await axios.post(`${config.apiUrl}/users/logout`,
+      {},
+      {
+        withCredentials: true
+      }
+    );
     setUser(null);
-    console.log('User successfully logged out.');
   } catch (error) {
     console.error('Error during logout:', error);
   }

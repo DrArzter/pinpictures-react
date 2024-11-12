@@ -1,47 +1,20 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .fade-enter,
 .fade-exit {
   opacity: 0;
   position: absolute;
   width: 100%;
+}
+
+.hover-transform {
+  transition: all 0.3s ease;
+}
+.hover-transform:hover {
+  transform: scale(1.1);
+  color: #FFD700;
+}
+.hover-transform:focus {
+  transform: scale(1.1);
+  color: #FFD700;
 }
 
 .fade-enter-active,
@@ -57,16 +30,56 @@
   transition: opacity 1000ms ease-in-out;
 }
 
-.loader {
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
+
+/* Стили для WebKit-браузеров */
+.cuteScrollBar::-webkit-scrollbar {
+  width: 12px;          /* Ширина вертикального скролбара */
+  height: 12px;         /* Высота горизонтального скролбара */
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.cuteScrollBar::-webkit-scrollbar-track {
+  background: #f1f1f1;  /* Цвет трека скролбара */
+  border-radius: 10px;
+}
+
+.cuteScrollBar::-webkit-scrollbar-thumb {
+  background-color: #888; /* Цвет ползунка */
+  border-radius: 10px;
+}
+
+.cuteScrollBar::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Цвет ползунка при наведении */
+}
+
+/* Стили для Firefox */
+.cuteScrollBar {
+  scrollbar-width: thin;                  /* Тонкий скролбар */
+  scrollbar-color: #888 #f1f1f1;         /* Цвет ползунка и трека */
+}
+
+/* Детальная настройка для Firefox */
+.cuteScrollBar scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+.cuteScrollBar scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.cuteScrollBar scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+
+/* Отключение скроллбара в WebKit-браузерах */
+.cuteScrollBar2::-webkit-scrollbar {
+  display: none; /* Полностью скрывает скроллбар */
+}
+
+/* Отключение скроллбара в Firefox */
+.cuteScrollBar2 {
+  scrollbar-width: none; /* Скрывает скроллбар */
+  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
 }

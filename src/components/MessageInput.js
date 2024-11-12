@@ -18,7 +18,7 @@ export default function MessageInput({ onSend }) {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -35,21 +35,23 @@ export default function MessageInput({ onSend }) {
     resizeTextarea();
   }, [message]);
 
+  const textareaClassName = `flex-grow p-2 text-zinc-700 bg-zinc-300 min-h-[40px] max-h-[200px] overflow-y-auto border border-zinc-600 rounded-l-lg resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700`;
+
+  const buttonClassName = `p-2 bg-zinc-700 text-zinc-300 hover:bg-zinc-600 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-zinc-700 ml-1`;
+
+
   return (
     <div className="flex mt-4 items-center">
       <textarea
         ref={textareaRef}
-        className="flex-grow p-2 text-zinc-700 bg-zinc-300 min-h-[40px] max-h-[200px] overflow-y-auto border border-zinc-600 rounded-l-lg resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700"
+        className={textareaClassName}
         value={message}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
         placeholder="Type your message..."
         rows={1}
       />
-      <button 
-        className="p-2 bg-zinc-700 text-zinc-300 hover:bg-zinc-600 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-zinc-700 ml-1" 
-        onClick={handleSend}
-      >
+      <button className={buttonClassName} onClick={handleSend}>
         Send
       </button>
     </div>

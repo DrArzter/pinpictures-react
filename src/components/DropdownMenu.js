@@ -1,33 +1,38 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { FaGear } from "react-icons/fa6";
+import { CiBookmarkPlus } from "react-icons/ci";
+import { RiLogoutBoxFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { FaUser, FaSignInAlt, FaSignOutAlt, FaCog } from "react-icons/fa";
 
-export default function DropdownMenu({
-  isDropdownOpen,
-  headerLinks,
-  user,
-  toggleDropdown,
-}) {
+import config from "../api/config";
+import * as api from "../api/index";
+
+import ChangeTheme from "./ChangeTheme";
+import ThemeContext from "./ThemeContext";
+
+export default function DropdownMenu({ isDropdownOpen, user, setUser, toggleDropdown }) {
   const dropdownRef = useRef(null);
+  const { isDarkMode } = useContext(ThemeContext);
+  const Navigate = useNavigate();
 
-  function getFilteredLinks(links) {
-    return links.filter((link) => {
-      if (user) {
-        return link.name !== "Authentication";
-      } else {
-        return link.name !== "Profile";
-      }
-    });
-  }
-
-  function handleClickOutside(event) {
+  const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       toggleDropdown();
     }
-  }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await api.logout( setUser );
+      Navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   useEffect(() => {
-
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         toggleDropdown();
@@ -37,50 +42,59 @@ export default function DropdownMenu({
     if (isDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, toggleDropdown]);
 
-  const iconMapping = {
-    Profile: <FaUser className="mr-2" />,
-    Authentication: user ? <FaSignOutAlt className="mr-2" /> : <FaSignInAlt className="mr-2" />,
-    Settings: <FaCog className="mr-2" />,
-  };
+  const dropdownClassName = `absolute z-[999] right-0 top-16 lg:w-[10vw] w-32 rounded-md shadow-lg transform transition-all duration-300 ease-in-out 
+    ${isDropdownOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"} 
+    ${isDarkMode ? "bg-darkModeBackground" : "bg-lightModeBackground"} 
+    transition-transform transition-opacity`;
 
+  const menuItemsClassName = `p-4 flex flex-col gap-4 w-[50%]
+    ${isDarkMode ? "text-darkModeText" : "text-lightModeText"} 
+    transition-colors`;
 
+  const iconClassName = isDarkMode ? "text-darkModeText" : "text-lightModeText";
 
   return (
-    <div
-      ref={dropdownRef}
-      className={`absolute right-0 mt-12 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[999] transform transition-all duration-300 ease-in-out ${
-        isDropdownOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
-      }`}
-    >
-      <div
-        className="py-2"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="options-menu"
-      >
-        {getFilteredLinks(headerLinks).map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className="flex items-center px-4 py-2 text-sm text-zinc-700 hover:bg-gradient-to-r from-zinc-100 to-zinc-200 hover:text-zinc-900 transition-colors duration-150"
-            role="menuitem"
-            onClick={toggleDropdown}
-          >
-            {iconMapping[link.name] || <span className="mr-2">•</span>}
-            {link.name}
+    <div ref={dropdownRef} className={dropdownClassName}>
+      <Link to={`/profile/${user.name}`}>
+        <img
+          src={
+            user.picpath.startsWith("https://ui-avatars.com/")
+              ? user.picpath
+              : `${config.apiUrl.replace("/api", "/")}${user.picpath}`
+          }
+          alt="Profile"
+          className="w-full h-24 object-cover rounded-t-md hover-transform cursor-pointer"
+        />
+      </Link>
+
+      <div className={menuItemsClassName}>
+        <div className="flex items-center justify-between gap-4">
+          <ChangeTheme />
+          <Link to="/Settings" className="cursor-pointer hover-transform">
+            <FaGear className={iconClassName} />
           </Link>
-        ))}
+        </div>
+
+        <div className="flex items-center gap-2 cursor-pointer hover-transform">
+          <CiBookmarkPlus className={iconClassName} />
+          <span>Bookmark</span>
+        </div>
+
+        <div
+          className="flex items-center gap-2 cursor-pointer hover-transform"
+          onClick={handleLogout}
+        >
+          <RiLogoutBoxFill className={iconClassName} />
+          <span>Logout</span>
+        </div>
       </div>
     </div>
   );

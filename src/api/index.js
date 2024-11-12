@@ -7,6 +7,8 @@ export {default as getMessages} from './getMessages'
 export {default as getPosts} from './getPosts'
 export {default as searchPost} from './searchPost'
 export {default as uploadPost} from './uploadPost'
+export {default as getPostById} from './getPostById'
+export {default as likePost} from './likePost'
 
 //COMMENTS
 export {default as uploadComment} from './uploadComment'
@@ -18,6 +20,9 @@ export {default as getUserByName} from './getUserByName'
 
 //FRIENDS
 export {default as addFriend} from './addFriend'
+export {default as confirmFriend} from './confirmFriend'
+export {default as getFriends} from './getFriends'
+export {default as removeFriend} from './removeFriend'
 
 //PROFILE
 export {default as uploadProfileImage} from './uploadProfileImage'
@@ -35,3 +40,6 @@ export {default as getChatById} from './getChatById'
 
 //MESSAGES
 export {default as uploadMessage} from './uploadMessage'
+
+//SEARCH
+export {default as search} from './search'
